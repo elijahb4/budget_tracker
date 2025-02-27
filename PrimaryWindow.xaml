@@ -1,0 +1,21 @@
+﻿<Window x:Class="Individual_project_initial.PrimaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Individual_project_initial"
+        mc:Ignorable="d"
+        Title="PrimaryWindow" Height="450" Width="800">
+    <Grid>
+        <Frame x:Name="Frame" NavigationUIVisibility="Hidden"/>
+        <DockPanel>
+            <!-- Navigation Pane -->
+            <ListBox DockPanel.Dock="Left" Width="auto" Background="LightGray" HorizontalAlignment="Left">
+                <Button Content="Home" Click="GoToHome_Click" />
+                <Button Content="Accounts" Click="GoToAccounts_Click" />
+                <Button Content="Settings" />
+                <Button Content="Help" />
+            </ListBox>
+        </DockPanel>
+    </Grid>
+</Window>
