@@ -27,11 +27,13 @@ namespace Individual_project_initial
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            // Does not exist in the current context = name to add in xaml page
-            //DateTime transactionTime = transactionTimeBox.Text;
-            //decimal transactionSum = transactionSumBox.Text;
+            DateTime transactionDate = dateComboBox.SelectedDate.Value;
+            string time = timeBox.Text;
+            string transactionSum = transactionSumBox.Text;
             string account = accountBox.Text;
             string note = noteBox.Text;
+
+            DateTime transactionTime = 
         }
     }
 }
