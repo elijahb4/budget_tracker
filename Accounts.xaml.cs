@@ -24,7 +24,7 @@ namespace Individual_project_initial
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("Pages/Account.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("AddTransaction.xaml", UriKind.Relative));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

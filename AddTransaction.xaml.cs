@@ -1,4 +1,5 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IndividualProjectInitial;
 
 namespace Individual_project_initial
 {
@@ -23,17 +25,33 @@ namespace Individual_project_initial
         public AddTransaction()
         {
             InitializeComponent();
+
+            
+
+            var viewModel = new UserModel();
+            this.DataContext = viewModel;
+
+            int id = viewModel.UserInstance.Id;
+            string output = id.ToString();
+            //useridconfirm.Text = output;
+
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            var viewModel = this.DataContext as UserModel;
+            if (viewModel != null)
+            {
+                string id = viewModel.UserInstance.Username;
+                int owner = int.Parse(id);
+            }
             DateTime transactionDate = dateComboBox.SelectedDate.Value;
             string time = timeBox.Text;
             string transactionSum = transactionSumBox.Text;
             string account = accountBox.Text;
             string note = noteBox.Text;
 
-            DateTime transactionTime = 
+            //DateTime transactionTime = ;
         }
     }
 }

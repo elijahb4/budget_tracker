@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using IndividualProjectInitial;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,10 +26,20 @@ namespace Individual_project_initial
         public AddAccount()
         {
             InitializeComponent();
+
+            var viewModel = new UserModel();
+            this.DataContext = viewModel;
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            var viewModel = this.DataContext as UserModel;
+            int owner = 0;
+            if (viewModel != null)
+            {
+                string id = viewModel.UserInstance.Username;
+                owner = int.Parse(id);
+            }
             string institutionName = institutionNameTextBox.Text;
             string accountName = accountNameTextBox.Text;
             string accountNumber = accountNumberTextBox.Text;
@@ -46,8 +57,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO liquid_accounts (InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Currency)
-                    VALUES (@InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Currency)";
+                        string query = @"INSERT INTO liquid_accounts (InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency)
+                    VALUES (@InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
 
                         using (var command = new MySqlCommand(query, connection))
                         {
@@ -59,6 +70,7 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@BIC", bic);
                             command.Parameters.AddWithValue("@Reference", reference);
                             command.Parameters.AddWithValue("@Balance", startingBalance);
+                            command.Parameters.AddWithValue("@Owner", owner);
                             command.Parameters.AddWithValue("@Currency", currency);
                             command.ExecuteNonQuery();
                         }
