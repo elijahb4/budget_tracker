@@ -28,23 +28,16 @@ namespace Individual_project_initial
 
             
 
-            var viewModel = new UserModel();
-            this.DataContext = viewModel;
-
-            int id = viewModel.UserInstance.Id;
-            string output = id.ToString();
-            //useridconfirm.Text = output;
+            
+            
 
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = this.DataContext as UserModel;
-            if (viewModel != null)
-            {
-                string id = viewModel.UserInstance.Username;
-                int owner = int.Parse(id);
-            }
+            int owner = GetLoginOwner();
+            string output = owner.ToString();
+            useridconfirm.Text = output;
             DateTime transactionDate = dateComboBox.SelectedDate.Value;
             string time = timeBox.Text;
             string transactionSum = transactionSumBox.Text;
@@ -52,6 +45,11 @@ namespace Individual_project_initial
             string note = noteBox.Text;
 
             //DateTime transactionTime = ;
+        }
+
+        private int GetLoginOwner()
+        {
+            return Login.GetOwner();
         }
     }
 }

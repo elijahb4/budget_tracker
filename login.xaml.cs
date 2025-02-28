@@ -6,6 +6,7 @@ namespace Individual_project_initial
 {
     partial class Login : Window
     {
+        static int owner;
         public Login()
         {
             InitializeComponent();
@@ -16,10 +17,10 @@ namespace Individual_project_initial
         {
             string username = txtUsername.Text;
             string password = txtPassword.Password;
-            int owner = 0;
+            int id = 0;
             string email = "";
 
-            if (AuthenticateUser(username, password))
+            if (AuthenticateUser(username, password, id))
             {
                 MessageBox.Show("Login successful", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 using (var dbHelper = new DatabaseHelper())
@@ -46,7 +47,7 @@ namespace Individual_project_initial
                 {
                     viewModel.SetUserInstance(new User
                     {
-                        Id = owner,
+                        Id = id,
                         Username = username,
                         Email = email,
                         Password = password
@@ -61,9 +62,7 @@ namespace Individual_project_initial
                 MessageBox.Show("Invalid username or password", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
-
-        private bool AuthenticateUser(string username, string password)
+        private bool AuthenticateUser(string username, string password, int owner)
         {
             try
             {
@@ -86,6 +85,10 @@ namespace Individual_project_initial
                 MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+        }
+        public static int GetOwner()
+        {
+            return owner;
         }
     }
 }

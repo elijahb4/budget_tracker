@@ -26,20 +26,13 @@ namespace Individual_project_initial
         public AddAccount()
         {
             InitializeComponent();
-
-            var viewModel = new UserModel();
-            this.DataContext = viewModel;
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = this.DataContext as UserModel;
-            int owner = 0;
-            if (viewModel != null)
-            {
-                string id = viewModel.UserInstance.Username;
-                owner = int.Parse(id);
-            }
+            int owner = GetLoginOwner();
+            string output = owner.ToString();
+            //useridconfirm.Text = output;
             string institutionName = institutionNameTextBox.Text;
             string accountName = accountNameTextBox.Text;
             string accountNumber = accountNumberTextBox.Text;
@@ -81,6 +74,10 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+        }
+        private int GetLoginOwner()
+        {
+            return Login.GetOwner();
         }
     }
 }
