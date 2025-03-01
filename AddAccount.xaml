@@ -19,7 +19,12 @@
         <TextBox Name="bicTextBox" HorizontalAlignment="Center" Margin="0,148,0,0" TextWrapping="Wrap" Text="BIC" VerticalAlignment="Top" Width="120"/>
         <TextBox Name="balanceTextBox" HorizontalAlignment="Center" Margin="0,171,0,0" TextWrapping="Wrap" Text="Starting Balance" VerticalAlignment="Top" Width="120"/>
         <TextBox Name="currencyTextBox" HorizontalAlignment="Center" Margin="0,194,0,0" TextWrapping="Wrap" Text="Currency" VerticalAlignment="Top" Width="120"/>
-        <ComboBox Name="AccountTypeComboBox" HorizontalAlignment="Center" Margin="0,217,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="AccountTypeComboBox"
+          SelectionChanged="AccountTypeComboBox_SelectionChanged"
+          Width="100"
+          Height="20"
+          Margin="10"/>
+
         <Button Content="Add Account" Click="SubmitButton_Click" HorizontalAlignment="Center" Margin="0,244,0,0" VerticalAlignment="Top"/>
 
     </Grid>

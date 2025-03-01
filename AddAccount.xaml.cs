@@ -2,67 +2,95 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for AddAccount.xaml
-    /// </summary>
     public partial class AddAccount : Page
     {
         public AddAccount()
         {
             InitializeComponent();
+            DataContext = this;
+            LoadComboBox();
+        }
+
+        private void LoadComboBox()
+        {
+            List<string> options = GetComboBoxOptions();
+            if (options.Count == 0)
+            {
+                MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                AccountTypeComboBox.ItemsSource = options;
+                Console.WriteLine("ComboBox options loaded successfully.");
+            }
         }
 
         public List<string> GetComboBoxOptions()
         {
-            List<string> options = new List<string>();
-            string connectionString = "your_connection_string_here";
+            List<string> accountOptions = new List<string>();
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            try
             {
-                try
+                using (var dbHelper = new DatabaseHelper())
                 {
-                    conn.Open();
-                    string query = "SELECT column_name FROM your_table_name";
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (var connection = dbHelper.GetConnection())
                     {
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        string query = "SELECT Type FROM account_type";
+
+                        using (var command = new MySqlCommand(query, connection))
                         {
-                            while (reader.Read())
+                            using (var reader = command.ExecuteReader())
                             {
-                                options.Add(reader.GetString(0));
+                                while (reader.Read())
+                                {
+                                    string type = reader.GetString(0);
+                                    accountOptions.Add(type);
+                                    Console.WriteLine($"Added option: {type}"); // Debug line
+                                }
                             }
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            return options;
+            return accountOptions;
+        }
+
+        public string selectedAccountType { get; set; }
+
+        private void AccountTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AccountTypeComboBox.SelectedItem != null)
+            {
+                selectedAccountType = AccountTypeComboBox.SelectedItem.ToString();
+                // Debugging statement
+                Console.WriteLine("Selected Account Type: " + selectedAccountType);
+            }
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             int owner = GetLoginOwner();
-            string output = owner.ToString();
+            string accountType = selectedAccountType;
+
+            // Debugging statement
+            Console.WriteLine("Account Type to be inserted: " + accountType);
+
+            if (string.IsNullOrEmpty(accountType))
+            {
+                MessageBox.Show("Please select an account type.");
+                return;
+            }
+
             string institutionName = institutionNameTextBox.Text;
             string accountName = accountNameTextBox.Text;
             string accountNumber = accountNumberTextBox.Text;
@@ -71,7 +99,6 @@ namespace Individual_project_initial
             string bic = bicTextBox.Text;
             string reference = referenceTextBox.Text;
             string startingBalance = balanceTextBox.Text;
-            string accountType = AccountTypeComboBox.Text;
             string currency = currencyTextBox.Text;
 
             try
@@ -80,12 +107,13 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO liquid_accounts (InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency)
-                        VALUES (@InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
+                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency)
+                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
 
                         using (var command = new MySqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@InstitutionName", institutionName);
+                            command.Parameters.AddWithValue("@AccountType", accountType);
                             command.Parameters.AddWithValue("@AccountNickname", accountName);
                             command.Parameters.AddWithValue("@AccountNumber", accountNumber);
                             command.Parameters.AddWithValue("@SortCode", sortCode);
@@ -99,12 +127,15 @@ namespace Individual_project_initial
                         }
                     }
                 }
+                // Optionally, update the UI or show a success message
+                MessageBox.Show("Account added successfully!");
             }
             catch (MySqlException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
         private int GetLoginOwner()
         {
             return Login.GetOwner();
