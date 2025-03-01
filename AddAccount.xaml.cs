@@ -28,11 +28,41 @@ namespace Individual_project_initial
             InitializeComponent();
         }
 
+        public List<string> GetComboBoxOptions()
+        {
+            List<string> options = new List<string>();
+            string connectionString = "your_connection_string_here";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT column_name FROM your_table_name";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                options.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+            return options;
+        }
+
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             int owner = GetLoginOwner();
             string output = owner.ToString();
-            //useridconfirm.Text = output;
             string institutionName = institutionNameTextBox.Text;
             string accountName = accountNameTextBox.Text;
             string accountNumber = accountNumberTextBox.Text;
@@ -51,7 +81,7 @@ namespace Individual_project_initial
                     using (var connection = dbHelper.GetConnection())
                     {
                         string query = @"INSERT INTO liquid_accounts (InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency)
-                    VALUES (@InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
+                        VALUES (@InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
 
                         using (var command = new MySqlCommand(query, connection))
                         {

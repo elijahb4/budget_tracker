@@ -26,18 +26,17 @@ namespace Individual_project_initial
         {
             InitializeComponent();
 
-            
+            int owner = GetLoginOwner();
 
-            
-            
+
+
 
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            int owner = GetLoginOwner();
-            string output = owner.ToString();
-            useridconfirm.Text = output;
+            
+            
             DateTime transactionDate = dateComboBox.SelectedDate.Value;
             string time = timeBox.Text;
             string transactionSum = transactionSumBox.Text;
