@@ -80,7 +80,6 @@ namespace Individual_project_initial
             int owner = GetLoginOwner();
             string accountType = selectedAccountType;
 
-            // Debugging statement
             Console.WriteLine("Account Type to be inserted: " + accountType);
 
             if (string.IsNullOrEmpty(accountType))

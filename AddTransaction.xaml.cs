@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IndividualProjectInitial;
+using Mysqlx.Crud;
 
 namespace Individual_project_initial
 {
@@ -24,6 +25,8 @@ namespace Individual_project_initial
             InitializeComponent();
             DataContext = this;
             LoadComboBox();
+            PopulateHourComboBox();
+            PopulateMinuteComboBox();
         }
         private void LoadComboBox()
         {
@@ -73,21 +76,90 @@ namespace Individual_project_initial
 
             return accountOptions;
         }
-
         public string selectedAccountType { get; set; }
+        private void PopulateHourComboBox()
+        {
+            for (int i = 0; i < 24; i++)
+            {
+                HourComboBox.Items.Add(i.ToString("D2"));
+            }
+            HourComboBox.SelectedIndex = 0;
+        }
+        private void PopulateMinuteComboBox()
+        {
+            for (int i = 0; i < 60; i++)
+            {
+                MinuteComboBox.Items.Add(i.ToString("D2"));
+            }
+            MinuteComboBox.SelectedIndex = 0;
+        }
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            
-            DateTime transactionDate = dateComboBox.SelectedDate.Value;
-            string time = timeBox.Text;
-            string transactionSum = transactionSumBox.Text;
-            string account = AccountComboBox.Text;
-            string note = noteBox.Text;
+            string selectedAccount = AccountComboBox.SelectedItem.ToString();
+            int accountPK = GetAccountPK(selectedAccount);
+            DateTime transactionDate = DateComboBox.SelectedDate.Value;
+            int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
+            int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
+            decimal transactionSum = decimal.Parse(TransactionSumBox.Text);
+            string note = NoteBox.Text;
+            DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
 
-            //DateTime transactionTime = ;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = @"INSERT INTO transactions (sum, time, accountFK)
+                        VALUES (@sum, @time, @accountFK)";
+
+                        using (var command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@sum", transactionSum);
+                            command.Parameters.AddWithValue("@time", transactionTime);
+                            command.Parameters.AddWithValue("@accountFK", accountPK);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                MessageBox.Show("Account added successfully!");
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
+        private int GetAccountPK(string selectedAccount)
+        {
+            int accountPK = 0;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT AccountPK FROM liquid_accounts WHERE AccountNickname = @AccountNickname";
 
+                        using (var command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AccountNickname", selectedAccount);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    accountPK = reader.GetInt32(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return accountPK;
+        }
         private int GetLoginOwner()
         {
             return Login.GetOwner();
