@@ -72,8 +72,6 @@ namespace Individual_project_initial
             if (AccountTypeComboBox.SelectedItem != null)
             {
                 selectedAccountType = AccountTypeComboBox.SelectedItem.ToString();
-                // Debugging statement
-                Console.WriteLine("Selected Account Type: " + selectedAccountType);
             }
         }
 
@@ -127,7 +125,6 @@ namespace Individual_project_initial
                         }
                     }
                 }
-                // Optionally, update the UI or show a success message
                 MessageBox.Show("Account added successfully!");
             }
             catch (MySqlException ex)

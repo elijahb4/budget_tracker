@@ -10,7 +10,7 @@
 
     <Grid Background="White">
         <DatePicker Name="dateComboBox" HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Top"/>
-        <ComboBox Name="accountBox" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Name="AccountComboBox" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="120"/>
         <!--<xctk:TimePicker Name="timePicker" />-->
         <TextBox Name="timeBox" HorizontalAlignment="Center" Margin="0,89,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <TextBox Name="noteBox" HorizontalAlignment="Center" Margin="0,37,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
