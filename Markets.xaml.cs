@@ -43,7 +43,7 @@ namespace Individual_project_initial
         public async Task<string> CallApi(string search_query)
         {
             string key = "nWm0PZsupKKPYBuByJe99IurBFk8dOjy";
-            string prefix = "https://financialmodelingprep.com/stable/search-symbol?query=";
+            string prefix = "https://financialmodelingprep.com/api/v3/search?query=";
             string url = $"{prefix}{search_query}&apikey={key}";
             return await queryLookup(url);
         }
@@ -80,8 +80,8 @@ namespace Individual_project_initial
                             symbol = item.GetProperty("symbol").GetString(),
                             name = item.GetProperty("name").GetString(),
                             currency = item.GetProperty("currency").GetString(),
-                            exchangeFullName = item.GetProperty("exchangeFullName").GetString(),
-                            exchange = item.GetProperty("exchange").GetString()
+                            exchangeFullName = item.GetProperty("stockExchange").GetString(),
+                            exchangeShortName = item.GetProperty("exchangeShortName").GetString()
                         };
                         results.Add(equity);
                     }
@@ -100,6 +100,6 @@ namespace Individual_project_initial
         public string name { get; set; }
         public string currency { get; set; }
         public string exchangeFullName { get; set; }
-        public string exchange { get; set; }
+        public string exchangeShortName { get; set; }
     }
 }

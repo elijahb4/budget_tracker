@@ -49,7 +49,7 @@ namespace Individual_project_initial
 
                 TextBlock exchangeTextBlock = new TextBlock
                 {
-                    Text = $"Exchange: {result.exchange}"
+                    Text = $"Exchange: {result.exchangeShortName}"
                 };
 
                 TextBlock exchangeFullNameTextBlock = new TextBlock
@@ -70,6 +70,8 @@ namespace Individual_project_initial
                 ResultsStackPanel.Children.Add(exchangeTextBlock);
                 ResultsStackPanel.Children.Add(exchangeFullNameTextBlock);
                 ResultsStackPanel.Children.Add(moreInfoButton);
+
+                //return result.symbol;
             }
         }
 
@@ -78,7 +80,7 @@ namespace Individual_project_initial
             Button button = sender as Button;
             string symbol = button.Tag.ToString();
             Equity equity = results.Find(e => e.symbol == symbol);
-            MoreInfo moreInfoPage = new MoreInfo(equity);
+            DisplayInfo displayInfoPage = new DisplayInfo(equity);
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
