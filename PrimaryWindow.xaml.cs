@@ -32,6 +32,14 @@ namespace Individual_project_initial
         private void GoToAccounts_Click(object sender, RoutedEventArgs e)
         {
             Frame.NavigationService.Navigate(new Uri("Accounts.xaml", UriKind.Relative));
-        }       
+        }
+        private void GoToMarkets_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.NavigationService.Navigate(new Uri("Markets.xaml", UriKind.Relative));
+        }
+        private void GoToSettings_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

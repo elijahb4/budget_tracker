@@ -13,8 +13,8 @@
             <ListBox DockPanel.Dock="Left" Width="auto" Background="LightGray" HorizontalAlignment="Left">
                 <Button Content="Home" Click="GoToHome_Click" />
                 <Button Content="Accounts" Click="GoToAccounts_Click" />
-                <Button Content="Settings" />
-                <Button Content="Help" />
+                <Button Content="Markets" Click="GoToMarkets_Click" />
+                <Button Content="Settings" Click="GoToSettings_Click" />
             </ListBox>
         </DockPanel>
     </Grid>

@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Net.Http;
 using System.Windows;
 
 namespace Individual_project_initial
@@ -16,5 +17,9 @@ namespace Individual_project_initial
                 }
             }
         }
+    }
+    public static class ApiClient
+    {
+        public static readonly HttpClient Client = new HttpClient();
     }
 }
