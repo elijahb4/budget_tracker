@@ -81,6 +81,7 @@ namespace Individual_project_initial
             string symbol = button.Tag.ToString();
             Equity equity = results.Find(e => e.symbol == symbol);
             DisplayInfo displayInfoPage = new DisplayInfo(equity);
+            NavigationService.Navigate(displayInfoPage);
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
