@@ -144,8 +144,7 @@ namespace Individual_project_initial
                     { "Zip", profile.zip },
                     { "Website", profile.website },
                     { "Description", profile.description }
-                    // Add more properties as needed
-                     };
+                    };
 
 
                     // Loop through the dictionary to create TextBlocks
