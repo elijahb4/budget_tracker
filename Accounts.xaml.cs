@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,12 @@ namespace Individual_project_initial
 {
     public partial class Accounts : Page
     {
+        private List<Account> accountOptions = new List<Account>();
+
         public Accounts()
         {
             InitializeComponent();
             int owner = GetLoginOwner();
-
-            List<Account> accountOptions = new List<Account>();
 
             try
             {
@@ -31,8 +32,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        //connection.Open();
-                        string query = "SELECT AccountNickname, InstitutionName, Balance, Currency FROM liquid_accounts WHERE Owner = @owner";
+                        string query = "SELECT AccountPK, AccountNickname, InstitutionName, Balance, Currency FROM liquid_accounts WHERE Owner = @owner";
 
                         using (var command = new MySqlCommand(query, connection))
                         {
@@ -43,10 +43,11 @@ namespace Individual_project_initial
                                 {
                                     Account account = new Account
                                     {
-                                        AccountNickname = reader.GetString(0),
-                                        InstitutionName = reader.GetString(1),
-                                        Balance = reader.GetDecimal(2),
-                                        Currency = reader.GetString(3)
+                                        AccountPK = reader.GetInt32(0),
+                                        AccountNickname = reader.GetString(1),
+                                        InstitutionName = reader.GetString(2),
+                                        Balance = reader.GetDecimal(3),
+                                        Currency = reader.GetString(4)
                                     };
                                     accountOptions.Add(account);
                                 }
@@ -62,13 +63,20 @@ namespace Individual_project_initial
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
+                    Button moreInfoButton = new Button
+                    {
+                        Content = "Full account details",
+                        Tag = account.AccountPK,
+                    };
+                    moreInfoButton.Click += MoreInfoButton_Click;
+                    AccountStackPanel.Children.Add(moreInfoButton);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }       
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -80,6 +88,16 @@ namespace Individual_project_initial
             NavigationService.Navigate(new Uri("AddAccount.xaml", UriKind.Relative));
         }
 
+        private void MoreInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button != null && button.Tag is int accountPK)
+            {
+                AccountInformation accountInformationPage = new AccountInformation(accountPK);
+                NavigationService.Navigate(new Uri("AccountInformation.xaml", UriKind.Relative));
+            }
+        }
+
         private int GetLoginOwner()
         {
             return Login.GetOwner();
@@ -87,8 +105,18 @@ namespace Individual_project_initial
     }
     public class Account
     {
+        public required int AccountPK { get; set; }
         public string AccountNickname { get; set; }
         public required string InstitutionName { get; set; }
+        public string AccountNumber { get; set; }
+        public string SortCode { get; set; }
+        public string Reference { get; set; }
+        public string IBAN { get; set; }
+        public string BIC { get; set; }
+        public bool Overdraft { get; set; }
+        public decimal OverdraftLimit { get; set; }
+        public decimal OverdraftInterestRate { get; set; }
+        public decimal InterestRate { get; set; }
         public decimal Balance { get; set; }
         public string Currency { get; set; }
     }

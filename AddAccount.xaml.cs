@@ -50,7 +50,7 @@ namespace Individual_project_initial
                                 {
                                     string type = reader.GetString(0);
                                     accountOptions.Add(type);
-                                    Console.WriteLine($"Added option: {type}"); // Debug line
+                                    Console.WriteLine($"Added option: {type}");
                                 }
                             }
                         }
