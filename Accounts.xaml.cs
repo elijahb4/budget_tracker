@@ -93,8 +93,8 @@ namespace Individual_project_initial
             Button button = sender as Button;
             if (button != null && button.Tag is int accountPK)
             {
-                AccountInformation accountInformationPage = new AccountInformation(accountPK);
                 NavigationService.Navigate(new Uri("AccountInformation.xaml", UriKind.Relative));
+                AccountInformation accountInformationPage = new AccountInformation(accountPK);
             }
         }
 

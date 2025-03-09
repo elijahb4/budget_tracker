@@ -4,6 +4,7 @@ using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace Individual_project_initial
 
         public AccountInformation(int AccountPK) : this()
         {
-            //InitializeComponent();
+            InitializeComponent();
             List<Account> accountDetails = new List<Account>();
 
             try
@@ -63,19 +64,31 @@ namespace Individual_project_initial
                                         Currency = reader.GetString(13)
                                     };
                                     accountDetails.Add(account);
+                                    MessageBox.Show($"Loaded account: {account.AccountNickname}, Balance: {account.Balance}");
                                 }
                             }
                         }
                     }
                 }
+                if (AccountStackPanel == null)
+                {
+                    MessageBox.Show("AccountStackPanel is null", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 foreach (var account in accountDetails)
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance}\n Currency: {account.Currency}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance}{account.Currency}",
                         TextWrapping = TextWrapping.Wrap
                     };
+                    MessageBox.Show($"Added TextBlock for account: {account.AccountNickname}");
                     AccountStackPanel.Children.Add(textBlock);
+                    TextBlock additionalInfoTextBlock = new TextBlock
+                    {
+                        Text = $"Account Number: {account.AccountNumber}\n Sort Code: {account.SortCode}\n Reference: {account.Reference}\n IBAN: {account.IBAN}\n BIC: {account.BIC}\n Overdraft: {account.Overdraft}\n Overdraft Limit: {account.OverdraftLimit}\n Overdraft Interest Rate: {account.OverdraftInterestRate}\n Interest Rate: {account.InterestRate}",
+                    };
+                    AccountStackPanel.Children.Add(additionalInfoTextBlock);
                 }
             }
             catch (Exception ex)
