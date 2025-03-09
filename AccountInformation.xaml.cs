@@ -1,21 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
-using Mysqlx.Crud;
-using Org.BouncyCastle.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
@@ -24,11 +10,27 @@ namespace Individual_project_initial
         public AccountInformation()
         {
             InitializeComponent();
+            Loaded += AccountInformation_Loaded;
         }
 
-        public AccountInformation(int AccountPK) : this()
+        private void AccountInformation_Loaded(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            if (NavigationService != null && NavigationService.Source != null)
+            {
+                var query = NavigationService.Source.OriginalString.Split('?').LastOrDefault();
+                if (query != null)
+                {
+                    var parameters = query.Split('&').Select(p => p.Split('=')).ToDictionary(p => p[0], p => p[1]);
+                    if (parameters.TryGetValue("accountPK", out string accountPKString) && int.TryParse(accountPKString, out int accountPK))
+                    {
+                        LoadAccountInformation(accountPK);
+                    }
+                }
+            }
+        }
+
+        private void LoadAccountInformation(int AccountPK)
+        {
             List<Account> accountDetails = new List<Account>();
 
             try
@@ -64,31 +66,26 @@ namespace Individual_project_initial
                                         Currency = reader.GetString(13)
                                     };
                                     accountDetails.Add(account);
-                                    MessageBox.Show($"Loaded account: {account.AccountNickname}, Balance: {account.Balance}");
                                 }
                             }
                         }
                     }
                 }
+
                 if (AccountStackPanel == null)
                 {
                     MessageBox.Show("AccountStackPanel is null", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
                 foreach (var account in accountDetails)
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance}{account.Currency}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance} {account.Currency}",
                         TextWrapping = TextWrapping.Wrap
                     };
-                    MessageBox.Show($"Added TextBlock for account: {account.AccountNickname}");
                     AccountStackPanel.Children.Add(textBlock);
-                    TextBlock additionalInfoTextBlock = new TextBlock
-                    {
-                        Text = $"Account Number: {account.AccountNumber}\n Sort Code: {account.SortCode}\n Reference: {account.Reference}\n IBAN: {account.IBAN}\n BIC: {account.BIC}\n Overdraft: {account.Overdraft}\n Overdraft Limit: {account.OverdraftLimit}\n Overdraft Interest Rate: {account.OverdraftInterestRate}\n Interest Rate: {account.InterestRate}",
-                    };
-                    AccountStackPanel.Children.Add(additionalInfoTextBlock);
                 }
             }
             catch (Exception ex)
@@ -97,5 +94,4 @@ namespace Individual_project_initial
             }
         }
     }
-    
 }
