@@ -2,18 +2,56 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Individual_project_initial
 {
-    public partial class AddAccount : Page
+    public partial class AddAccount : Page, INotifyPropertyChanged
     {
         public AddAccount()
         {
             InitializeComponent();
             DataContext = this;
             LoadComboBox();
+            ExpanderVisibility = Visibility.Collapsed;
+            _isYes = true;
+        }
+
+        private bool _isYes;
+
+        public bool IsYes
+        {
+            get => _isYes;
+            set
+            {
+                _isYes = value;
+                OnPropertyChanged(nameof(IsYes));
+                ExpanderVisibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public bool IsNo
+        {
+            get => !_isYes;
+            set
+            {
+                _isYes = !value;
+                OnPropertyChanged(nameof(IsNo));
+                ExpanderVisibility = value ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        public Visibility ExpanderVisibility { get; private set; }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private void LoadComboBox()
@@ -25,6 +63,7 @@ namespace Individual_project_initial
             }
             else
             {
+                //AccountTypeComboBox.Items.Clear();
                 AccountTypeComboBox.ItemsSource = options;
                 Console.WriteLine("ComboBox options loaded successfully.");
             }
@@ -71,7 +110,7 @@ namespace Individual_project_initial
         {
             if (AccountTypeComboBox.SelectedItem != null)
             {
-                selectedAccountType = AccountTypeComboBox.SelectedItem.ToString();
+                selectedAccountType = AccountTypeComboBox.SelectedItem?.ToString() ?? string.Empty;
             }
         }
 
@@ -97,6 +136,7 @@ namespace Individual_project_initial
             string reference = referenceTextBox.Text;
             string startingBalance = balanceTextBox.Text;
             string currency = currencyTextBox.Text;
+            DateTime date = DateTime.Now;
 
             try
             {
@@ -104,8 +144,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency)
-                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency)";
+                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency, CreatedAt)
+                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency, @CreatedAt)";
 
                         using (var command = new MySqlCommand(query, connection))
                         {
@@ -120,6 +160,7 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@Balance", startingBalance);
                             command.Parameters.AddWithValue("@Owner", owner);
                             command.Parameters.AddWithValue("@Currency", currency);
+                            command.Parameters.AddWithValue("@CreatedAt", date);
                             command.ExecuteNonQuery();
                         }
                     }
