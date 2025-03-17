@@ -2,70 +2,38 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Individual_project_initial
 {
-    public partial class AddAccount : Page, INotifyPropertyChanged
+    public partial class AddAccount : Page
     {
+        public List<string> AccountTypes { get; private set; }
+
         public AddAccount()
         {
             InitializeComponent();
             DataContext = this;
+            AccountTypes = new List<string>();
             LoadComboBox();
-            ExpanderVisibility = Visibility.Collapsed;
-            _isYes = true;
-        }
-
-        private bool _isYes;
-
-        public bool IsYes
-        {
-            get => _isYes;
-            set
-            {
-                _isYes = value;
-                OnPropertyChanged(nameof(IsYes));
-                ExpanderVisibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public bool IsNo
-        {
-            get => !_isYes;
-            set
-            {
-                _isYes = !value;
-                OnPropertyChanged(nameof(IsNo));
-                ExpanderVisibility = value ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-
-        public Visibility ExpanderVisibility { get; private set; }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private void LoadComboBox()
         {
-            List<string> options = GetComboBoxOptions();
-            if (options.Count == 0)
+            AccountTypes = GetComboBoxOptions();
+            if (AccountTypes.Count == 0)
             {
                 MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
-                //AccountTypeComboBox.Items.Clear();
-                AccountTypeComboBox.ItemsSource = options;
-                Console.WriteLine("ComboBox options loaded successfully.");
+                AccountTypeComboBox.ItemsSource = AccountTypes;
+                MessageBox.Show($"ComboBox loaded with {AccountTypes.Count} options.");
+                foreach (var type in AccountTypes)
+                {
+                    MessageBox.Show($"Loaded option: {type}");
+                }
             }
         }
 
@@ -135,7 +103,7 @@ namespace Individual_project_initial
             string bic = bicTextBox.Text;
             string reference = referenceTextBox.Text;
             string startingBalance = balanceTextBox.Text;
-            string currency = currencyTextBox.Text;
+            //string currency = currencyTextBox.Text;
             DateTime date = DateTime.Now;
 
             try
@@ -144,8 +112,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, Currency, CreatedAt)
-                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @Currency, @CreatedAt)";
+                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, CreatedAt)
+                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
 
                         using (var command = new MySqlCommand(query, connection))
                         {
@@ -159,7 +127,7 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@Reference", reference);
                             command.Parameters.AddWithValue("@Balance", startingBalance);
                             command.Parameters.AddWithValue("@Owner", owner);
-                            command.Parameters.AddWithValue("@Currency", currency);
+                            //command.Parameters.AddWithValue("@Currency", currency);
                             command.Parameters.AddWithValue("@CreatedAt", date);
                             command.ExecuteNonQuery();
                         }
