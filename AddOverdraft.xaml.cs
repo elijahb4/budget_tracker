@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,42 @@ namespace Individual_project_initial
         public AddOverdraft()
         {
             InitializeComponent();
+        }
+
+        private void submitButton_click(object sender, RoutedEventArgs)
+        {
+            string overdraftAmountInput = OverdraftAmountTextBox.Text;
+            string overdraftLimitInput = OverdraftLimitTextBox.Text;
+            string overdraftInterestRateInput = OverdraftInterestTextBox.Text;
+
+            if (string.IsNullOrEmpty(overdraftAmountInput) || string.IsNullOrEmpty(overdraftLimitInput) || string.IsNullOrEmpty(overdraftInterestRateInput))
+            {
+                MessageBox.Show("Please fill in all fields.");
+                return;
+            }
+
+            decimal overdraftAmount = decimal.Parse(overdraftAmountInput);
+            decimal overdraftLimit = decimal.Parse(overdraftLimitInput);
+            decimal overdraftInterestRate = decimal.Parse(overdraftInterestRateInput);
+
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "UPDATE account SET OverdraftAmount = @OverdraftAmount, OverdraftLimit = @OverdraftLimit, OverdraftInterestRate = @OverdraftInterestRate WHERE AccountID = @AccountID";
+                        using (var command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@OverdraftAmount", overdraftAmount);
+                            command.Parameters.AddWithValue("@OverdraftLimit", overdraftLimit);
+                            command.Parameters.AddWithValue("@OverdraftInterestRate", overdraftInterestRate);
+                            command.Parameters.AddWithValue("@AccountID", 1);
+                        }
+                    }
+                }
+            }
+            catch { }
         }
     }
 }
