@@ -7,8 +7,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddOverdraft">
-
     <Grid>
-        
+        <TextBox Name="overdraftLimitTextBox" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Overdraft Limit" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="overdraftInterestRateTextBox" HorizontalAlignment="Center" Margin="0,33,0,0" TextWrapping="Wrap" Text="Overdraft Interest Rate" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Add Account" Click="SubmitButton_Click" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>

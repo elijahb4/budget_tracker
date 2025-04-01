@@ -103,7 +103,6 @@ namespace Individual_project_initial
             string bic = bicTextBox.Text;
             string reference = referenceTextBox.Text;
             string startingBalance = balanceTextBox.Text;
-            //string currency = currencyTextBox.Text;
             DateTime date = DateTime.Now;
 
             try
@@ -127,7 +126,6 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@Reference", reference);
                             command.Parameters.AddWithValue("@Balance", startingBalance);
                             command.Parameters.AddWithValue("@Owner", owner);
-                            //command.Parameters.AddWithValue("@Currency", currency);
                             command.Parameters.AddWithValue("@CreatedAt", date);
                             command.ExecuteNonQuery();
                         }
