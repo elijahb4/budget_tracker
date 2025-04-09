@@ -18,9 +18,6 @@ using MySql.Data.MySqlClient;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for AddOverdraft.xaml
-    /// </summary>
     public partial class AddOverdraft : Page
     {
         private readonly int _accountPK;
@@ -67,19 +64,17 @@ namespace Individual_project_initial
             }
         }
 
-        private void submitButton_click(object sender, RoutedEventArgs)
+        private void submitButton_Click_Overdraft(object sender, RoutedEventArgs e)
         {
-            string overdraftAmountInput = OverdraftAmountTextBox.Text;
-            string overdraftLimitInput = OverdraftLimitTextBox.Text;
-            string overdraftInterestRateInput = OverdraftInterestTextBox.Text;
+            string overdraftLimitInput = overdraftLimitTextBox.Text;
+            string overdraftInterestRateInput = overdraftInterestRateTextBox.Text;
 
-            if (string.IsNullOrEmpty(overdraftAmountInput) || string.IsNullOrEmpty(overdraftLimitInput) || string.IsNullOrEmpty(overdraftInterestRateInput))
+            if (string.IsNullOrEmpty(overdraftLimitInput) || string.IsNullOrEmpty(overdraftInterestRateInput))
             {
                 MessageBox.Show("Please fill in all fields.");
                 return;
             }
 
-            decimal overdraftAmount = decimal.Parse(overdraftAmountInput);
             decimal overdraftLimit = decimal.Parse(overdraftLimitInput);
             decimal overdraftInterestRate = decimal.Parse(overdraftInterestRateInput);
 
@@ -89,10 +84,9 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "UPDATE account SET OverdraftAmount = @OverdraftAmount, OverdraftLimit = @OverdraftLimit, OverdraftInterestRate = @OverdraftInterestRate WHERE AccountID = @AccountID";
+                        string query = "UPDATE account SET OverdraftLimit = @OverdraftLimit, OverdraftInterestRate = @OverdraftInterestRate WHERE AccountID = @AccountID";
                         using (var command = new MySqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@OverdraftAmount", overdraftAmount);
                             command.Parameters.AddWithValue("@OverdraftLimit", overdraftLimit);
                             command.Parameters.AddWithValue("@OverdraftInterestRate", overdraftInterestRate);
                             command.Parameters.AddWithValue("@AccountID", 1);

@@ -159,5 +159,3 @@ namespace Individual_project_initial
         }
     }
 }
-    }
-}
