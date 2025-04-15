@@ -18,9 +18,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for DisplayInfo.xaml
-    /// </summary>
     public partial class DisplayInfo : Page
     {
         public TextWrapping TextWrapping { get; set; }

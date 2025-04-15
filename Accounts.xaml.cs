@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
+﻿using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace Individual_project_initial
                     {
                         string query = "SELECT AccountPK, AccountNickname, InstitutionName, Balance, Currency FROM liquid_accounts WHERE Owner = @owner";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@owner", owner);
                             using (var reader = command.ExecuteReader())

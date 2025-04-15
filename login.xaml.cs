@@ -1,5 +1,5 @@
 using IndividualProjectInitial;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using System.Windows;
 
 namespace Individual_project_initial
@@ -27,16 +27,16 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string data_query = "SELECT user_id FROM user_information WHERE username = @username AND password = @password";
-                        using (MySqlCommand command = new MySqlCommand(data_query, connection))
+                        string data_query = "SELECT user_pk FROM user_information WHERE username = @username AND password = @password";
+                        using (var command = new NpgsqlCommand(data_query, connection))
                         {
                             command.Parameters.AddWithValue("@username", username);
                             command.Parameters.AddWithValue("@password", password);
-                            using (MySqlDataReader reader = command.ExecuteReader())
+                            using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {
-                                    owner = reader.GetInt32("user_id");
+                                    owner = reader.GetInt32(reader.GetOrdinal("user_pk"));
                                 }
                             }
                         }
@@ -66,17 +66,18 @@ namespace Individual_project_initial
         {
             try
             {
-                // Use your existing database connection service here
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
                         string query = "SELECT COUNT(*) FROM user_information WHERE username = @username AND password = @password";
-                        MySqlCommand cmd = new MySqlCommand(query, connection);
-                        cmd.Parameters.AddWithValue("@username", username);
-                        cmd.Parameters.AddWithValue("@password", password);
-                        int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        return count > 0; // If count > 0, user exists
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@username", username);
+                            command.Parameters.AddWithValue("@password", password);
+                            int count = Convert.ToInt32(command.ExecuteScalar());
+                            return count > 0;
+                        }
                     }
                 }
             }

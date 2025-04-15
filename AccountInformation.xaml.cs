@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Npgsql;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Navigation;
@@ -41,7 +41,7 @@ namespace Individual_project_initial
                     {
                         string query = "SELECT AccountPK, AccountNickname, InstitutionName, AccountNumber, SortCode, Reference, IBAN, BIC, Overdraft, OverdraftLimit, OverdraftInterestRate, InterestRate, Balance, Currency FROM liquid_accounts WHERE AccountPK = @AccountPK";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@AccountPK", AccountPK);
                             using (var reader = command.ExecuteReader())

@@ -1,5 +1,5 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,7 +54,7 @@ namespace Individual_project_initial
                     {
                         string query = "SELECT AccountNickname FROM liquid_accounts WHERE Owner = @Owner";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@Owner", owner);
                             using (var reader = command.ExecuteReader())
@@ -113,7 +113,7 @@ namespace Individual_project_initial
                         string query = @"INSERT INTO transactions (sum, time, accountFK)
                         VALUES (@sum, @time, @accountFK)";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@sum", transactionSum);
                             command.Parameters.AddWithValue("@time", transactionTime);
@@ -124,7 +124,7 @@ namespace Individual_project_initial
                 }
                 MessageBox.Show("Account added successfully!");
             }
-            catch (MySqlException ex)
+            catch (NpgsqlException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -140,7 +140,7 @@ namespace Individual_project_initial
                     {
                         string query = "SELECT AccountPK FROM liquid_accounts WHERE AccountNickname = @AccountNickname";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@AccountNickname", selectedAccount);
                             using (var reader = command.ExecuteReader())

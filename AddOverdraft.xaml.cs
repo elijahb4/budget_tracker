@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
 
 namespace Individual_project_initial
 {
@@ -48,7 +47,7 @@ namespace Individual_project_initial
                     using (var connection = dbHelper.GetConnection())
                     {
                         string query = "UPDATE liquid accounts SET (Overdraft, OverdraftLimit, OverdraftInterestRate) VALUES (@Overdraft, @OverdraftLimit, @OverdraftInterestRate) WHERE AccountPK = @AccountPK";
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@Overdraft", overdraftBool);
                             command.Parameters.AddWithValue("@OverdraftLimit", overdraftLimit);
@@ -85,7 +84,7 @@ namespace Individual_project_initial
                     using (var connection = dbHelper.GetConnection())
                     {
                         string query = "UPDATE account SET OverdraftLimit = @OverdraftLimit, OverdraftInterestRate = @OverdraftInterestRate WHERE AccountID = @AccountID";
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@OverdraftLimit", overdraftLimit);
                             command.Parameters.AddWithValue("@OverdraftInterestRate", overdraftInterestRate);

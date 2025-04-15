@@ -1,5 +1,5 @@
 ﻿using IndividualProjectInitial;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -49,7 +49,7 @@ namespace Individual_project_initial
                     {
                         string query = "SELECT Type FROM account_type";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             using (var reader = command.ExecuteReader())
                             {
@@ -114,7 +114,7 @@ namespace Individual_project_initial
                         string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, CreatedAt)
                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
 
-                        using (var command = new MySqlCommand(query, connection))
+                        using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@InstitutionName", institutionName);
                             command.Parameters.AddWithValue("@AccountType", accountType);
@@ -133,7 +133,7 @@ namespace Individual_project_initial
                 }
                 MessageBox.Show("Account added successfully!");
             }
-            catch (MySqlException ex)
+            catch (NpgsqlException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using System;
 using System.IO;
 using System.Windows;
@@ -9,7 +9,7 @@ namespace Individual_project_initial
     public class DatabaseHelper : IDisposable
     {
         private readonly string _connectionString;
-        private MySqlConnection _connection;
+        private NpgsqlConnection _connection;
         private bool _disposed = false;
 
         public DatabaseHelper()
@@ -22,11 +22,11 @@ namespace Individual_project_initial
             _connectionString = config.GetConnectionString("LocalDatabase");
         }
 
-        public MySqlConnection GetConnection()
+        public NpgsqlConnection GetConnection()
         {
             if (_connection == null)
             {
-                _connection = new MySqlConnection(_connectionString);
+                _connection = new NpgsqlConnection(_connectionString);
             }
 
             if (_connection.State != System.Data.ConnectionState.Open)
@@ -44,6 +44,56 @@ namespace Individual_project_initial
             }
 
             return _connection;
+        }
+
+        public void SetupSchema()
+        {
+            var sqlPath = Path.Combine(AppContext.BaseDirectory, "Sql", "init_schema.sql");
+
+            if (!File.Exists(sqlPath))
+            {
+                MessageBox.Show("Schema SQL file not found at: " + sqlPath);
+                return;
+            }
+
+            var sql = File.ReadAllText(sqlPath);
+
+            try
+            {
+                using var cmd = new NpgsqlCommand(sql, GetConnection());
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Database schema successfully ensured.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to execute schema setup: " + ex.Message);
+            }
+
+            SeedData();
+        }
+
+        private void SeedData()
+        {
+            var seedDataPath = Path.Combine(AppContext.BaseDirectory, "Sql", "seed_data.sql");
+
+            if (!File.Exists(seedDataPath))
+            {
+                MessageBox.Show("Seed data SQL file not found at: " + seedDataPath);
+                return;
+            }
+
+            var seedDataSql = File.ReadAllText(seedDataPath);
+
+            try
+            {
+                using var cmd = new NpgsqlCommand(seedDataSql, GetConnection());
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Test data successfully inserted.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to insert test data: " + ex.Message);
+            }
         }
 
         public void Dispose()

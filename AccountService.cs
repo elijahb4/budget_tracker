@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Npgsql;
 using System;
 
 namespace Individual_project_initial.Services
@@ -14,7 +14,7 @@ namespace Individual_project_initial.Services
                     {
                         using (var connection = dbHelper.GetConnection())
                         {
-                            using (var command = new MySqlCommand(query, connection))
+                            using (var command = new NpgsqlCommand(query, connection))
                             {
                                 command.Parameters.AddWithValue("@AccountPK", AccountPK);
                                 using (var reader = command.ExecuteReader())
@@ -45,7 +45,7 @@ namespace Individual_project_initial.Services
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        using (var updateCommand = new MySqlCommand(updateQuery, connection))
+                        using (var updateCommand = new NpgsqlCommand(updateQuery, connection))
                         {
                             updateCommand.Parameters.AddWithValue("@AccountPK", AccountPK);
                             updateCommand.ExecuteNonQuery();
