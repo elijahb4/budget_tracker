@@ -52,7 +52,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountNickname FROM liquid_accounts WHERE Owner = @Owner";
+                        string query = "SELECT AccountNickname FROM accounts WHERE Owner = @Owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -97,27 +97,30 @@ namespace Individual_project_initial
         {
             string selectedAccount = AccountComboBox.SelectedItem.ToString();
             int accountPK = GetAccountPK(selectedAccount);
+            decimal Balance = GetAccountBalance(accountPK);
             DateTime transactionDate = DateComboBox.SelectedDate.Value;
             int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
             int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
             decimal transactionSum = decimal.Parse(TransactionSumBox.Text);
             string note = NoteBox.Text;
             DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
-
+            decimal BalanceAfter = Balance + transactionSum;
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO transactions (sum, time, accountFK)
-                        VALUES (@sum, @time, @accountFK)";
+                        string query = @"INSERT INTO transactions (TransactionSum, TransactionTime, AccountFK, balanceafter, balanceprior)
+                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@sum", transactionSum);
                             command.Parameters.AddWithValue("@time", transactionTime);
                             command.Parameters.AddWithValue("@accountFK", accountPK);
+                            command.Parameters.AddWithValue("@balanceafter", BalanceAfter);
+                            command.Parameters.AddWithValue("@balanceprior", Balance);
                             command.ExecuteNonQuery();
                         }
                     }
@@ -138,7 +141,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK FROM liquid_accounts WHERE AccountNickname = @AccountNickname";
+                        string query = "SELECT AccountPK FROM accounts WHERE AccountNickname = @AccountNickname";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -159,6 +162,36 @@ namespace Individual_project_initial
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return accountPK;
+        }
+        private decimal GetAccountBalance(int accountPK)
+        {
+            decimal Balance = 0;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT Balance FROM liquid_accounts WHERE AccountPK = @AccountPK";
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AccountPK", accountPK);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    Balance = reader.GetDecimal(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return Balance;
         }
         private int GetLoginOwner()
         {
