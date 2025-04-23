@@ -13,9 +13,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Individual_project_initial
 {
-    class Insights
+    public partial class Insights
     {
-        public decimal InterestEarned(AccountFK)
+        public decimal InterestEarned(int AccountFK, DateOnly startDate, DateOnly endDate)
         {
             int owner = GetLoginOwner();
             //update to work monthly, do months where transactions exist and only up to the start if the prior fiscal year and calculations haven't already been made and interest != 0
@@ -32,7 +32,7 @@ namespace Individual_project_initial
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@accountfk", accountFK);
+                            command.Parameters.AddWithValue("@accountfk", AccountFK);
                             using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -62,35 +62,29 @@ namespace Individual_project_initial
             DateTime workingDate = new DateTime();
             int txIndex = 0;
             decimal balance = 0;
+            decimal dailyInterest = 0;
+            decimal balanceprior = 0;
+            decimal interestRate = 0;
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
                 // Apply any transactions that happened on this day
                 while (txIndex < transactions.Count && transactions[txIndex].Timestamp.Date == date.Date)
                 {
                     balance += transactions[txIndex].TransactionSum;
-                    currentInterestRate = transactions[txIndex].NewRate;
+                    interestRate = transactions[txIndex].NewRate;
                     txIndex++;
                 }
 
                 // Calculate daily interest
-                dailyInterest = balance * (currentInterestRate / 100 / 365);
+                dailyInterest = balance * (interestRate / 100 / 365);
 
+                decimal balanceafter = balanceprior + dailyInterest;
                 // Insert the interest for this day
-                InsertInterest(accountFK, dailyInterest, date, balance);
-            }
-            foreach (var transaction in transactions)
-            {
-                decimal interestRate = 0;
-                decimal totalBalance = 0;
-                DateTime startTime = DateTime.Now;
-                DateTime endTime = DateTime.Now.AddMonths(1);
-                TimeSpan timeSpan = endTime - startTime;
-                decimal interestEarned = totalBalance * (interestRate / 365) * (int)timeSpan.TotalDays;
-                totalInterestEarned += interestEarned;
+                InsertInterest(AccountFK, dailyInterest, date, balanceafter, balanceprior);
             }
             return totalInterestEarned;
         }
-        private void InsertInterest()
+        private void InsertInterest(int AccountFK, decimal transactionSum, DateTime timestamp, decimal balanceafter, decimal balanceprior)
         {
             string logType = "InterestPayment";
             try
@@ -103,11 +97,11 @@ namespace Individual_project_initial
                             "VALUES (@AccountFK, @TransactionSum, @TransactionTime, @balanceafter, @balanceprior, @logtype)";
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@AccountFK", accountFK);
+                            command.Parameters.AddWithValue("@AccountFK", AccountFK);
                             command.Parameters.AddWithValue("@TransactionSum", transactionSum);
                             command.Parameters.AddWithValue("@TransactionTime", timestamp);
-                            command.Parameters.AddWithValue("@balanceafter", startTime);
-                            command.Parameters.AddWithValue("@balanceprior", endTime);
+                            command.Parameters.AddWithValue("@balanceafter", balanceafter);
+                            command.Parameters.AddWithValue("@balanceprior", balanceprior);
                             command.Parameters.AddWithValue("@logtype", logType);
                             command.ExecuteNonQuery();
                         }
@@ -122,6 +116,30 @@ namespace Individual_project_initial
         private int GetLoginOwner()
         {
             return Login.GetOwner();
+        }
+
+        public static decimal GetTotalInterest(int accountId)
+        {
+            using (var dbHelper = new DatabaseHelper())
+            {
+                using (var connection = dbHelper.GetConnection())
+                {
+                    using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(""TransactionSum""), 0) FROM public.transactions WHERE ""AccountFK"" = @AccountFK AND logtype = @LogType;", connection);
+                    {
+                        cmd.Parameters.AddWithValue("@AccountFK", accountId);
+                        cmd.Parameters.AddWithValue("@LogType", "interest");
+
+                        var result = cmd.ExecuteScalar();
+                        return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
+                    }
+                }
+            }
+        }
+
+        public static void SaveInterestToUserSettings(decimal interest)
+        {
+            Properties.Settings.Default.InterestForYear = interest;
+            Properties.Settings.Default.Save();
         }
     }
 

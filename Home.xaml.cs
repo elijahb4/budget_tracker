@@ -27,7 +27,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccouuntPK FROM accounts WHERE Owner = @Owner";
+                        string query = "SELECT AccountPK FROM accounts WHERE Owner = @Owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -50,11 +50,24 @@ namespace Individual_project_initial
             }
             foreach (Int32 AccountFK in accounts)
             {
-                Insights.InterestEarned(AccountFK);
+                Insights.GetTotalInterest(AccountFK);
             }
             Properties.Settings.Default.InterestLastUpdated = DateTime.Now;
             Properties.Settings.Default.Save();
         }
+        public static DateTime GetCustomTaxYearStart()
+        {
+            int day = Properties.Settings.Default.TaxStartDate;
+            int month = Properties.Settings.Default.TaxStartMonth;
+
+            var today = DateTime.Today;
+            int year = (today.Month > month || (today.Month == month && today.Day >= day))
+                ? today.Year
+                : today.Year - 1;
+
+            return new DateTime(year, month, day);
+        }
+
         private int GetLoginOwner()
         {
             return Login.GetOwner();

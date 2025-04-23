@@ -33,5 +33,41 @@ namespace Individual_project_initial.Properties {
                 this["InterestLastUpdated"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal InterestForYear {
+            get {
+                return ((decimal)(this["InterestForYear"]));
+            }
+            set {
+                this["InterestForYear"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TaxStartDate {
+            get {
+                return ((int)(this["TaxStartDate"]));
+            }
+            set {
+                this["TaxStartDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TaxStartMonth {
+            get {
+                return ((int)(this["TaxStartMonth"]));
+            }
+            set {
+                this["TaxStartMonth"] = value;
+            }
+        }
     }
 }
