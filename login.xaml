@@ -13,26 +13,39 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center" FontSize="15" TextWrapping="Wrap" Text="Login" Grid.Row="0" Grid.ColumnSpan="2"/>
+                <Button Content="Change Server" Click="ChangeServer_Btn" Grid.Row="1" Grid.ColumnSpan="2"/>
 
-                <TextBlock Text="Username:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" MinWidth="40" x:Name="txtUsername"/>
+                <TextBlock Text="Username:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="-18,4,18,0" Grid.RowSpan="3"/>
+                <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" MinWidth="40" x:Name="txtUsername" Margin="40,2,0,25" RenderTransformOrigin="0.5,0.5" Width="106" Grid.RowSpan="3">
+                    <TextBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-0.26"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBox.RenderTransform>
+                </TextBox>
 
-                <TextBlock Text="Password:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                <PasswordBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" MinWidth="40" x:Name="txtPassword"/>
+                <TextBlock Text="Password:" Grid.Row="4" Grid.Column="1" VerticalAlignment="Top" Margin="-13,6,14,0"/>
+                <PasswordBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="40" x:Name="txtPassword" Height="18" VerticalAlignment="Top" Margin="40,6,0,0" Width="106"/>
 
-                <Button Content="Login" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Click="BtnLogin_Click" Tag="owner"/>
-                </Grid>
+                <Button Content="Login" Grid.Row="4" HorizontalAlignment="Center" Click="BtnLogin_Click" Tag="owner" Margin="0,29,0,-26" Grid.Column="1" Width="40"/>
+            </Grid>
         </Grid>
     </Viewbox>
 </Window>

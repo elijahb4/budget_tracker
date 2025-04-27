@@ -15,18 +15,6 @@ namespace Individual_project_initial
             {
                 dbHelper.SetupSchema();
             }
-            PerformDatabaseOperation();
-        }
-
-        public void PerformDatabaseOperation()
-        {
-            using (var dbHelper = new DatabaseHelper())
-            {
-                using (var connection = dbHelper.GetConnection())
-                {
-                    
-                }
-            }
         }
     }
 

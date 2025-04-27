@@ -13,6 +13,12 @@ namespace Individual_project_initial
             var viewModel = new UserModel();
             this.DataContext = viewModel;
         }
+        private void ChangeServer_Btn(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            EstablishConnection establishConnection = new EstablishConnection();
+            establishConnection.Show();
+        }
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             string username = txtUsername.Text;

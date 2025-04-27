@@ -66,8 +66,23 @@ namespace Individual_project_initial
                 Password = password
             };
 
-            string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true});
+            string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText("DB_Connection.json", jsonString);
+            PerformDatabaseOperation();
+            this.Hide();
+            Login loginWindow = new Login();
+            loginWindow.Show();
+        }
+
+        public void PerformDatabaseOperation()
+        {
+            (var dbHelper = new DatabaseHelper())
+            {
+                using (var connection = dbHelper.GetConnection())
+                {
+
+                }
+            }
         }
 
         string BuildConnectionString()
@@ -79,7 +94,6 @@ namespace Individual_project_initial
             string password = passwordBox.Password;
             return $"Host={host};Port={port};Database={database};Username={username};Password={password};";
         }
-
         bool TestConnection(string connectionString)
         {
             try
@@ -92,6 +106,16 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Connection failed: {ex.Message}");
                 return false;
+            }
+        }
+        public void PerformDatabaseOperation()
+        {
+            using (var dbHelper = new DatabaseHelper())
+            {
+                using (var connection = dbHelper.GetConnection())
+                {
+
+                }
             }
         }
     }

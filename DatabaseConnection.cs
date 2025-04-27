@@ -16,7 +16,7 @@ namespace Individual_project_initial
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("DB_Connection.json", optional: false, reloadOnChange: true)
                 .Build();
 
             _connectionString = config.GetConnectionString("LocalDatabase");

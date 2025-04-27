@@ -15,7 +15,7 @@ namespace Individual_project_initial
 {
     public partial class Insights
     {
-        public decimal InterestEarned(int AccountFK, DateOnly startDate, DateOnly endDate)
+        public decimal InterestEarned(int AccountFK, DateTime startDate, DateTime endDate)
         {
             int owner = GetLoginOwner();
             //update to work monthly, do months where transactions exist and only up to the start if the prior fiscal year and calculations haven't already been made and interest != 0
@@ -138,7 +138,8 @@ namespace Individual_project_initial
 
         public static void SaveInterestToUserSettings(decimal interest)
         {
-            Properties.Settings.Default.InterestForYear = interest;
+            // Convert the decimal value to a string before assigning it to the InterestForYear property
+            Properties.Settings.Default.InterestForYear = interest.ToString();
             Properties.Settings.Default.Save();
         }
     }
