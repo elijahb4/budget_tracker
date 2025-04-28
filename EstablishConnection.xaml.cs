@@ -68,21 +68,13 @@ namespace Individual_project_initial
 
             string jsonString = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText("DB_Connection.json", jsonString);
-            PerformDatabaseOperation();
+            using (var dbHelper = new DatabaseHelper())
+            {
+                dbHelper.SetupSchema();
+            }
             this.Hide();
             Login loginWindow = new Login();
             loginWindow.Show();
-        }
-
-        public void PerformDatabaseOperation()
-        {
-            (var dbHelper = new DatabaseHelper())
-            {
-                using (var connection = dbHelper.GetConnection())
-                {
-
-                }
-            }
         }
 
         string BuildConnectionString()
@@ -92,7 +84,7 @@ namespace Individual_project_initial
             string database = databaseTextBox.Text;
             string username = usernameTextBox.Text;
             string password = passwordBox.Password;
-            return $"Host={host};Port={port};Database={database};Username={username};Password={password};";
+            return $"Host={host};Port={port};Database={database};Username={username};Password={password};Pooling=true";
         }
         bool TestConnection(string connectionString)
         {

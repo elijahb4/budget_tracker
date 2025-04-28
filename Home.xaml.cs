@@ -1,5 +1,4 @@
-﻿using Mysqlx.Crud;
-using Npgsql;
+﻿using Npgsql;
 using System;
 using System.Windows;
 using System.Windows.Controls;

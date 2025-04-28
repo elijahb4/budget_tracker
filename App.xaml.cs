@@ -10,11 +10,7 @@ namespace Individual_project_initial
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-            using (var dbHelper = new DatabaseHelper())
-            {
-                dbHelper.SetupSchema();
-            }
+            
         }
     }
 

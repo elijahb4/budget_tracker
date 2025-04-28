@@ -15,11 +15,28 @@ namespace Individual_project_initial
         public DatabaseHelper()
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("DB_Connection.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            _connectionString = config.GetConnectionString("LocalDatabase");
+            var host = config["Host"];
+            var port = config["Port"];
+            var database = config["Database"];
+            var username = config["Username"];
+            var password = config["Password"];
+
+            host = host?.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(host) ||
+                string.IsNullOrWhiteSpace(port) ||
+                string.IsNullOrWhiteSpace(database) ||
+                string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                throw new InvalidOperationException("One or more database configuration values are missing in DB_Connection.json.");
+            }
+
+            _connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
         }
 
         public NpgsqlConnection GetConnection()
