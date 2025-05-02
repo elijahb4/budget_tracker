@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Individual_project_initial.Properties;
 using Npgsql;
 
@@ -98,16 +98,6 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Connection failed: {ex.Message}");
                 return false;
-            }
-        }
-        public void PerformDatabaseOperation()
-        {
-            using (var dbHelper = new DatabaseHelper())
-            {
-                using (var connection = dbHelper.GetConnection())
-                {
-
-                }
             }
         }
     }

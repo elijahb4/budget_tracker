@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for UpdateAccountDetails.xaml
-    /// </summary>
     public partial class UpdateAccountDetails : Page
     {
         public UpdateAccountDetails()
