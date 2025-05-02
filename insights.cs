@@ -138,15 +138,26 @@ namespace Individual_project_initial
 
         public static void SaveInterestToUserSettings(decimal interest)
         {
-            // Convert the decimal value to a string before assigning it to the InterestForYear property
             Properties.Settings.Default.InterestForYear = interest.ToString();
             Properties.Settings.Default.Save();
         }
     }
 
+    class Target
+    {
+        public int TargetId { get; set; }
+        public int OwnerId { get; set; }
+        public int AccountFK { get; set; }
+        public string TargetType { get; set; }
+        public decimal TargetAmount { get; set; }
+        public Date StartDate { get; set; }
+        public Date EndDate { get; set; }
+        public string Note { get; set; }
+    }
+
     class Transactionchange
     {
-        public int TrabsactionId { get; set; }
+        public int TransactionId { get; set; }
         public int AccountFK { get; set; }
         public decimal TransactionSum { get; set; }
         public DateTime Timestamp { get; set; }

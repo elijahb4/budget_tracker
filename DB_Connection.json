@@ -1,5 +1,5 @@
 {
-  "Host": "Localhost",
+  "Host": "localhost",
   "Port": "5432",
   "Database": "budget_tracker_db",
   "Username": "postgres",

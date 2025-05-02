@@ -76,7 +76,6 @@ namespace Individual_project_initial
 
             return accountOptions;
         }
-        public string selectedAccountType { get; set; }
         private void PopulateHourComboBox()
         {
             for (int i = 0; i < 24; i++)

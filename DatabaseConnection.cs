@@ -131,7 +131,6 @@ namespace Individual_project_initial
                         _connection = null;
                     }
                 }
-
                 _disposed = true;
             }
         }
