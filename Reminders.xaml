@@ -11,9 +11,16 @@
     <Grid Background="White">
         <TextBlock Text="Set a Reminder" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"/>
         <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
-        <ComboBox HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="140"/>
-        <ComboBox Name="HourComboBox" HorizontalAlignment="Left" Margin="340,66,0,0" VerticalAlignment="Top" Width="55"/>
-        <ComboBox Name="MinuteComboBox" HorizontalAlignment="Left" Margin="400,66,0,0" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.512,0.046"/>
+        <RichTextBox HorizontalAlignment="Left" Name="ReminderNote" Height="80" Margin="120,67,0,0" VerticalAlignment="Top" Width="299">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="Reminder Note"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Label Content="Reminder Date" HorizontalAlignment="Left" Margin="120,147,0,0" VerticalAlignment="Top" Width="94"/>
+        <DatePicker HorizontalAlignment="Left" Name="ReminderDate" Margin="120,173,0,0" VerticalAlignment="Top"/>
+        <Button Content="Set Reminder" Name="ReminderSubmit" HorizontalAlignment="Left" Margin="120,205,0,0" VerticalAlignment="Top" Width="82"/>
 
     </Grid>
 </Page>

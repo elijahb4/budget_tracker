@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.TimeZoneInfo;
 
 namespace Individual_project_initial
 {
@@ -22,53 +23,45 @@ namespace Individual_project_initial
         {
             InitializeComponent();
         }
-        private void LoadComboBox()
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ReminderDate.SelectedDate == null || ReminderNote.Document == null ||
+                ReminderNote.Document.Blocks.Count == 0)
+            {
+                MessageBox.Show("All fields are required");
+                return;
+            }
             int owner = GetLoginOwner();
-            List<string> options = GetComboBoxOptions(owner);
-            if (options.Count == 0)
-            {
-                MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                AccountComboBox.ItemsSource = options;
-                Console.WriteLine("ComboBox options loaded successfully.");
-            }
-        }
-        public List<string> GetComboBoxOptions(int owner)
-        {
-            List<string> accountOptions = new List<string>();
-
+            string note = Note(ReminderNote);
+            DateTime reminder_date_input = ReminderDate.SelectedDate.Value;
+            DateOnly reminder_date = DateOnly.FromDateTime(reminder_date_input);
+            using (var dbHelper = new DatabaseHelper())
             try
             {
-                using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = "INSERT INTO reminders (userFK, date, note) VALUES (@owner, @reminder_date, @note)";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = "SELECT AccountNickname FROM accounts WHERE Owner = @Owner";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@Owner", owner);
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    string accountName = reader.GetString(0);
-                                    accountOptions.Add(accountName);
-                                }
-                            }
-                        }
+                        command.Parameters.AddWithValue("@owner", owner);
+                        command.Parameters.AddWithValue("@date", reminder_date);
+                        command.Parameters.AddWithValue("@note", note);
+                        command.ExecuteNonQuery();
                     }
                 }
+            MessageBox.Show("Reminder Set");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            catch (NpgsqlException ex) {
+            MessageBox.Show("Error: " + ex.Message);
             }
-
-            return accountOptions;
+        }
+        string Note(RichTextBox ReminderNote)
+        {
+            TextRange textRange = new TextRange(
+                ReminderNote.Document.ContentStart,
+                ReminderNote.Document.ContentEnd
+            );
+            return textRange.Text;
         }
         private int GetLoginOwner()
         {
