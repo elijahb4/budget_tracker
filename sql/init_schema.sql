@@ -80,3 +80,37 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 	CONSTRAINT transactions_pk PRIMARY KEY ("TransactionPK"),
 	CONSTRAINT transactions_accounts_fk FOREIGN KEY ("AccountFK") REFERENCES public.accounts("AccountPK") ON UPDATE CASCADE
 );
+
+
+-- public.targets definition
+
+-- Drop table
+
+-- DROP TABLE public.targets;
+
+CREATE TABLE IF NOT EXISTS public.targets (
+	targetpk int4 NOT NULL,
+	ownerfk int4 NOT NULL,
+	accountfk varchar NOT NULL,
+	"type" varchar NOT NULL,
+	amount numeric NOT NULL,
+	startdate timestamptz NOT NULL,
+	targetdate timestamptz NOT NULL,
+	note text NULL,
+	CONSTRAINT targets_pk PRIMARY KEY (targetpk)
+);
+
+
+-- public.reminders definition
+
+-- Drop table
+
+-- DROP TABLE public.reminders;
+
+CREATE TABLE IF NOT EXISTS public.reminders (
+	reminderpk int4 NOT NULL,
+	"Date" timestamptz NOT NULL,
+	note text NULL,
+	userfk int4 NOT NULL,
+	CONSTRAINT reminders_pk PRIMARY KEY (reminderpk)
+);
