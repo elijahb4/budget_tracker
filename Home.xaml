@@ -11,5 +11,14 @@
     <Grid Background="White">
         <TextBlock Text="Your Dashboard" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"/>
         <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
+        <TextBlock HorizontalAlignment="Left" Margin="120,67,0,0" TextWrapping="Wrap" Text="Total Balance" FontSize="18" VerticalAlignment="Top" Height="30" Width="300" />
+        <Button Content="See all accounts" HorizontalAlignment="Left" Margin="120,142,0,0" VerticalAlignment="Top"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="120,97,0,0" TextWrapping="Wrap" Text="Balance" FontSize="28" VerticalAlignment="Top" Height="40" Width="150"/>
+        <TextBlock HorizontalAlignment="Left" Margin="120,169,0,0" TextWrapping="Wrap" Text="Transactions" FontSize="18" VerticalAlignment="Top" Height="30" Width="300"/>
+        <TextBlock HorizontalAlignment="Left" Margin="120,204,0,0" TextWrapping="Wrap" Text="Upcoming Targets" FontSize="18" VerticalAlignment="Top" Height="30" Width="300"/>
+        <Button Content="See all targets" HorizontalAlignment="Left" Margin="120,234,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="120,259,0,0" TextWrapping="Wrap" Text="Upcoming Reminders" FontSize="18" VerticalAlignment="Top" Height="30" Width="300"/>
+        <Button Content="See all reminders" HorizontalAlignment="Left" Margin="120,289,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>

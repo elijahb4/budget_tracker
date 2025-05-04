@@ -9,7 +9,6 @@
     <Grid>
         <Frame x:Name="Frame" NavigationUIVisibility="Hidden"/>
         <DockPanel>
-            <!-- Navigation Pane -->
             <ListBox DockPanel.Dock="Left" Width="auto" Background="LightGray" HorizontalAlignment="Left">
                 <Button Content="Home" Click="GoToHome_Click" />
                 <Button Content="Accounts" Click="GoToAccounts_Click" />
