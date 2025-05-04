@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS public.user_information (
 	username varchar NOT NULL,
 	email varchar NULL,
 	"password" varchar NOT NULL,
+	tax_allowance numeric DEFAULT 1000 NOT NULL,
 	CONSTRAINT user_information_pk PRIMARY KEY (user_pk),
 	CONSTRAINT user_information_unique UNIQUE (username),
 	CONSTRAINT user_information_unique_1 UNIQUE (email)

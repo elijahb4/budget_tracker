@@ -97,8 +97,18 @@ namespace Individual_project_initial
             DateTime transactionDate = DateComboBox.SelectedDate.Value;
             int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
             int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
-            decimal transactionSum = decimal.Parse(TransactionSumBox.Text);
-            string note = NoteBox.Text;
+            string transactionSumInput = TransactionSumBox.Text;
+            decimal transactionSum;
+            if (IsValidDecimal(transactionSumInput))
+            {
+                transactionSum = decimal.Parse(transactionSumInput);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid decimal number for the transaction sum.");
+                return;
+            }
+                string note = NoteBox.Text;
             DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
             decimal BalanceAfter = Balance + transactionSum;
             try
@@ -121,11 +131,11 @@ namespace Individual_project_initial
                         }
                     }
                 }
-                MessageBox.Show("Account added successfully!");
+                MessageBox.Show("Transaction added successfully!");
             }
             catch (NpgsqlException ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error adding transaction: " + ex.Message);
             }
         }
         private int GetAccountPK(string selectedAccount)
@@ -188,6 +198,10 @@ namespace Individual_project_initial
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return Balance;
+        }
+        static bool IsValidDecimal(string input)
+        {
+            return decimal.TryParse(input, out _);
         }
         private int GetLoginOwner()
         {

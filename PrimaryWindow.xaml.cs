@@ -33,11 +33,27 @@ namespace Individual_project_initial
         {
             Frame.NavigationService.Navigate(new Uri("Accounts.xaml", UriKind.Relative));
         }
+        private void GoToTargets_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.NavigationService.Navigate(new Uri("ViewTargets.xaml", UriKind.Relative));
+        }
+        private void GoToReminders_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.NavigationService.Navigate(new Uri("ViewReminders.xaml", UriKind.Relative));
+        }
+        private void GoToInterest_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.NavigationService.Navigate(new Uri("Interest.xaml", UriKind.Relative));
+        }
         private void GoToMarkets_Click(object sender, RoutedEventArgs e)
         {
             Frame.NavigationService.Navigate(new Uri("Markets.xaml", UriKind.Relative));
         }
         private void GoToSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.NavigationService.Navigate(new Uri("Settings.xaml", UriKind.Relative));
+        }
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
             Frame.NavigationService.Navigate(new Uri("Settings.xaml", UriKind.Relative));
         }

@@ -31,7 +31,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK, AccountNickname, InstitutionName, Balance, Currency FROM liquid_accounts WHERE Owner = @owner";
+                        string query = "SELECT AccountPK, AccountNickname, InstitutionName, Balance FROM accounts WHERE Owner = @owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -46,7 +46,6 @@ namespace Individual_project_initial
                                         AccountNickname = reader.GetString(1),
                                         InstitutionName = reader.GetString(2),
                                         Balance = reader.GetDecimal(3),
-                                        Currency = reader.GetString(4)
                                     };
                                     accountOptions.Add(account);
                                 }
@@ -58,7 +57,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance}\n Currency: {account.Currency}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{account.Balance}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);

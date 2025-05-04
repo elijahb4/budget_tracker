@@ -16,15 +16,13 @@
         <TextBox Name="UsernameTextBox" HorizontalAlignment="Left" Margin="127,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
         <Button Click="ChangeUsername_Click" Content="Update" HorizontalAlignment="Left" Margin="255,124,0,0" VerticalAlignment="Top"/>
         <Label Content="Change Password" HorizontalAlignment="Left" Margin="120,146,0,0" VerticalAlignment="Top" Width="127" Height="27"/>
-        <TextBox HorizontalAlignment="Left" Margin="127,173,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
+        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="127,173,0,0" VerticalAlignment="Top" Width="120" Height="20"/>
         <Button Click="ChangePassword_Click" Content="Update" HorizontalAlignment="Left" Margin="255,173,0,0" VerticalAlignment="Top"/>
         <Label Content="Change Email" HorizontalAlignment="Left" Margin="120,195,0,0" VerticalAlignment="Top" Width="127" Height="27"/>
         <TextBox Name="EmailTextBox" HorizontalAlignment="Left" Margin="127,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
         <Button Click="ChangeEmail_Click" Content="Update" HorizontalAlignment="Left" Margin="255,222,0,0" VerticalAlignment="Top"/>
         <Label Content="Change Tax Free Savings Interest Limit" HorizontalAlignment="Left" Margin="120,244,0,0" VerticalAlignment="Top" Width="242" Height="27"/>
-        <TextBox HorizontalAlignment="Left" Margin="127,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-        <Button Name="TaxFreeTextBox" Click="ChangeTaxFree_Click" Content="Update" HorizontalAlignment="Left" Margin="255,271,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="120,308,0,0" TextWrapping="Wrap" Text="Danger Zone" FontSize="18" VerticalAlignment="Top" Height="30" Width="300" />
-        <Button Click="DeleteAccount" Content="Delete Account" HorizontalAlignment="Left" Margin="127,338,0,0" VerticalAlignment="Top" Width="114"/>
+        <TextBox Name="TaxFreeTextBox" HorizontalAlignment="Left" Margin="127,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
+        <Button Click="ChangeTaxFree_Click" Content="Update" HorizontalAlignment="Left" Margin="255,271,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>

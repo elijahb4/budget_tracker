@@ -10,10 +10,19 @@
         <Frame x:Name="Frame" NavigationUIVisibility="Hidden"/>
         <DockPanel>
             <ListBox DockPanel.Dock="Left" Width="auto" Background="LightGray" HorizontalAlignment="Left">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <Button Content="Home" Click="GoToHome_Click" />
                 <Button Content="Accounts" Click="GoToAccounts_Click" />
+                <Button Content="Targets" Click="GoToTargets_Click" />
+                <Button Content="Reminders" Click="GoToReminders_Click" />
+                <Button Content="Interest" Click="GoToInterest_Click" />
                 <Button Content="Markets" Click="GoToMarkets_Click" />
-                <Button Content="Settings" Click="GoToSettings_Click" />
+                <Button Content="Settings" Click="GoToSettings_Click" VerticalAlignment="Bottom" />
+                <Button Content="Log out" Click="Logout_Click" VerticalAlignment="Bottom" />
             </ListBox>
         </DockPanel>
     </Grid>
