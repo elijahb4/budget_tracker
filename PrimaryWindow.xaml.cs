@@ -39,7 +39,7 @@ namespace Individual_project_initial
         }
         private void GoToSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.NavigationService.Navigate(new Uri("Settings.xaml", UriKind.Relative));
         }
     }
 }

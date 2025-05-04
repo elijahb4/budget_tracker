@@ -15,14 +15,31 @@ using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for Settings.xaml
-    /// </summary>
     public partial class Settings : Page
     {
         public Settings()
         {
             InitializeComponent();
+        }
+
+        private void ChangeUsername_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ChangeEmail_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteAccount_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
