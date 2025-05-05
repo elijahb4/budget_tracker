@@ -31,7 +31,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK, AccountNickname, InstitutionName, Balance FROM accounts WHERE Owner = @owner";
+                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"" FROM accounts WHERE ""Owner"" = @owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -110,11 +110,8 @@ namespace Individual_project_initial
         public string Reference { get; set; }
         public string IBAN { get; set; }
         public string BIC { get; set; }
-        public bool Overdraft { get; set; }
-        public decimal OverdraftLimit { get; set; }
-        public decimal OverdraftInterestRate { get; set; }
         public decimal InterestRate { get; set; }
         public decimal Balance { get; set; }
-        public string Currency { get; set; }
+        public string AccountType { get; set; }
     }
 }

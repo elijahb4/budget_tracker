@@ -48,8 +48,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK, AccountNickname, InstitutionName, AccountNumber, SortCode, Reference, IBAN, BIC, Overdraft, OverdraftLimit, OverdraftInterestRate, InterestRate, Balance, Currency FROM liquid_accounts WHERE AccountPK = @AccountPK";
-
+                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"" FROM accounts WHERE ""Owner"" = @owner";
+                        //change query
                         using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@AccountPK", AccountPK);
@@ -67,12 +67,9 @@ namespace Individual_project_initial
                                         Reference = reader.GetString(5),
                                         IBAN = reader.GetString(6),
                                         BIC = reader.GetString(7),
-                                        Overdraft = reader.GetBoolean(8),
-                                        OverdraftLimit = reader.GetDecimal(9),
-                                        OverdraftInterestRate = reader.GetDecimal(10),
                                         InterestRate = reader.GetDecimal(11),
                                         Balance = reader.GetDecimal(12),
-                                        Currency = reader.GetString(13)
+                                        AccountType = reader.GetString(13)
                                     };
                                     accountDetails.Add(account);
                                 }
@@ -91,7 +88,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: {account.Balance} {account.Currency}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{account.Balance}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
