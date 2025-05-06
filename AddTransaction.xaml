@@ -5,11 +5,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="AddTransaction">
-
-    <Grid Background="White">
-        <DatePicker Name="DateComboBox" HorizontalAlignment="Left" Margin="120,124,0,0" VerticalAlignment="Top" Width="120"/>
+      d:DesignHeight="720" d:DesignWidth="1280"
+            Title="AddTransaction" Height="720" Width="1280">
+    <Viewbox Stretch="Uniform">
+        <Grid Height="720" Width="1280" Background="White">
+            <DatePicker Name="DateComboBox" HorizontalAlignment="Left" Margin="120,124,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox Name="AccountComboBox" HorizontalAlignment="Left" Margin="120,97,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox Name="HourComboBox" HorizontalAlignment="Left" Margin="120,174,0,0" VerticalAlignment="Top" Width="55"/>
         <ComboBox Name="MinuteComboBox" HorizontalAlignment="Left" Margin="180,174,0,0" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.512,0.046"/>
@@ -22,4 +22,5 @@
         <Label Content="Hour" HorizontalAlignment="Left" Margin="120,148,0,0" VerticalAlignment="Top" Width="39"/>
         <Label Content="Minute" HorizontalAlignment="Left" Margin="182,148,0,0" VerticalAlignment="Top" Width="56"/>
     </Grid>
+        </Viewbox>
 </Page>

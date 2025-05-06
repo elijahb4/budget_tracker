@@ -5,20 +5,18 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Title="Accounts">
-    <Grid Margin="30,30,10,10" Background="White">
-        <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"><Run Language="en-gb" Text="Accounts"/></TextBlock>
-
-        <Button Content="Add Account" Click="Button_Click_1" HorizontalAlignment="Left" Margin="120,73,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.571,2.518"/>
-        <Button Content="Add Transaction" Click="Button_Click" HorizontalAlignment="Left" Margin="205,73,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.101,0.251"/>
-        <Separator HorizontalAlignment="Left" Height="23" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-        <Separator HorizontalAlignment="Left" Height="23" Margin="120,98,0,0" VerticalAlignment="Top" Width="355"/>
-        <ScrollViewer Margin="120,126,0,10" Width="355" HorizontalAlignment="Left">
-            <StackPanel x:Name="AccountStackPanel" Width="345" Height="auto"/>
-        </ScrollViewer>
-
-
-
-    </Grid>
+    <Viewbox Stretch="Uniform">
+        <Grid Height="720" Width="1280" Background="White">
+            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"><Run Language="en-gb" Text="Accounts"/></TextBlock>
+            <Button Content="Add Account" Click="Button_Click_1" HorizontalAlignment="Left" Margin="120,73,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.571,2.518"/>
+            <Button Content="Add Transaction" Click="Button_Click" HorizontalAlignment="Left" Margin="205,73,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.101,0.251"/>
+            <Separator HorizontalAlignment="Left" Height="23" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
+            <Separator HorizontalAlignment="Left" Height="23" Margin="120,98,0,0" VerticalAlignment="Top" Width="355"/>
+            <ScrollViewer Margin="120,126,0,10" Width="355" HorizontalAlignment="Left">
+                <StackPanel x:Name="AccountStackPanel" Width="345" Height="auto"/>
+            </ScrollViewer>
+        </Grid>
+    </Viewbox>
 </Page>

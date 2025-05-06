@@ -5,21 +5,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Reminders">
-
-    <Grid Background="White">
-        <TextBlock Text="Set a Reminder" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"/>
-        <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
-        <RichTextBox HorizontalAlignment="Left" Name="ReminderNote" Height="80" Margin="120,67,0,0" VerticalAlignment="Top" Width="299">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="Reminder Note"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <Label Content="Reminder Date" HorizontalAlignment="Left" Margin="120,147,0,0" VerticalAlignment="Top" Width="94"/>
-        <DatePicker HorizontalAlignment="Left" Name="ReminderDate" Margin="120,173,0,0" VerticalAlignment="Top"/>
-        <Button Content="Set Reminder" Name="ReminderSubmit" Click="SubmitButton_Click" HorizontalAlignment="Left" Margin="120,205,0,0" VerticalAlignment="Top" Width="82"/>
-    </Grid>
+        d:DesignHeight="720" d:DesignWidth="1280"
+  Title="Reminders">
+    <Viewbox Stretch="Uniform">
+        <Grid Height="720" Width="1280" Background="White">
+            <TextBlock Text="Set a Reminder" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"/>
+            <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
+            <RichTextBox HorizontalAlignment="Left" Name="ReminderNote" Height="80" Margin="120,67,0,0" VerticalAlignment="Top" Width="299">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text="Reminder Note"/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+            <Label Content="Reminder Date" HorizontalAlignment="Left" Margin="120,147,0,0" VerticalAlignment="Top" Width="94"/>
+            <DatePicker HorizontalAlignment="Left" Name="ReminderDate" Margin="120,173,0,0" VerticalAlignment="Top"/>
+            <Button Content="Set Reminder" Name="ReminderSubmit" Click="SubmitButton_Click" HorizontalAlignment="Left" Margin="120,205,0,0" VerticalAlignment="Top" Width="82"/>
+        </Grid>
+    </Viewbox>
 </Page>

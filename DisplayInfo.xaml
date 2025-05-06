@@ -5,16 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="DisplayInfo">
-
-    <Grid Background="White">
-        <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-        <TextBlock Text="Results" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"/>
-        <ScrollViewer Margin="120,70,325,10" HorizontalAlignment="Left">
-            <StackPanel x:Name="ResultsStackPanel" Width="345" Height="auto">
-                <TextBox x:Name="DisplayInfoTextBox" Width="345" Height="auto"/>
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+      d:DesignHeight="720" d:DesignWidth="1280"
+            Title="DisplayInfo" Height="720" Width="1280">
+    <Viewbox Stretch="Uniform">
+        <Grid Height="720" Width="1280" Background="White">
+            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
+            <TextBlock Text="Results" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"/>
+            <ScrollViewer Margin="120,70,0,10" HorizontalAlignment="Left" Width="733">
+                <StackPanel x:Name="ResultsStackPanel" Width="345" Height="auto">
+                    <TextBox x:Name="DisplayInfoTextBox" Width="345" Height="auto"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Viewbox>
 </Page>
