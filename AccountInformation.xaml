@@ -8,16 +8,17 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Account Information">
-
-    <Grid Background="White">
-        <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355">
+    <Viewbox Stretch="Uniform">
+        <Grid Background="White">
+            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355">
             <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
-        </TextBlock>
-        <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355"/>
-        <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,90">
-            <!-- Temporary TextBlock for debugging -->
-            <TextBlock Text="Debugging: This should be visible if StackPanel is correctly positioned."/>
-            <oxy:PlotView Model="{Binding BalanceChart}" />
-        </StackPanel>
-    </Grid>
+            </TextBlock>
+            <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355"/>
+            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,90">
+                <!-- Temporary TextBlock for debugging -->
+                <TextBlock Text="Debugging: This should be visible if StackPanel is correctly positioned."/>
+                <oxy:PlotView Model="{Binding BalanceChart}" />
+            </StackPanel>
+        </Grid>
+    </Viewbox>
 </Page>
