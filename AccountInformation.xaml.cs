@@ -48,8 +48,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"" FROM accounts WHERE ""Owner"" = @owner";
-                        //change query
+                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"", ""AccountNumber"", ""SortCode"", ""Reference"", ""IBAN"", ""BIC"", ""InterestRate"", ""AccountType"" FROM accounts WHERE ""Owner"" = @owner";
+
                         using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@AccountPK", AccountPK);
@@ -67,9 +67,9 @@ namespace Individual_project_initial
                                         Reference = reader.GetString(5),
                                         IBAN = reader.GetString(6),
                                         BIC = reader.GetString(7),
-                                        InterestRate = reader.GetDecimal(11),
-                                        Balance = reader.GetDecimal(12),
-                                        AccountType = reader.GetString(13)
+                                        InterestRate = reader.GetDecimal(8),
+                                        Balance = reader.GetDecimal(9),
+                                        AccountType = reader.GetString(10)
                                     };
                                     accountDetails.Add(account);
                                 }
