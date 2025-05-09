@@ -16,78 +16,47 @@ namespace Individual_project_initial
             InitializeComponent();
             DataContext = this;
             AccountTypes = new List<string>();
-            LoadComboBox();
+            PopulateComboBoxWithAccountTypes();
         }
 
-        private void LoadComboBox()
+        private void PopulateComboBoxWithAccountTypes()
         {
-            AccountTypes = GetComboBoxOptions();
-            if (AccountTypes.Count == 0)
+            List<string> accountTypes = GetComboBoxOptions();
+            if (accountTypes.Count == 0)
             {
                 MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
-                AccountTypeComboBox.ItemsSource = AccountTypes;
-                MessageBox.Show($"ComboBox loaded with {AccountTypes.Count} options.");
-                foreach (var type in AccountTypes)
-                {
-                    MessageBox.Show($"Loaded option: {type}");
-                }
+                AccountTypeComboBox.ItemsSource = accountTypes;
+                Console.WriteLine($"ComboBox loaded with {accountTypes.Count} options.");
             }
         }
 
         public List<string> GetComboBoxOptions()
         {
-            List<string> accountOptions = new List<string>();
-
-            try
+            return new List<string>
             {
-                using (var dbHelper = new DatabaseHelper())
-                {
-                    using (var connection = dbHelper.GetConnection())
-                    {
-                        string query = "SELECT Type FROM account_type";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    string type = reader.GetString(0);
-                                    accountOptions.Add(type);
-                                    Console.WriteLine($"Added option: {type}");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return accountOptions;
+                "Current",
+                "Savings",
+                "ISA"
+            };
         }
 
-        public string selectedAccountType { get; set; }
+        public string SelectedAccountType { get; set; }
 
         private void AccountTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (AccountTypeComboBox.SelectedItem != null)
             {
-                selectedAccountType = AccountTypeComboBox.SelectedItem?.ToString() ?? string.Empty;
+                SelectedAccountType = AccountTypeComboBox.SelectedItem.ToString() ?? string.Empty;
             }
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             int owner = GetLoginOwner();
-            string accountType = selectedAccountType;
-
-            Console.WriteLine("Account Type to be inserted: " + accountType);
+            string accountType = SelectedAccountType;
 
             if (string.IsNullOrEmpty(accountType))
             {
@@ -99,10 +68,26 @@ namespace Individual_project_initial
             string accountName = accountNameTextBox.Text;
             string accountNumber = accountNumberTextBox.Text;
             string sortCode = sortCodeTextBox.Text;
-            string iban = ibanTextBox.Text;
-            string bic = bicTextBox.Text;
             string reference = referenceTextBox.Text;
-            string startingBalance = balanceTextBox.Text;
+            string startingBalanceText = balanceTextBox.Text;
+            decimal startingBalance;
+
+            if (!decimal.TryParse(startingBalanceText, out startingBalance))
+            {
+                MessageBox.Show("Invalid starting balance. Please enter a valid number.");
+                return;
+            }
+            if (accountNumber.Length != 8)
+            {
+                MessageBox.Show("Account number must be 8 digits long.");
+                return;
+            }
+            if (sortCode.Length != 6)
+            {
+                MessageBox.Show("Sort code must be 6 digits long.");
+                return;
+            }
+
             DateTime date = DateTime.Now;
 
             try
@@ -111,8 +96,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, CreatedAt)
-                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
+                        string query = @"INSERT INTO accounts (accounttype, institutionname, accountnickname, accountnumber, sortcode, reference, balance, owner, createdat)
+                                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -121,8 +106,6 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@AccountNickname", accountName);
                             command.Parameters.AddWithValue("@AccountNumber", accountNumber);
                             command.Parameters.AddWithValue("@SortCode", sortCode);
-                            command.Parameters.AddWithValue("@IBAN", iban);
-                            command.Parameters.AddWithValue("@BIC", bic);
                             command.Parameters.AddWithValue("@Reference", reference);
                             command.Parameters.AddWithValue("@Balance", startingBalance);
                             command.Parameters.AddWithValue("@Owner", owner);

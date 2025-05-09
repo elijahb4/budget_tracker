@@ -9,12 +9,8 @@ namespace Individual_project_initial
     {
         public Home()
         {
-            this.InitializeComponent();
-            DateTime lastRun = Properties.Settings.Default.InterestLastUpdated;
-            if ((DateTime.Now - lastRun).TotalDays >= 5)
-            {
-                UpdateInterest();
-            }            
+            InitializeComponent();
+            UpdateInterest();        
         }
         private void UpdateInterest()
         {
@@ -51,20 +47,6 @@ namespace Individual_project_initial
             {
                 Insights.GetTotalInterest(AccountFK);
             }
-            Properties.Settings.Default.InterestLastUpdated = DateTime.Now;
-            Properties.Settings.Default.Save();
-        }
-        public static DateTime GetCustomTaxYearStart()
-        {
-            int day = Properties.Settings.Default.TaxStartDate;
-            int month = Properties.Settings.Default.TaxStartMonth;
-
-            var today = DateTime.Today;
-            int year = (today.Month > month || (today.Month == month && today.Day >= day))
-                ? today.Year
-                : today.Year - 1;
-
-            return new DateTime(year, month, day);
         }
 
         private int GetLoginOwner()

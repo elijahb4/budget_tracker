@@ -20,6 +20,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -45,6 +46,7 @@
                 <PasswordBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="40" x:Name="txtPassword" Height="18" VerticalAlignment="Top" Margin="94,25,0,0" Width="106"/>
 
                 <Button Content="Login" Grid.Row="4" HorizontalAlignment="Center" Click="BtnLogin_Click" Tag="owner" Margin="0,48,0,-25" Grid.Column="1" Width="40"/>
+                <Button Content="Create Account" Grid.Row="5" HorizontalAlignment="Center" Click="CreateAccount_Click" Tag="owner" Margin="0,48,0,-25" Grid.Column="1" Width="120"/>
             </Grid>
         </Grid>
     </Viewbox>

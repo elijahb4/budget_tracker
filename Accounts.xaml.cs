@@ -31,7 +31,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"" FROM accounts WHERE ""Owner"" = @owner";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, balance FROM accounts WHERE owner = @owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {

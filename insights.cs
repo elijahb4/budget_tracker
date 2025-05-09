@@ -124,7 +124,7 @@ namespace Individual_project_initial
             {
                 using (var connection = dbHelper.GetConnection())
                 {
-                    using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(""TransactionSum""), 0) FROM public.transactions WHERE ""AccountFK"" = @AccountFK AND logtype = @LogType;", connection);
+                    using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(transactionsum), 0) FROM public.transactions WHERE accountfk = @AccountFK AND logtype = @LogType;", connection);
                     {
                         cmd.Parameters.AddWithValue("@AccountFK", accountId);
                         cmd.Parameters.AddWithValue("@LogType", "interest");
@@ -136,11 +136,6 @@ namespace Individual_project_initial
             }
         }
 
-        public static void SaveInterestToUserSettings(decimal interest)
-        {
-            Properties.Settings.Default.InterestForYear = interest.ToString();
-            Properties.Settings.Default.Save();
-        }
     }
 
     class Target

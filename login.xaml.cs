@@ -33,11 +33,10 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string data_query = "SELECT user_pk FROM user_information WHERE username = @username AND password = @password";
+                        string data_query = "SELECT user_pk FROM user_information WHERE username = @username";
                         using (var command = new NpgsqlCommand(data_query, connection))
                         {
                             command.Parameters.AddWithValue("@username", username);
-                            command.Parameters.AddWithValue("@password", password);
                             using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -76,13 +75,19 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT COUNT(*) FROM user_information WHERE username = @username AND password = @password";
+                        string query = "SELECT password FROM user_information WHERE username = @username";
                         using (var command = new NpgsqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@username", username);
-                            command.Parameters.AddWithValue("@password", password);
-                            int count = Convert.ToInt32(command.ExecuteScalar());
-                            return count > 0;
+
+                            object result = command.ExecuteScalar();
+                            if (result == null || result == DBNull.Value)
+                            {
+                                return false;
+                            }
+
+                            string storedHash = result.ToString();
+                            return BCrypt.Net.BCrypt.Verify(password, storedHash);
                         }
                     }
                 }
@@ -93,6 +98,14 @@ namespace Individual_project_initial
                 return false;
             }
         }
+
+        private void CreateAccount_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            Register registerWindow = new Register();
+            registerWindow.Show();
+        }
+
         public static int GetOwner()
         {
             return owner;

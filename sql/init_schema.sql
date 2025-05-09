@@ -9,17 +9,7 @@ END $$;
 
 
 COMMENT ON SCHEMA public IS 'standard public schema';
--- public.account_type definition
 
--- Drop table
-
--- DROP TABLE public.account_type;
-
--- This will only create the table if it doesn't already exist
-CREATE TABLE IF NOT EXISTS public.account_type (
-	"Type" varchar NOT NULL,
-	CONSTRAINT account_type_pk PRIMARY KEY ("Type")
-);
 
 -- public.user_information definition
 
@@ -46,24 +36,18 @@ CREATE TABLE IF NOT EXISTS public.user_information (
 -- DROP TABLE public.accounts;
 
 CREATE TABLE IF NOT EXISTS public.accounts (
-	"AccountPK" int4 NOT NULL,
-	"Owner" int4 NOT NULL,
-	"InstitutionName" varchar NOT NULL,
-	"AccountName" varchar NULL,
-	"SortCode" varchar NULL,
-	"IBAN" varchar NULL,
-	"BIC" varchar NULL,
-	"Reference" varchar NULL,
-	"CreatedAt" timestamptz NOT NULL,
-	"Balance" numeric NOT NULL,
-	"Overdraft" bool DEFAULT false NOT NULL,
-	"OverdraftAmount" numeric NULL,
-	"InterestRate" numeric DEFAULT 0 NOT NULL,
-	"OverdraftInterestRate" numeric NULL,
-	"AccountNickname" varchar NOT NULL,
-	CONSTRAINT accounts_pk PRIMARY KEY ("AccountPK"),
-	CONSTRAINT accounts_unique UNIQUE ("AccountName"),
-	CONSTRAINT accounts_user_information_fk FOREIGN KEY ("Owner") REFERENCES public.user_information(user_pk)
+	accountpk INT4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    accounttype VARCHAR(50),
+    institutionname VARCHAR(100),
+    accountnickname VARCHAR(100),
+    accountnumber VARCHAR(20),
+    sortcode VARCHAR(10),
+    reference VARCHAR(255),
+    balance DECIMAL(15, 2),
+    owner INT4,
+    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT accounts_unique UNIQUE ("accountnickname"),
+	CONSTRAINT accounts_user_information_fk FOREIGN KEY ("owner") REFERENCES public.user_information(user_pk)
 );
 
 
@@ -74,11 +58,10 @@ CREATE TABLE IF NOT EXISTS public.accounts (
 -- DROP TABLE public.transactions;
 
 CREATE TABLE IF NOT EXISTS public.transactions (
-	"TransactionPK" int4 NOT NULL,
-	"AccountFK" int4 NOT NULL,
-	"TransactionSum" numeric NOT NULL,
-	"TransactionTime" timestamptz NOT NULL,
-	CONSTRAINT transactions_pk PRIMARY KEY ("TransactionPK"),
+	transactionpk int4 NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	accountfk int4 NOT NULL,
+	transactionSum numeric NOT NULL,
+	transactionTime timestamptz NOT NULL,
 	CONSTRAINT transactions_accounts_fk FOREIGN KEY ("AccountFK") REFERENCES public.accounts("AccountPK") ON UPDATE CASCADE
 );
 
@@ -110,7 +93,7 @@ CREATE TABLE IF NOT EXISTS public.targets (
 
 CREATE TABLE IF NOT EXISTS public.reminders (
 	reminderpk int4 NOT NULL,
-	"Date" timestamptz NOT NULL,
+	"date" timestamptz NOT NULL,
 	note text NULL,
 	userfk int4 NOT NULL,
 	CONSTRAINT reminders_pk PRIMARY KEY (reminderpk)

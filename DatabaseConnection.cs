@@ -86,7 +86,7 @@ namespace Individual_project_initial
                 MessageBox.Show("Failed to execute schema setup: " + ex.Message);
             }
 
-            SeedData();
+            //SeedData();
         }
 
         private void SeedData()
