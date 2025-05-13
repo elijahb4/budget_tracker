@@ -1,5 +1,6 @@
 # Budget Tracker Application
-### What the application does, how it works and how to run it
+- What the application does, how it works and how to run it
+
 ## Background to the application and key details
 This is a local budget tracker application for Windows. It allows you to add particulars of bank accounts, transactions, and tax information. The application can use this information to provide information such as projections on how much you'll earn in interest in a year to help you manage your finances. It also generates data visualisations for you with your data.
 You can set your own personal tax limits and fiscal year start/end.
@@ -27,3 +28,7 @@ You can store data on your local machine or connect to remote data base, if you 
 	
 
 ## Features and using the application
+### Connect to database and sign in
+
+
+### 
