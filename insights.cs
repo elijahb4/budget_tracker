@@ -150,6 +150,14 @@ namespace Individual_project_initial
         public string Note { get; set; }
     }
 
+    public class Reminder
+    {
+        public int ReminderPK { get; set; }
+        public DateTime Date { get; set; }
+        public string Note { get; set; }
+        public int UserFK { get; set; }
+    }
+
     class Transactionchange
     {
         public int TransactionId { get; set; }
