@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for Transfer.xaml
-    /// </summary>
     public partial class Transfer : Page
     {
         public Transfer()
@@ -25,9 +22,141 @@ namespace Individual_project_initial
             InitializeComponent();
         }
 
-        private void AccountToComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LoadComboBox()
         {
-
+            int owner = GetLoginOwner();
+            List<string> options = GetComboBoxOptions(owner);
+            if (options.Count == 0)
+            {
+                MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                AccountComboBox.ItemsSource = options;
+                Console.WriteLine("ComboBox options loaded successfully.");
+            }
         }
+        public List<string> GetComboBoxOptions(int owner)
+        {
+            List<string> accountOptions = new List<string>();
+
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT AccountNickname FROM accounts WHERE Owner = @Owner";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@Owner", owner);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    string accountName = reader.GetString(0);
+                                    accountOptions.Add(accountName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        return accountOptions;
+    }
+
+    private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedAccount = AccountComboBox.SelectedItem.ToString();
+            int accountPK = GetAccountPK(selectedAccount);
+            decimal Balance = GetAccountBalance(accountPK);
+            DateTime transactionDate = DateComboBox.SelectedDate.Value;
+            int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
+            int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
+            string transactionSumInput = TransactionSumBox.Text;
+            decimal transactionSum;
+            if (IsValidDecimal(transactionSumInput))
+            {
+                transactionSum = decimal.Parse(transactionSumInput);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid decimal number for the transaction sum.");
+                return;
+            }
+                string note = NoteBox.Text;
+            DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
+            decimal BalanceAfter = Balance + transactionSum;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = @"INSERT INTO transactions (TransactionSum, TransactionTime, AccountFK, balanceafter, balanceprior)
+                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@sum", transactionSum);
+                            command.Parameters.AddWithValue("@time", transactionTime);
+                            command.Parameters.AddWithValue("@accountFK", accountPK);
+                            command.Parameters.AddWithValue("@balanceafter", BalanceAfter);
+                            command.Parameters.AddWithValue("@balanceprior", Balance);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                MessageBox.Show("Transaction added successfully!");
+            }
+            catch (NpgsqlException ex)
+            {
+                MessageBox.Show("Error adding transaction: " + ex.Message);
+            }
+        }
+        private int GetAccountPK(string selectedAccount)
+        {
+            int accountPK = 0;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT AccountPK FROM accounts WHERE AccountNickname = @AccountNickname";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AccountNickname", selectedAccount);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    accountPK = reader.GetInt32(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return accountPK;
+        }
+
+     static bool IsValidDecimal(string input)
+    {
+        return decimal.TryParse(input, out _);
+    }
+    private int GetLoginOwner()
+    {
+        return Login.GetOwner();
     }
 }
