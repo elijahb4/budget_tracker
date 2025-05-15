@@ -137,7 +137,6 @@ namespace Individual_project_initial
         }
 
     }
-
     class Target
     {
         public int TargetId { get; set; }
@@ -145,8 +144,8 @@ namespace Individual_project_initial
         public int AccountFK { get; set; }
         public string TargetType { get; set; }
         public decimal TargetAmount { get; set; }
-        public Date StartDate { get; set; }
-        public Date EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string Note { get; set; }
     }
 

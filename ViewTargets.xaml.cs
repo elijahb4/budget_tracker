@@ -71,15 +71,15 @@ namespace Individual_project_initial
                         TextWrapping = TextWrapping.Wrap
                     };
 
-                    AccountStackPanel.Children.Add(textBlock);
+                    TargetStackPanel.Children.Add(textBlock);
 
                     Button moreInfoButton = new Button
                     {
                         Content = "Full target details",
-                        Tag = target.TargetPK,
+                        Tag = target.TargetId,
                     };
                     moreInfoButton.Click += MoreInfoButton_Click;
-                    AccountStackPanel.Children.Add(moreInfoButton);
+                    TargetStackPanel.Children.Add(moreInfoButton);
                 }
             }
             catch (Exception ex)

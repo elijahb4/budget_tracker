@@ -56,7 +56,7 @@ namespace Individual_project_initial
                         Margin = new Thickness(0, 5, 0, 5)
                     };
 
-                    AccountStackPanel.Children.Add(textBlock);
+                    ReminderStackPanel.Children.Add(textBlock);
 
                     Button moreInfoButton = new Button
                     {
@@ -66,7 +66,7 @@ namespace Individual_project_initial
                     };
                     moreInfoButton.Click += ReminderMoreInfoButton_Click;
 
-                    AccountStackPanel.Children.Add(moreInfoButton);
+                    ReminderStackPanel.Children.Add(moreInfoButton);
                 }
             }
             catch (Exception ex)

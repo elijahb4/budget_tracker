@@ -21,6 +21,7 @@
             <Label Content="Password" HorizontalAlignment="Left" Margin="120,197,0,0" VerticalAlignment="Top" Width="120"/>
             <Label Content="Confirm Password" HorizontalAlignment="Left" Margin="120,241,0,0" VerticalAlignment="Top" Width="120"/>
             <Button Content="Create Account" Click="RegisterButton_Click" HorizontalAlignment="Left" Margin="120,301,0,0" VerticalAlignment="Top"/>
+            <Button Content="Go Back" Click="ToLogin_Click" HorizontalAlignment="Left" Margin="120,337,0,0" VerticalAlignment="Top"/>
         </Grid>
     </Viewbox>
 </Window>

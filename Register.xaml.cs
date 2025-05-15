@@ -80,5 +80,11 @@ namespace Individual_project_initial
             Login loginWindow = new Login();
             loginWindow.Show();
         }
+        private void ToLogin_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            Login loginWindow = new Login();
+            loginWindow.Show();
+        }
     }
 }

@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 	accountfk int4 NOT NULL,
 	transactionSum numeric NOT NULL,
 	transactionTime timestamptz NOT NULL,
-	CONSTRAINT transactions_accounts_fk FOREIGN KEY ("AccountFK") REFERENCES public.accounts("AccountPK") ON UPDATE CASCADE
+	CONSTRAINT transactions_accounttype_fk FOREIGN KEY ("accounttypefk") REFERENCES public.accounts("accounttype") ON UPDATE CASCADE
 );
 
 
