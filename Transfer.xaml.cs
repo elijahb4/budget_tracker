@@ -24,5 +24,10 @@ namespace Individual_project_initial
         {
             InitializeComponent();
         }
+
+        private void AccountToComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
