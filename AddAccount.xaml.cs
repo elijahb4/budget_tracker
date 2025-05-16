@@ -97,7 +97,7 @@ namespace Individual_project_initial
                     using (var connection = dbHelper.GetConnection())
                     {
                         string query = @"INSERT INTO accounts (accounttype, institutionname, accountnickname, accountnumber, sortcode, reference, balance, owner, createdat)
-                                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
+                                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @Reference, @Balance, @Owner, @CreatedAt)";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {

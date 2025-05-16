@@ -72,14 +72,6 @@ namespace Individual_project_initial
                     };
 
                     TargetStackPanel.Children.Add(textBlock);
-
-                    Button moreInfoButton = new Button
-                    {
-                        Content = "Full target details",
-                        Tag = target.TargetId,
-                    };
-                    moreInfoButton.Click += MoreInfoButton_Click;
-                    TargetStackPanel.Children.Add(moreInfoButton);
                 }
             }
             catch (Exception ex)
@@ -88,12 +80,9 @@ namespace Individual_project_initial
             }
         }
 
-        private void MoreInfoButton_Click(object sender, RoutedEventArgs e)
+        private void SetTargetButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is int targetPK)
-            {
-                NavigationService.Navigate(new Uri($"TargetInformation.xaml?targetPK={targetPK}", UriKind.Relative));
-            }
+            NavigationService?.Navigate(new Uri("Targets.xaml", UriKind.Relative));
         }
 
         private int GetLoginOwner()

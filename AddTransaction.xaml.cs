@@ -49,7 +49,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountNickname FROM accounts WHERE Owner = @Owner";
+                        string query = "SELECT accountnickname FROM accounts WHERE owner = @Owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -108,7 +108,7 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a valid decimal number for the transaction sum.");
                 return;
             }
-                string note = NoteBox.Text;
+            string note = NoteBox.Text;
             DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
             decimal BalanceAfter = Balance + transactionSum;
             try
@@ -117,7 +117,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO transactions (TransactionSum, TransactionTime, AccountFK, balanceafter, balanceprior)
+                        string query = @"INSERT INTO transactions (transactionSum, transactionTime, accountfk, balanceafter, balanceprior)
                         VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
 
                         using (var command = new NpgsqlCommand(query, connection))
@@ -147,11 +147,11 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK FROM accounts WHERE AccountNickname = @AccountNickname";
+                        string query = "SELECT accountpk FROM accounts WHERE accountnickname = @accountnickname";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@AccountNickname", selectedAccount);
+                            command.Parameters.AddWithValue("@accountnickname", selectedAccount);
                             using (var reader = command.ExecuteReader())
                             {
                                 if (reader.Read())
@@ -169,6 +169,7 @@ namespace Individual_project_initial
             }
             return accountPK;
         }
+
         private decimal GetAccountBalance(int accountPK)
         {
             decimal Balance = 0;
@@ -178,10 +179,10 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT Balance FROM liquid_accounts WHERE AccountPK = @AccountPK";
+                        string query = "SELECT balance FROM accounts WHERE accountpk = @accountpk";
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@AccountPK", accountPK);
+                            command.Parameters.AddWithValue("@accountpk", accountPK);
                             using (var reader = command.ExecuteReader())
                             {
                                 if (reader.Read())
@@ -199,6 +200,7 @@ namespace Individual_project_initial
             }
             return Balance;
         }
+
         static bool IsValidDecimal(string input)
         {
             return decimal.TryParse(input, out _);

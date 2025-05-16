@@ -57,16 +57,6 @@ namespace Individual_project_initial
                     };
 
                     ReminderStackPanel.Children.Add(textBlock);
-
-                    Button moreInfoButton = new Button
-                    {
-                        Content = "More reminder details",
-                        Tag = reminder.ReminderPK,
-                        Margin = new Thickness(0, 0, 0, 10)
-                    };
-                    moreInfoButton.Click += ReminderMoreInfoButton_Click;
-
-                    ReminderStackPanel.Children.Add(moreInfoButton);
                 }
             }
             catch (Exception ex)
@@ -75,12 +65,9 @@ namespace Individual_project_initial
             }
         }
 
-        private void ReminderMoreInfoButton_Click(object sender, RoutedEventArgs e)
+        private void SetReminderButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is int reminderPK)
-            {
-                NavigationService.Navigate(new Uri($"ReminderInformation.xaml?reminderPK={reminderPK}", UriKind.Relative));
-            }
+            NavigationService?.Navigate(new Uri("Reminders.xaml", UriKind.Relative));
         }
 
         private int GetLoginOwner()

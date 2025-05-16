@@ -137,29 +137,39 @@ namespace Individual_project_initial
         public List<DataPoint> GetDailyBalancesFromPostgres()
         {
             var dataPoints = new List<DataPoint>();
-            using (var dbHelper = new DatabaseHelper())
-            {
-                using (var connection = dbHelper.GetConnection())
-                {
 
-                    string query = @"SELECT DISTINCT ON (DATE(""Timestamp"")) DATE(""Timestamp"") AS Day, ""Balance"" FROM ""transactions"" WHERE ""Timestamp"" >= @FromDate AND ""Timestamp"" < @ToDate ORDER BY DATE(""Timestamp""), ""Timestamp"" DESC;";
-                    using (var cmd = new NpgsqlCommand(query, connection))
+            using (var dbHelper = new DatabaseHelper())
+            using (var connection = dbHelper.GetConnection())
+            {
+                string query = @"
+            SELECT DISTINCT ON (DATE(transactiontime)) 
+                DATE(transactiontime) AS day, 
+                balanceafter 
+            FROM transactions 
+            WHERE transactiontime >= @FromDate AND transactiontime < @ToDate 
+            ORDER BY DATE(transactiontime), transactionTime DESC;";
+
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@FromDate", DateTime.Now.AddDays(-30));
+                    cmd.Parameters.AddWithValue("@ToDate", DateTime.Now);
+
                     using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@ToDate", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@FromDate", DateTime.Now.AddDays(-30));
                         while (reader.Read())
                         {
                             DateTime date = reader.GetDateTime(0);
-                            double balance = reader.GetDouble(1);
+                            decimal balance = reader.GetDecimal(1);
 
-                            // Use DateTimeAxis if you want actual dates on the X axis
-                            dataPoints.Add(new DataPoint(DateTimeAxis.ToDouble(date), balance));
+                            // Convert to double if necessary for charting
+                            dataPoints.Add(new DataPoint(DateTimeAxis.ToDouble(date), (double)balance));
                         }
                     }
                 }
             }
+
             return dataPoints;
         }
+
     }
 }

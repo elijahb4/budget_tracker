@@ -19,7 +19,7 @@
                 <Button Content="Accounts" Click="GoToAccounts_Click" />
                 <Button Content="Targets" Click="GoToTargets_Click" />
                 <Button Content="Reminders" Click="GoToReminders_Click" />
-                <Button Content="Interest" Click="GoToInterest_Click" />
+                <Button Content="Transfer" Click="GoToTransfer_Click" />
                 <Button Content="Markets" Click="GoToMarkets_Click" />
                 <Button Content="Settings" Click="GoToSettings_Click" VerticalAlignment="Bottom" />
                 <Button Content="Log out" Click="Logout_Click" VerticalAlignment="Bottom" />

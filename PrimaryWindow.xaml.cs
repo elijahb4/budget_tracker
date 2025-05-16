@@ -41,9 +41,9 @@ namespace Individual_project_initial
         {
             Frame.NavigationService.Navigate(new Uri("ViewReminders.xaml", UriKind.Relative));
         }
-        private void GoToInterest_Click(object sender, RoutedEventArgs e)
+        private void GoToTransfer_Click(object sender, RoutedEventArgs e)
         {
-            Frame.NavigationService.Navigate(new Uri("Interest.xaml", UriKind.Relative));
+            Frame.NavigationService.Navigate(new Uri("Transfer.xaml", UriKind.Relative));
         }
         private void GoToMarkets_Click(object sender, RoutedEventArgs e)
         {

@@ -7,31 +7,25 @@ BEGIN
     END IF;
 END $$;
 
-
 COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 -- public.user_information definition
 
--- Drop table
-
 -- DROP TABLE public.user_information;
 
 CREATE TABLE IF NOT EXISTS public.user_information (
-	user_pk int4 NOT NULL,
+	user_pk int4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	username varchar NOT NULL,
 	email varchar NULL,
 	"password" varchar NOT NULL,
 	tax_allowance numeric DEFAULT 1000 NOT NULL,
-	CONSTRAINT user_information_pk PRIMARY KEY (user_pk),
 	CONSTRAINT user_information_unique UNIQUE (username),
 	CONSTRAINT user_information_unique_1 UNIQUE (email)
 );
 
 
 -- public.accounts definition
-
--- Drop table
 
 -- DROP TABLE public.accounts;
 
@@ -53,48 +47,42 @@ CREATE TABLE IF NOT EXISTS public.accounts (
 
 -- public.transactions definition
 
--- Drop table
-
 -- DROP TABLE public.transactions;
 
 CREATE TABLE IF NOT EXISTS public.transactions (
-	transactionpk int4 NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	transactionpk int4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	accountfk int4 NOT NULL,
 	transactionSum numeric NOT NULL,
 	transactionTime timestamptz NOT NULL,
-	CONSTRAINT transactions_accounttype_fk FOREIGN KEY ("accounttypefk") REFERENCES public.accounts("accounttype") ON UPDATE CASCADE
+	balancebefore numeric NOT NULL,
+	balanceafter numeric NOT NULL,
+	CONSTRAINT transactions_account_fk FOREIGN KEY ("accountfk") REFERENCES public.accounts("accountpk") ON UPDATE CASCADE
 );
 
 
 -- public.targets definition
 
--- Drop table
-
 -- DROP TABLE public.targets;
 
 CREATE TABLE IF NOT EXISTS public.targets (
-	targetpk int4 NOT NULL,
+	targetpk int4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	ownerfk int4 NOT NULL,
 	accountfk varchar NOT NULL,
 	"type" varchar NOT NULL,
 	amount numeric NOT NULL,
 	startdate timestamptz NOT NULL,
 	targetdate timestamptz NOT NULL,
-	note text NULL,
-	CONSTRAINT targets_pk PRIMARY KEY (targetpk)
+	note text NULL
 );
 
 
 -- public.reminders definition
 
--- Drop table
-
 -- DROP TABLE public.reminders;
 
 CREATE TABLE IF NOT EXISTS public.reminders (
-	reminderpk int4 NOT NULL,
+	reminderpk int4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	"date" timestamptz NOT NULL,
 	note text NULL,
-	userfk int4 NOT NULL,
-	CONSTRAINT reminders_pk PRIMARY KEY (reminderpk)
+	userfk int4 NOT NULL
 );

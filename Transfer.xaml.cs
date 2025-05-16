@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Npgsql;
+using static System.TimeZoneInfo;
 
 namespace Individual_project_initial
 {
@@ -20,6 +22,7 @@ namespace Individual_project_initial
         public Transfer()
         {
             InitializeComponent();
+            LoadComboBox();
         }
 
         private void LoadComboBox()
@@ -32,8 +35,8 @@ namespace Individual_project_initial
             }
             else
             {
-                AccountComboBox.ItemsSource = options;
-                Console.WriteLine("ComboBox options loaded successfully.");
+                AccountFromComboBox.ItemsSource = options;
+                AccountToComboBox.ItemsSource = options;
             }
         }
         public List<string> GetComboBoxOptions(int owner)
@@ -46,7 +49,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountNickname FROM accounts WHERE Owner = @Owner";
+                        string query = "SELECT accountnickname FROM accounts WHERE owner = @Owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -67,18 +70,23 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        return accountOptions;
-    }
+            return accountOptions;
+        }
 
-    private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void TransferButton_Click(object sender, RoutedEventArgs e)
         {
-            string selectedAccount = AccountComboBox.SelectedItem.ToString();
-            int accountPK = GetAccountPK(selectedAccount);
-            decimal Balance = GetAccountBalance(accountPK);
-            DateTime transactionDate = DateComboBox.SelectedDate.Value;
-            int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
-            int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
-            string transactionSumInput = TransactionSumBox.Text;
+            string selectedFromAccount = AccountFromComboBox.SelectedItem.ToString();
+            string selectedToAccount = AccountToComboBox.SelectedItem.ToString();
+            if (selectedFromAccount == selectedToAccount)
+            {
+                MessageBox.Show("Please select different accounts for transfer.");
+                return;
+            }
+            int accountFromPK = GetAccountPK(selectedFromAccount);
+            int accountToPK = GetAccountPK(selectedToAccount);
+            decimal FromBalance = GetAccountBalance(accountFromPK);
+            decimal ToBalance = GetAccountBalance(accountToPK);
+            string transactionSumInput = SumTextBox.Text;
             decimal transactionSum;
             if (IsValidDecimal(transactionSumInput))
             {
@@ -89,35 +97,10 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a valid decimal number for the transaction sum.");
                 return;
             }
-                string note = NoteBox.Text;
-            DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
-            decimal BalanceAfter = Balance + transactionSum;
-            try
-            {
-                using (var dbHelper = new DatabaseHelper())
-                {
-                    using (var connection = dbHelper.GetConnection())
-                    {
-                        string query = @"INSERT INTO transactions (TransactionSum, TransactionTime, AccountFK, balanceafter, balanceprior)
-                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@sum", transactionSum);
-                            command.Parameters.AddWithValue("@time", transactionTime);
-                            command.Parameters.AddWithValue("@accountFK", accountPK);
-                            command.Parameters.AddWithValue("@balanceafter", BalanceAfter);
-                            command.Parameters.AddWithValue("@balanceprior", Balance);
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                }
-                MessageBox.Show("Transaction added successfully!");
-            }
-            catch (NpgsqlException ex)
-            {
-                MessageBox.Show("Error adding transaction: " + ex.Message);
-            }
+            bool deduct = true;
+            InsertTransaction(accountFromPK, transactionSum, FromBalance, DateTime.Now, deduct);
+            deduct = false;
+            InsertTransaction(accountToPK, transactionSum, FromBalance, DateTime.Now, deduct);
         }
         private int GetAccountPK(string selectedAccount)
         {
@@ -128,7 +111,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT AccountPK FROM accounts WHERE AccountNickname = @AccountNickname";
+                        string query = "SELECT accountpk FROM accounts WHERE accountnickname = @AccountNickname";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -151,12 +134,83 @@ namespace Individual_project_initial
             return accountPK;
         }
 
-     static bool IsValidDecimal(string input)
-    {
-        return decimal.TryParse(input, out _);
-    }
-    private int GetLoginOwner()
-    {
-        return Login.GetOwner();
+        private decimal GetAccountBalance(int accountPK)
+        {
+            decimal Balance = 0;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT balance FROM accounts WHERE accountpk = @accountpk";
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@accountpk", accountPK);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    Balance = reader.GetDecimal(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return Balance;
+        }
+
+        private void InsertTransaction (int accountpk, decimal sum, decimal balance, DateTime time, bool deduct)
+        {
+            decimal balanceAfter;
+            if (deduct)
+            {
+                balanceAfter = balance - sum;
+            }
+            else
+            {
+                balanceAfter = balance + sum;
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = @"INSERT INTO transactions (transactionsum, transactiontime, accountfk, balanceafter, balanceprior)
+                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@sum", sum);
+                            command.Parameters.AddWithValue("@time", time);
+                            command.Parameters.AddWithValue("@accountFK", accountpk);
+                            command.Parameters.AddWithValue("@balanceafter", balanceAfter);
+                            command.Parameters.AddWithValue("@balanceprior", balance);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                MessageBox.Show("Transaction added successfully!");
+            }
+            catch (NpgsqlException ex)
+            {
+                MessageBox.Show("Error adding transaction: " + ex.Message);
+            }
+        }
+
+        static bool IsValidDecimal(string input)
+        {
+            return decimal.TryParse(input, out _);
+        }
+        private int GetLoginOwner()
+        {
+            return Login.GetOwner();
+        }
     }
 }

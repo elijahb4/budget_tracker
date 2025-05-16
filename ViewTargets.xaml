@@ -8,9 +8,10 @@
     Title="ViewTargets" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock HorizontalAlignment="Left" Height="41" Margin="120,10,0,0" TextWrapping="Wrap" Text="Taregts" FontSize="30" VerticalAlignment="Top" Width="314"/>
+            <TextBlock HorizontalAlignment="Left" Height="41" Margin="120,10,0,0" TextWrapping="Wrap" Text="Targets" FontSize="30" VerticalAlignment="Top" Width="314"/>
             <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <StackPanel x:Name="TargetStackPanel" Height="auto" Margin="120,88,467,85"/>
+            <Button Content="Set Target" Click="SetTargetButton_Click" HorizontalAlignment="Left" Margin="120,70,0,0" VerticalAlignment="Top"/>
+            <StackPanel x:Name="TargetStackPanel" Height="auto" Margin="120,98,467,85"/>
         </Grid>
     </Viewbox>
 </Page>
