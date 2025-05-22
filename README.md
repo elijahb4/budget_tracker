@@ -17,18 +17,46 @@ You can store data on your local machine or connect to remote data base, if you 
  - Windows 10 or later
  - .NET Desktop Runtime [learn more](https://learn.microsoft.com/en-us/dotnet/core/install/windows)
  - Your hardware must meet the requirements of the .NET Desktop Runtime - see link above for more information
- - PostgreSQL installed where you want the database to be (local or remote)
+ - [PostgreSQL](https://www.postgresql.org/download/windows/) installed where you want the database to be (local or remote)
  
 ## How to Run
 1. Setup PostgreSQL database
 	
-2. 
+2. Ensure NPGSQL is installed
 	
 3.
 	
 
 ## Features and using the application
 ### Connect to database and sign in
+1. Establishing a connection to the database
+  - The fields will be pre-filled with localhost default values, change these values only where necessary
+  - Once ready, save the connection details
+2. Sign in
+  - If you don't have an account, you can create one
+  - Enter your username and password to sign in.
+### Home Tab
+- See your total balance
+- Be notified of your savings interest this year
+### Accounts Tab
+1. See an overview of your accounts
+  - 
+### Targets Tab
+
+### Reminders Tab
+
+### Transfer Tab
+
+### Markets Tab
+
+### Settings Tab
+
+### Sign Out
+
+## Notices and declarations
+### Licences
+This software uses languages and dependencies which are subject to their own respective licences, please see *licences.txt* for full details of those licences as well as attribution.
+### Privacy
 
 
-### 
+### Accessibility
