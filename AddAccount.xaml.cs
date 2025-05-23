@@ -70,9 +70,16 @@ namespace Individual_project_initial
             string sortCode = sortCodeTextBox.Text;
             string reference = referenceTextBox.Text;
             string startingBalanceText = balanceTextBox.Text;
+            string interestRateText = interestRateTextBox.Text;
             decimal startingBalance;
+            decimal interestRate;
 
             if (!decimal.TryParse(startingBalanceText, out startingBalance))
+            {
+                MessageBox.Show("Invalid starting balance. Please enter a valid number.");
+                return;
+            }
+            if (!decimal.TryParse(interestRateText, out interestRate))
             {
                 MessageBox.Show("Invalid starting balance. Please enter a valid number.");
                 return;
@@ -96,8 +103,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO accounts (accounttype, institutionname, accountnickname, accountnumber, sortcode, reference, balance, owner, createdat)
-                                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @Reference, @Balance, @Owner, @CreatedAt)";
+                        string query = @"INSERT INTO accounts (accounttype, institutionname, accountnickname, accountnumber, sortcode, reference, balance, interestrate, owner, createdat)
+                                         VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @Reference, @Balance, @InterestRate, @Owner, @CreatedAt)";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -108,6 +115,7 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@SortCode", sortCode);
                             command.Parameters.AddWithValue("@Reference", reference);
                             command.Parameters.AddWithValue("@Balance", startingBalance);
+                            command.Parameters.AddWithValue("@InterestRate", interestRate);
                             command.Parameters.AddWithValue("@Owner", owner);
                             command.Parameters.AddWithValue("@CreatedAt", date);
                             command.ExecuteNonQuery();

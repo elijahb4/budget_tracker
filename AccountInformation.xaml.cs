@@ -48,7 +48,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT ""AccountPK"", ""AccountNickname"", ""InstitutionName"", ""Balance"", ""AccountNumber"", ""SortCode"", ""Reference"", ""IBAN"", ""BIC"", ""InterestRate"", ""AccountType"" FROM accounts WHERE ""Owner"" = @owner";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE owner = @owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -65,11 +65,9 @@ namespace Individual_project_initial
                                         AccountNumber = reader.GetString(3),
                                         SortCode = reader.GetString(4),
                                         Reference = reader.GetString(5),
-                                        IBAN = reader.GetString(6),
-                                        BIC = reader.GetString(7),
-                                        InterestRate = reader.GetDecimal(8),
-                                        Balance = reader.GetDecimal(9),
-                                        AccountType = reader.GetString(10)
+                                        InterestRate = reader.GetDecimal(6),
+                                        Balance = reader.GetDecimal(7),
+                                        AccountType = reader.GetString(8)
                                     };
                                     accountDetails.Add(account);
                                 }
@@ -88,7 +86,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{account.Balance}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{ToString(account.Balance)} \n Account Number: {account.AccountNumber}\n Sort Code: {account.SortCode}\n Reference: {account.Reference} \n Interest Rate: {account.InterestRate} \n Type: {account.AccountType}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
@@ -98,6 +96,11 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private object ToString(decimal balance)
+        {
+             return balance.ToString("N2");
         }
 
         public PlotModel LoadChart()

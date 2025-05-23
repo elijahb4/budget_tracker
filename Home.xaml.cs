@@ -19,13 +19,14 @@ namespace Individual_project_initial
             decimal totalInterestEarned = 0;
             int owner = GetLoginOwner();
             List<Int32> accounts = new List<Int32>();
+            List<decimal> balances = new List<decimal>();
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT accountpk, accounttype FROM accounts WHERE owner = @Owner";
+                        string query = "SELECT accountpk, balance, accounttype FROM accounts WHERE owner = @Owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -36,6 +37,8 @@ namespace Individual_project_initial
                                 {
                                     int accountPK = reader.GetInt32(0);
                                     accounts.Add(accountPK);
+                                    decimal balance = reader.GetDecimal(1);
+                                    balances.Add(balance);
                                 }
                             }
                         }
@@ -46,9 +49,15 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Error retrieving account names when updating interest calculations: " + ex.Message);
             }
-            foreach (Int32 AccountFK in accounts)
+            decimal totalBalance = 0;
+            foreach (decimal balance in balances)
             {
-                totalInterestEarned =+ Insights.GetTotalInterest(AccountFK);
+                totalBalance += balance;
+            }
+            BalanceTextBlock.Text = "Total Balance: £" + totalBalance.ToString("F2");
+            foreach (Int32 AccountPK in accounts)
+            {
+                totalInterestEarned =+ Insights.GetTotalInterest(AccountPK);
             }
             decimal tax_allowance = 0;
             try
@@ -106,6 +115,26 @@ namespace Individual_project_initial
         private int GetLoginOwner()
         {
             return Login.GetOwner();
+        }
+
+        private void GoToAccounts_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri("Accounts.xaml", UriKind.Relative));
+        }
+
+        private void AddTransaction_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri("AddTransaction.xaml", UriKind.Relative));
+        }
+
+        private void GoToTargets_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri("ViewTargets.xaml", UriKind.Relative));
+        }
+
+        private void GoToReminders_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri("ViewReminders.xaml", UriKind.Relative));
         }
     }
 }

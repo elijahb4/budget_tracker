@@ -19,16 +19,3 @@ You can store data on your local machine or connect to remote data base, if you 
  - Your hardware must meet the requirements of the .NET Desktop Runtime - see link above for more information
  - PostgreSQL installed where you want the database to be (local or remote)
  
-## How to Run
-1. Setup PostgreSQL database
-	
-2. 
-	
-3.
-	
-
-## Features and using the application
-### Connect to database and sign in
-
-
-### 

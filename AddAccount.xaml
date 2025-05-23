@@ -15,7 +15,7 @@
         <TextBox Name="sortCodeTextBox" HorizontalAlignment="Left" Margin="120,144,0,0" TextWrapping="Wrap" Text="Sort Code" VerticalAlignment="Top" Width="120"/>
             <TextBox Name="referenceTextBox" HorizontalAlignment="Left" Margin="120,167,0,0" TextWrapping="Wrap" Text="Reference" VerticalAlignment="Top" Width="120"/>
             <TextBox Name="balanceTextBox" HorizontalAlignment="Left" Margin="120,213,0,0" TextWrapping="Wrap" Text="Starting Balance" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="interestRate" HorizontalAlignment="Left" Margin="120,190,0,0" TextWrapping="Wrap" Text="Interest Rate" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="interestRateTextBox" HorizontalAlignment="Left" Margin="120,190,0,0" TextWrapping="Wrap" Text="Interest Rate" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" SelectionChanged="AccountTypeComboBox_SelectionChanged" HorizontalAlignment="Left" Margin="120,270,0,0" VerticalAlignment="Top" Width="120"/>
         <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="231"><Run Language="en-gb" Text="Add an Account"/></TextBlock>
         <Separator HorizontalAlignment="Left" Height="23" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>

@@ -93,7 +93,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "INSERT INTO transactions (AccountFK, TransactionSum, TransactionTime, balanceafter, balanceprior, logtype) " +
+                        string query = "INSERT INTO transactions (accountfk, amount, transactionsum, balanceafter, balanceprior, logtype) " +
                             "VALUES (@AccountFK, @TransactionSum, @TransactionTime, @balanceafter, @balanceprior, @logtype)";
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -126,8 +126,8 @@ namespace Individual_project_initial
                 {
                     using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(transactionsum), 0) FROM public.transactions WHERE accountfk = @AccountFK AND logtype = @LogType;", connection);
                     {
-                        cmd.Parameters.AddWithValue("@AccountFK", accountId);
-                        cmd.Parameters.AddWithValue("@LogType", "interest");
+                        cmd.Parameters.AddWithValue("@accountfk", accountId);
+                        cmd.Parameters.AddWithValue("@logtype", "interest");
 
                         var result = cmd.ExecuteScalar();
                         return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;

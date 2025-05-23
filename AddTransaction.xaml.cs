@@ -117,7 +117,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO transactions (transactionSum, transactionTime, accountfk, balanceafter, balanceprior)
+                        string query = @"INSERT INTO transactions (transactionsum, transactiontime, accountfk, balanceafter, balanceprior)
                         VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
 
                         using (var command = new NpgsqlCommand(query, connection))
