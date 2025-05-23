@@ -48,7 +48,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT accountpk, accountnickname, institutionname, balance, accountnumber, sortcode, reference, iban, bic, interestrate, accounttype FROM accounts WHERE accountpk == @AccountPK";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE owner = @owner";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -65,11 +65,9 @@ namespace Individual_project_initial
                                         AccountNumber = reader.GetString(3),
                                         SortCode = reader.GetString(4),
                                         Reference = reader.GetString(5),
-                                        IBAN = reader.GetString(6),
-                                        BIC = reader.GetString(7),
-                                        InterestRate = reader.GetDecimal(8),
-                                        Balance = reader.GetDecimal(9),
-                                        AccountType = reader.GetString(10)
+                                        InterestRate = reader.GetDecimal(6),
+                                        Balance = reader.GetDecimal(7),
+                                        AccountType = reader.GetString(8)
                                     };
                                     accountDetails.Add(account);
                                 }
@@ -88,7 +86,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{account.Balance}",
+                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{ToString(account.Balance)} \n Account Number: {account.AccountNumber}\n Sort Code: {account.SortCode}\n Reference: {account.Reference} \n Interest Rate: {account.InterestRate} \n Type: {account.AccountType}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
@@ -98,54 +96,11 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
 
-            List<Transactionchange> transactions = new List<Transactionchange>();
-
-            try
-            {
-                using (var dbHelper = new DatabaseHelper())
-                {
-                    using (var connection = dbHelper.GetConnection())
-                    {
-                        string query = "SELECT * FROM transactions WHERE AccountFK = @accountFK ORDER BY TransactionTime ASC";
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@accountfk", AccountPK);
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    Transactionchange transaction = new Transactionchange
-                                    {
-                                        AccountFK = reader.GetInt32(1),
-                                        TransactionSum = reader.GetDecimal(2),
-                                        Timestamp = new DateTime(3),
-                                        BalanceAfter = reader.GetDecimal(4),
-                                        BalanceBefore = reader.GetDecimal(5),
-                                        LogType = reader.GetString(6),
-                                        NewRate = reader.GetDecimal(7),
-                                        RatePrior = reader.GetDecimal(8)
-                                    };
-                                    transactions.Add(transaction);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving transactions: " + ex.Message);
-            }
-            foreach (var transaction in transactions)
-            {
-                TextBlock textBlock = new TextBlock
-                {
-                    Text = $"Transaction: {transaction.TransactionSum}\nType: {transaction.LogType}\nDate: {transaction.Timestamp}\nBalance After: £{transaction.BalanceAfter}",
-                    TextWrapping = TextWrapping.Wrap
-                };
-                AccountStackPanel.Children.Add(textBlock);
-            }
+        private object ToString(decimal balance)
+        {
+             return balance.ToString("N2");
         }
 
         public PlotModel LoadChart()

@@ -40,7 +40,7 @@ namespace Individual_project_initial
             {
                 using (var connection = dbHelper.GetConnection())
                 {
-                    string query = "INSERT INTO reminders (userFK, date, note) VALUES (@owner, @reminder_date, @note)";
+                    string query = "INSERT INTO reminders (userFK, date, note) VALUES (@owner, @date, @note)";
                     using (var command = new NpgsqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@owner", owner);

@@ -29,20 +29,32 @@ CREATE TABLE IF NOT EXISTS public.user_information (
 
 -- DROP TABLE public.accounts;
 
+-- public.accounts definition
+
+-- Drop table
+
+-- DROP TABLE public.accounts;
+
 CREATE TABLE IF NOT EXISTS public.accounts (
-	accountpk INT4 GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    accounttype VARCHAR(50),
-    institutionname VARCHAR(100),
-    accountnickname VARCHAR(100),
-    accountnumber VARCHAR(20),
-    sortcode VARCHAR(10),
-    reference VARCHAR(255),
-    balance DECIMAL(15, 2),
-    owner INT4,
-    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT accounts_unique UNIQUE ("accountnickname"),
-	CONSTRAINT accounts_user_information_fk FOREIGN KEY ("owner") REFERENCES public.user_information(user_pk)
+	accountpk int4 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1 NO CYCLE) NOT NULL,
+	accounttype varchar(50) NULL,
+	institutionname varchar(100) NULL,
+	accountnickname varchar(100) NULL,
+	accountnumber varchar(20) NULL,
+	sortcode varchar(10) NULL,
+	reference varchar(255) NULL,
+	balance numeric(15, 2) NULL,
+	"owner" int4 NULL,
+	createdat timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+	interestrate numeric NULL,
+	CONSTRAINT accounts_pkey PRIMARY KEY (accountpk),
+	CONSTRAINT accounts_unique UNIQUE (accountnickname)
 );
+
+
+-- public.accounts foreign keys
+
+ALTER TABLE public.accounts ADD CONSTRAINT accounts_user_information_fk FOREIGN KEY ("owner") REFERENCES public.user_information(user_pk);
 
 
 -- public.transactions definition
@@ -54,7 +66,7 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 	accountfk int4 NOT NULL,
 	transactionSum numeric NOT NULL,
 	transactionTime timestamptz NOT NULL,
-	balancebefore numeric NOT NULL,
+	balanceprior numeric NOT NULL,
 	balanceafter numeric NOT NULL,
 	CONSTRAINT transactions_account_fk FOREIGN KEY ("accountfk") REFERENCES public.accounts("accountpk") ON UPDATE CASCADE
 );
