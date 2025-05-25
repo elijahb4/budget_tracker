@@ -24,7 +24,7 @@ You can store data on your local machine or connect to remote data base, if you 
 	
 2. Ensure NPGSQL is installed
 	
-3.
+3. 
 	
 
 ## Features and using the application
@@ -40,18 +40,25 @@ You can store data on your local machine or connect to remote data base, if you 
 - Be notified of your savings interest this year
 ### Accounts Tab
 1. See an overview of your accounts
-  - 
+  - Snapshot information such as balance and account name shown
+2. Add Accounts
+  - Click 'Add Account' to add an account
+3. Add Transactions
+  - Click 'Add Transaction' to add a transaction to a particular account
+3. See detailed information on a particular account
+  - Click for more info on a particular account to see full transaction history and account details
 ### Targets Tab
-
+  - Set financial targets for your accounts, either to meet a certain income or stay below a threshold on expenses
 ### Reminders Tab
-
+  - Set a reminder on anything for later
 ### Transfer Tab
-
+  - Transfer money between your accounts
 ### Markets Tab
-
+  - Look up stock infomration for any listed company incorporated and listed in the United States
 ### Settings Tab
-
+  - Update information on 
 ### Sign Out
+  - When you're finished, click this to sign out
 
 ## Notices and declarations
 ### Licences

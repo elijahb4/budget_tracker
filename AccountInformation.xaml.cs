@@ -11,6 +11,7 @@ using System.Windows.Media.Effects;
 
 namespace Individual_project_initial
 {
+    //This page displays detailed information about a specific account such as account number, sort code, etc.
     public partial class AccountInformation : Page
     {
         public PlotModel BalanceChart { get; set; }
