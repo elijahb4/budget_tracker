@@ -17,13 +17,18 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
             <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355" Grid.Row="0">
                 <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
             </TextBlock>
             <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355" Grid.Row="1"/>
-            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,0" Grid.Row="2"/>
-            <oxy:PlotView Model="{Binding BalanceChart}" Grid.Row="3" Margin="120,0,75,40" Height="300" />
+            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,0" Grid.Row="2" Grid.Column="0"/>
+            <StackPanel x:Name="TransactionStackPanel" Margin="120,70,75,0" Grid.Row="2" Grid.Column="1"/>
+            <oxy:PlotView Model="{Binding BalanceChart}" Grid.Row="3" Margin="120,33,121,73" Height="300" Grid.ColumnSpan="2" />
         </Grid>
     </Viewbox>
 </Page>

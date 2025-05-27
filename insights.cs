@@ -165,6 +165,7 @@ namespace Individual_project_initial
         public decimal BalanceAfter { get; set; }
         public decimal BalanceBefore { get; set; }
         public string LogType { get; set; }
+        public string Refernece { get; set; }
         public decimal NewRate { get; set; }
         public decimal RatePrior { get; set; }
     }

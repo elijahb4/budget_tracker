@@ -43,6 +43,7 @@ namespace Individual_project_initial
         private void LoadAccountInformation(int AccountPK)
         {
             List<Account> accountDetails = new List<Account>();
+            List<Transactionchange> transactionDetails = new List<Transactionchange>();
 
             try
             {
@@ -50,11 +51,11 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE accountpk = @AccountPK";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@AccountPK", AccountPK);
+                            command.Parameters.AddWithValue("@accountpk", AccountPK);
                             using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -98,8 +99,59 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
 
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accounrfk = @accountfk";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AccountFK", AccountPK);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Transactionchange transaction = new Transactionchange
+                                    {
+                                        TransactionId = reader.GetInt32(0),
+                                        AccountFK = reader.GetInt32(1),
+                                        TransactionSum = reader.GetDecimal(2),
+                                        Timestamp = reader.GetDateTime(3),
+                                        BalanceAfter = reader.GetDecimal(4),
+                                        BalanceBefore = reader.GetDecimal(5),
+                                    };
+                                    transactionDetails.Add(transaction);
+                                }
+        }
+                        }
+                    }
+                }
+
+                if (TransactionStackPanel == null)
+                {
+                    MessageBox.Show("TransactionStackPanel is null", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                foreach (var transaction in transactionDetails)
+                {
+                    TextBlock textBlock = new TextBlock
+                    {
+                        Text = $"Transaction Sum: {transaction.TransactionSum}\n Transaction Timestamp: {transaction.Timestamp}\n Balance After: £{ToString(transaction.BalanceAfter)} \n Balance Before: £{ToString(transaction.BalanceBefore)} \n Refernce: £{ToString(transaction.Reference)}",
+                        TextWrapping = TextWrapping.Wrap
+                    };
+                    TransactionStackPanel.Children.Add(textBlock);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading transactions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private object ToString(decimal balance)
         {
              return balance.ToString("N2");
@@ -107,7 +159,7 @@ namespace Individual_project_initial
 
         public PlotModel LoadChart()
         {
-            BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
+            var BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
 
             BalanceChart.Axes.Add(new DateTimeAxis
             {
