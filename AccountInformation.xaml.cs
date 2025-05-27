@@ -19,8 +19,9 @@ namespace Individual_project_initial
         public AccountInformation()
         {
             InitializeComponent();
+            DataContext = this;
             Loaded += AccountInformation_Loaded;
-            LoadChart();
+            BalanceChart = LoadChart();
         }
 
         private void AccountInformation_Loaded(object sender, RoutedEventArgs e)
@@ -49,7 +50,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE owner = @owner";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE accountpk = @AccountPK";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -106,7 +107,7 @@ namespace Individual_project_initial
 
         public PlotModel LoadChart()
         {
-            var BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
+            BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
 
             BalanceChart.Axes.Add(new DateTimeAxis
             {

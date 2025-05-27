@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using IndividualProjectInitial;
+using Mysqlx.Crud;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,138 +20,211 @@ namespace Individual_project_initial
 {
     public partial class UpdateAccountDetails : Page
     {
+        public List<string> AccountTypes { get; private set; }
+
         public UpdateAccountDetails()
         {
             InitializeComponent();
-            DataContext = this;
+            //GetLoginOwner();
             AccountTypes = new List<string>();
-            LoadComboBox();
+            PopulateComboBoxWithAccountTypes();
         }
 
-        public List<string> AccountTypes { get; private set; }
-
-        private void LoadComboBox()
+        private void PopulateComboBoxWithAccountTypes()
         {
-            AccountTypes = GetComboBoxOptions();
-            if (AccountTypes.Count == 0)
+            List<string> accountTypes = GetComboBoxOptions();
+            if (accountTypes.Count == 0)
             {
                 MessageBox.Show("No options found for the ComboBox.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
-                AccountTypeComboBox.ItemsSource = AccountTypes;
-                MessageBox.Show($"ComboBox loaded with {AccountTypes.Count} options.");
-                foreach (var type in AccountTypes)
-                {
-                    MessageBox.Show($"Loaded option: {type}");
-                }
+                AccountTypeComboBox.ItemsSource = accountTypes;
+                Console.WriteLine($"ComboBox loaded with {accountTypes.Count} options.");
             }
         }
 
+
         public List<string> GetComboBoxOptions()
         {
-            List<string> accountOptions = new List<string>();
+            return new List<string>
+            {
+                "Current",
+                "Savings",
+                "ISA"
+            };
+        }
 
+        public string SelectedAccountType { get; set; }
+
+        private void UpdateInsName_Click(object sender, RoutedEventArgs e)
+        {
+            string newInsName = institutionNameTextBox.Text;
+            if (string.IsNullOrEmpty(newInsName))
+            {
+                MessageBox.Show("Please enter a value");
+                return;
+            }
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT Type FROM account_type";
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            using (var reader = command.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    string type = reader.GetString(0);
-                                    accountOptions.Add(type);
-                                    Console.WriteLine($"Added option: {type}");
-                                }
-                            }
+                            command.Parameters.AddWithValue("@newInsName", newInsName);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return accountOptions;
-        }
-
-        public string selectedAccountType { get; set; }
-
-        private void AccountTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (AccountTypeComboBox.SelectedItem != null)
-            {
-                selectedAccountType = AccountTypeComboBox.SelectedItem?.ToString() ?? string.Empty;
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
-
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateNickname_Click(object sender, RoutedEventArgs e)
         {
-            int owner = GetLoginOwner();
-            string accountType = selectedAccountType;
-
-            Console.WriteLine("Account Type to be inserted: " + accountType);
-
-            if (string.IsNullOrEmpty(accountType))
+            string newInsName = accountNameTextBox.Text;
+            if (string.IsNullOrEmpty(newInsName))
             {
-                MessageBox.Show("Please select an account type.");
+                MessageBox.Show("Please enter a value");
                 return;
             }
-
-            string institutionName = institutionNameTextBox.Text;
-            string accountName = accountNameTextBox.Text;
-            string accountNumber = accountNumberTextBox.Text;
-            string sortCode = sortCodeTextBox.Text;
-            string iban = ibanTextBox.Text;
-            string bic = bicTextBox.Text;
-            string reference = referenceTextBox.Text;
-            string startingBalance = balanceTextBox.Text;
-            //string currency = currencyTextBox.Text;
-            DateTime date = DateTime.Now;
-
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO liquid_accounts (AccountType, InstitutionName, AccountNickname, AccountNumber, SortCode, IBAN, BIC, Reference, Balance, Owner, CreatedAt)
-                        VALUES (@AccountType, @InstitutionName, @AccountNickname, @AccountNumber, @SortCode, @IBAN, @BIC, @Reference, @Balance, @Owner, @CreatedAt)";
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@InstitutionName", institutionName);
-                            command.Parameters.AddWithValue("@AccountType", accountType);
-                            command.Parameters.AddWithValue("@AccountNickname", accountName);
-                            command.Parameters.AddWithValue("@AccountNumber", accountNumber);
-                            command.Parameters.AddWithValue("@SortCode", sortCode);
-                            command.Parameters.AddWithValue("@IBAN", iban);
-                            command.Parameters.AddWithValue("@BIC", bic);
-                            command.Parameters.AddWithValue("@Reference", reference);
-                            command.Parameters.AddWithValue("@Balance", startingBalance);
-                            command.Parameters.AddWithValue("@Owner", owner);
-                            //command.Parameters.AddWithValue("@Currency", currency);
-                            command.Parameters.AddWithValue("@CreatedAt", date);
-                            command.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@newInsName", newInsName);
                         }
                     }
                 }
-                MessageBox.Show("Account added successfully!");
             }
-            catch (NpgsqlException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
 
+        private void UpdateAccNum_Click(object sender, RoutedEventArgs e)
+        {
+            string newInsName = accountNumberTextBox.Text;
+            if (string.IsNullOrEmpty(newInsName))
+            {
+                MessageBox.Show("Please enter a value");
+                return;
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private void UpdateSortCode_Click(object sender, RoutedEventArgs e)
+        {
+            string newInsName = sortCodeTextBox.Text;
+            if (string.IsNullOrEmpty(newInsName))
+            {
+                MessageBox.Show("Please enter a value");
+                return;
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+        private void UpdateReference_Click(object sender, RoutedEventArgs e)
+        {
+            string newInsName = referenceTextBox.Text;
+            if (string.IsNullOrEmpty(newInsName))
+            {
+                MessageBox.Show("Please enter a value");
+                return;
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+        private void UpdateType_Click(object sender, RoutedEventArgs e)
+        {
+            if (AccountTypeComboBox.SelectedItem != null)
+            {
+                SelectedAccountType = AccountTypeComboBox.SelectedItem.ToString() ?? string.Empty;
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@newInsName", SelectedAccountType);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
         private int GetLoginOwner()
         {
             return Login.GetOwner();

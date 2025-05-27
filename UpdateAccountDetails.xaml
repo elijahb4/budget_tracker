@@ -5,21 +5,25 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-       d:DesignHeight="720" d:DesignWidth="1280"
+        d:DesignHeight="720" d:DesignWidth="1280"
   Title="UpdateAccountDetails">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBox Name="institutionNameTextBox" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Institution Name" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="accountNameTextBox" HorizontalAlignment="Center" Margin="0,33,0,0" TextWrapping="Wrap" Text="Account Nickname" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="accountNumberTextBox" HorizontalAlignment="Center" Margin="0,56,0,0" TextWrapping="Wrap" Text="Account Number" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="sortCodeTextBox" HorizontalAlignment="Center" Margin="0,79,0,0" TextWrapping="Wrap" Text="Sort Code" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="referenceTextBox" HorizontalAlignment="Center" Margin="0,102,0,0" TextWrapping="Wrap" Text="Reference" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="ibanTextBox" HorizontalAlignment="Center" Margin="0,125,0,0" TextWrapping="Wrap" Text="IBAN" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="bicTextBox" HorizontalAlignment="Center" Margin="0,148,0,0" TextWrapping="Wrap" Text="BIC" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="balanceTextBox" HorizontalAlignment="Center" Margin="0,171,0,0" TextWrapping="Wrap" Text="Starting Balance" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="interestRate" HorizontalAlignment="Center" Margin="0,171,0,0" TextWrapping="Wrap" Text="Interest Rate" VerticalAlignment="Top" Width="120"/>
-            <ComboBox x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" SelectionChanged="AccountTypeComboBox_SelectionChanged" HorizontalAlignment="Left" Margin="523,331,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Add Account" Click="SubmitButton_Click" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top"/>
+            <TextBox Name="institutionNameTextBox" HorizontalAlignment="Left" Margin="120,73,0,0" TextWrapping="Wrap" Text="Institution Name" VerticalAlignment="Top" Width="120" Height="25"/>
+            <TextBox Name="accountNameTextBox" HorizontalAlignment="Left" Margin="120,103,0,0" TextWrapping="Wrap" Text="Account Nickname" VerticalAlignment="Top" Width="120" Height="25"/>
+            <TextBox Name="accountNumberTextBox" HorizontalAlignment="Left" Margin="120,133,0,0" TextWrapping="Wrap" Text="Account Number" VerticalAlignment="Top" Width="120" Height="25"/>
+            <TextBox Name="sortCodeTextBox" HorizontalAlignment="Left" Margin="120,163,0,0" TextWrapping="Wrap" Text="Sort Code" VerticalAlignment="Top" Width="120" Height="24"/>
+            <TextBox Name="referenceTextBox" HorizontalAlignment="Left" Margin="120,192,0,0" TextWrapping="Wrap" Text="Reference" VerticalAlignment="Top" Width="120" Height="25"/>
+            <ComboBox x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" HorizontalAlignment="Left" Margin="120,246,0,0" VerticalAlignment="Top" Width="120"/>
+            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"><Run Language="en-gb" Text="Update an Account"/></TextBlock>
+            <Separator HorizontalAlignment="Left" Height="23" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
+            <Label FontSize="14" Content="Account Type" HorizontalAlignment="Left" Margin="120,217,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Update" Click="UpdateInsName_Click" HorizontalAlignment="Left" Margin="245,73,0,0" VerticalAlignment="Top" Height="25"/>
+            <Button Content="Update" Click="UpdateNickname_Click" HorizontalAlignment="Left" Margin="245,103,0,0" VerticalAlignment="Top" Height="25"/>
+            <Button Content="Update" Click="UpdateAccNum_Click" HorizontalAlignment="Left" Margin="245,133,0,0" VerticalAlignment="Top" Height="25"/>
+            <Button Content="Update" Click="UpdateSortCode_Click" HorizontalAlignment="Left" Margin="245,163,0,0" VerticalAlignment="Top" Height="25"/>
+            <Button Content="Update" Click="UpdateReference_Click" HorizontalAlignment="Left" Margin="245,192,0,0" VerticalAlignment="Top" Height="25"/>
+            <Button Content="Update" Click="UpdateType_Click" HorizontalAlignment="Left" Margin="245,246,0,0" VerticalAlignment="Top" Height="25"/>
         </Grid>
     </Viewbox>
 </Page>

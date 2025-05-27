@@ -6,17 +6,24 @@
       xmlns:oxy="http://oxyplot.org/wpf"
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d"
-        d:DesignHeight="720" d:DesignWidth="1280"
-  Title="AccountInformation">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="AccountInformation">
+
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355">
-            <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355" Grid.Row="0">
+                <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
             </TextBlock>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355"/>
-            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,90">
-                <oxy:PlotView Model="{Binding BalanceChart}" />
-            </StackPanel>
+            <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355" Grid.Row="1"/>
+            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,0" Grid.Row="2"/>
+            <oxy:PlotView Model="{Binding BalanceChart}" Grid.Row="3" Margin="120,0,75,40" Height="300" />
         </Grid>
     </Viewbox>
 </Page>
