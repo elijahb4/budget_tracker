@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 	transactionTime timestamptz NOT NULL,
 	balanceprior numeric NOT NULL,
 	balanceafter numeric NOT NULL,
+	reference varchar(255) NULL,
 	CONSTRAINT transactions_account_fk FOREIGN KEY ("accountfk") REFERENCES public.accounts("accountpk") ON UPDATE CASCADE
 );
 

@@ -168,5 +168,6 @@ namespace Individual_project_initial
         public string Refernece { get; set; }
         public decimal NewRate { get; set; }
         public decimal RatePrior { get; set; }
+        public string Reference { get; internal set; }
     }
 }

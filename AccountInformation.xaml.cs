@@ -106,7 +106,7 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accounrfk = @accountfk";
+                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter, reference FROM transactions WHERE accounrfk = @accountfk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -121,12 +121,13 @@ namespace Individual_project_initial
                                         AccountFK = reader.GetInt32(1),
                                         TransactionSum = reader.GetDecimal(2),
                                         Timestamp = reader.GetDateTime(3),
-                                        BalanceAfter = reader.GetDecimal(4),
-                                        BalanceBefore = reader.GetDecimal(5),
+                                        BalanceBefore = reader.GetDecimal(4),
+                                        BalanceAfter = reader.GetDecimal(5),
+                                        Reference = reader.GetString(6)
                                     };
                                     transactionDetails.Add(transaction);
                                 }
-        }
+                            }
                         }
                     }
                 }
@@ -141,7 +142,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Transaction Sum: {transaction.TransactionSum}\n Transaction Timestamp: {transaction.Timestamp}\n Balance After: £{ToString(transaction.BalanceAfter)} \n Balance Before: £{ToString(transaction.BalanceBefore)} \n Refernce: £{ToString(transaction.Reference)}",
+                        Text = $"Transaction Sum: {transaction.TransactionSum}\n Transaction Timestamp: {transaction.Timestamp}\n Balance After: £{ToString(transaction.BalanceAfter)} \n Balance Before: £{ToString(transaction.BalanceBefore)} \n Refernce: {transaction.Reference}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     TransactionStackPanel.Children.Add(textBlock);
@@ -199,12 +200,12 @@ namespace Individual_project_initial
             using (var connection = dbHelper.GetConnection())
             {
                 string query = @"
-            SELECT DISTINCT ON (DATE(transactiontime)) 
+                SELECT DISTINCT ON (DATE(transactiontime)) 
                 DATE(transactiontime) AS day, 
                 balanceafter 
-            FROM transactions 
-            WHERE transactiontime >= @FromDate AND transactiontime < @ToDate 
-            ORDER BY DATE(transactiontime), transactionTime DESC;";
+                FROM transactions 
+                WHERE transactiontime >= @FromDate AND transactiontime < @ToDate 
+                ORDER BY DATE(transactiontime), transactionTime DESC;";
 
                 using (var cmd = new NpgsqlCommand(query, connection))
                 {
