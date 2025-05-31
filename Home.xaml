@@ -20,6 +20,8 @@
             <Button Click="GoToTargets_Click" Content="See all targets" HorizontalAlignment="Left" Margin="120,268,0,0" VerticalAlignment="Top"/>
             <TextBlock HorizontalAlignment="Left" Margin="120,296,0,0" TextWrapping="Wrap" Text="Upcoming Reminders" FontSize="18" VerticalAlignment="Top" Height="30" Width="300"/>
             <Button Click="GoToReminders_Click" Content="See all reminders" HorizontalAlignment="Left" Margin="120,331,0,0" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="120,359,0,0" TextWrapping="Wrap" Text="Interest" FontSize="18" VerticalAlignment="Top" Height="30" Width="300"/>
+            <StackPanel HorizontalAlignment="Left" Name="InterestStackPanel" Height="173" Margin="120,394,0,0" VerticalAlignment="Top" Width="520"/>
         </Grid>
     </Viewbox>
 </Page>

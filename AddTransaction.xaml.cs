@@ -94,6 +94,7 @@ namespace Individual_project_initial
             string selectedAccount = AccountComboBox.SelectedItem.ToString();
             int accountPK = GetAccountPK(selectedAccount);
             decimal Balance = GetAccountBalance(accountPK);
+            DateTime createdate = GetAccountCreated(accountPK);
             DateTime transactionDate = DateComboBox.SelectedDate.Value;
             int selectedHour = int.Parse(HourComboBox.SelectedItem.ToString());
             int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
@@ -110,6 +111,10 @@ namespace Individual_project_initial
             }
             string note = NoteBox.Text;
             DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
+            if (transactionTime < createdate)
+            {
+                transactionSum = -transactionSum;
+            }
             decimal BalanceAfter = Balance + transactionSum;
             try
             {
@@ -199,6 +204,36 @@ namespace Individual_project_initial
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return Balance;
+        }
+        private DateTime GetAccountCreated(int accountPK)
+        {
+            DateTime created = DateTime.Now;
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT createdat FROM accounts WHERE accountpk = @accountpk";
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@accountpk", accountPK);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    created = reader.GetDateTime(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account creation date: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return created;
         }
 
         static bool IsValidDecimal(string input)
