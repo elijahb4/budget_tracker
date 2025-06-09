@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS public.accounts (
 
 -- public.accounts foreign keys
 
-ALTER TABLE public.accounts ADD CONSTRAINT accounts_user_information_fk FOREIGN KEY ("owner") REFERENCES public.user_information(user_pk);
+-- ALTER TABLE public.accounts ADD CONSTRAINT accounts_user_information_fk FOREIGN KEY ("owner") REFERENCES public.user_information(user_pk);
 
 
 -- public.transactions definition

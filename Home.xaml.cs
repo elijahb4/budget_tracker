@@ -86,31 +86,31 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Error retrieving your tax limit: " + ex.Message);
             }
-            string InterestStatus;
             decimal least_concern = tax_allowance / 2;
             decimal moderate_concern = tax_allowance * Convert.ToDecimal(0.8);
             decimal most_concern = tax_allowance * Convert.ToDecimal(1.25);
+            TextBlock InterestStatus = new TextBlock();
             if (totalInterestEarned < least_concern)
             {
-                InterestStatus = $"You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
+                InterestStatus.Text = $"You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
             }
             else if (totalInterestEarned > least_concern)
             {
-                InterestStatus = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's more than 50% of your tax-free limit.";
+                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's more than 50% of your tax-free limit.";
             }
             else if (totalInterestEarned > moderate_concern && totalInterestEarned <= least_concern)
             {
-                InterestStatus = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
+                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
             }
             else if (totalInterestEarned > moderate_concern && totalInterestEarned < most_concern)
             {
-                InterestStatus = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
+                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
             }
             else
             {
-                InterestStatus = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
+                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
             }
-            MessageBox.Show(InterestStatus, "Interest Status", MessageBoxButton.OK, MessageBoxImage.Information);
+            InterestStackPanel.Children.Add(InterestStatus);
         }
         private int GetLoginOwner()
         {

@@ -1,27 +1,31 @@
-﻿using Npgsql;
-using System.Windows.Controls;
-using System.Windows;
-using System.Windows.Navigation;
+﻿using Mysqlx.Crud;
+using Npgsql;
 using OxyPlot;
-using OxyPlot.Series;
 using OxyPlot.Axes;
-using Mysqlx.Crud;
+using OxyPlot.Series;
+using System.Collections.Concurrent;
+using System.Transactions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Navigation;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Windows.Media.Effects;
+using static System.TimeZoneInfo;
 
 namespace Individual_project_initial
 {
-    //This page displays detailed information about a specific account such as account number, sort code, etc.
+    // This page displays detailed information about a specific account such as account number, sort code, etc.
     public partial class AccountInformation : Page
     {
         public PlotModel BalanceChart { get; set; }
+        private int _accountPK;
 
         public AccountInformation()
         {
             InitializeComponent();
+            BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
             DataContext = this;
             Loaded += AccountInformation_Loaded;
-            BalanceChart = LoadChart();
         }
 
         private void AccountInformation_Loaded(object sender, RoutedEventArgs e)
@@ -40,40 +44,39 @@ namespace Individual_project_initial
             }
         }
 
-        private void LoadAccountInformation(int AccountPK)
+        private void LoadAccountInformation(int accountPK)
         {
+            _accountPK = accountPK;
             List<Account> accountDetails = new List<Account>();
             List<Transactionchange> transactionDetails = new List<Transactionchange>();
 
+            // Load account details
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE accountpk = @accountpk";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype FROM accounts WHERE accountpk = @accountpk";
-
-                        using (var command = new NpgsqlCommand(query, connection))
+                        command.Parameters.AddWithValue("@accountpk", accountPK);
+                        using (var reader = command.ExecuteReader())
                         {
-                            command.Parameters.AddWithValue("@accountpk", AccountPK);
-                            using (var reader = command.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
+                                Account account = new Account
                                 {
-                                    Account account = new Account
-                                    {
-                                        AccountPK = reader.GetInt32(0),
-                                        AccountNickname = reader.GetString(1),
-                                        InstitutionName = reader.GetString(2),
-                                        AccountNumber = reader.GetString(3),
-                                        SortCode = reader.GetString(4),
-                                        Reference = reader.GetString(5),
-                                        InterestRate = reader.GetDecimal(6),
-                                        Balance = reader.GetDecimal(7),
-                                        AccountType = reader.GetString(8)
-                                    };
-                                    accountDetails.Add(account);
-                                }
+                                    AccountPK = reader.GetInt32(0),
+                                    AccountNickname = reader.GetString(1),
+                                    InstitutionName = reader.GetString(2),
+                                    AccountNumber = reader.GetString(3),
+                                    SortCode = reader.GetString(4),
+                                    Reference = reader.GetString(5),
+                                    InterestRate = reader.GetDecimal(6),
+                                    Balance = reader.GetDecimal(7),
+                                    AccountType = reader.GetString(8)
+                                };
+                                accountDetails.Add(account);
                             }
                         }
                     }
@@ -85,11 +88,12 @@ namespace Individual_project_initial
                     return;
                 }
 
+                AccountStackPanel.Children.Clear();
                 foreach (var account in accountDetails)
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\n Institution: {account.InstitutionName}\n Balance: £{ToString(account.Balance)} \n Account Number: {account.AccountNumber}\n Sort Code: {account.SortCode}\n Reference: {account.Reference} \n Interest Rate: {account.InterestRate} \n Type: {account.AccountType}",
+                        Text = $"Account: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{ToString(account.Balance)}\nAccount Number: {account.AccountNumber}\nSort Code: {account.SortCode}\nReference: {account.Reference}\nInterest Rate: {account.InterestRate}\nType: {account.AccountType}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
@@ -97,36 +101,33 @@ namespace Individual_project_initial
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading account details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            // Load transaction details
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accountfk = @accountfk";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter, reference FROM transactions WHERE accounrfk = @accountfk";
-
-                        using (var command = new NpgsqlCommand(query, connection))
+                        command.Parameters.AddWithValue("@accountfk", accountPK);
+                        using (var reader = command.ExecuteReader())
                         {
-                            command.Parameters.AddWithValue("@AccountFK", AccountPK);
-                            using (var reader = command.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
+                                Transactionchange transaction = new Transactionchange
                                 {
-                                    Transactionchange transaction = new Transactionchange
-                                    {
-                                        TransactionId = reader.GetInt32(0),
-                                        AccountFK = reader.GetInt32(1),
-                                        TransactionSum = reader.GetDecimal(2),
-                                        Timestamp = reader.GetDateTime(3),
-                                        BalanceBefore = reader.GetDecimal(4),
-                                        BalanceAfter = reader.GetDecimal(5),
-                                        Reference = reader.GetString(6)
-                                    };
-                                    transactionDetails.Add(transaction);
-                                }
+                                    TransactionId = reader.GetInt32(0),
+                                    AccountFK = reader.GetInt32(1),
+                                    TransactionSum = reader.GetDecimal(2),
+                                    Timestamp = reader.GetDateTime(3),
+                                    BalanceBefore = reader.GetDecimal(4),
+                                    BalanceAfter = reader.GetDecimal(5),
+                                };
+                                transactionDetails.Add(transaction);
                             }
                         }
                     }
@@ -138,11 +139,12 @@ namespace Individual_project_initial
                     return;
                 }
 
+                TransactionStackPanel.Children.Clear();
                 foreach (var transaction in transactionDetails)
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Transaction Sum: {transaction.TransactionSum}\n Transaction Timestamp: {transaction.Timestamp}\n Balance After: £{ToString(transaction.BalanceAfter)} \n Balance Before: £{ToString(transaction.BalanceBefore)} \n Refernce: {transaction.Reference}",
+                        Text = $"Transaction Sum: {transaction.TransactionSum}\nTransaction Timestamp: {transaction.Timestamp}\nBalance After: £{ToString(transaction.BalanceAfter)}\nBalance Before: £{ToString(transaction.BalanceBefore)}",
                         TextWrapping = TextWrapping.Wrap
                     };
                     TransactionStackPanel.Children.Add(textBlock);
@@ -152,15 +154,18 @@ namespace Individual_project_initial
             {
                 MessageBox.Show($"Error loading transactions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-        private object ToString(decimal balance)
-        {
-             return balance.ToString("N2");
+            LoadChart();
         }
 
-        public PlotModel LoadChart()
+        private string ToString(decimal balance)
         {
-            var BalanceChart = new PlotModel { Title = "Daily Closing Balances" };
+            return balance.ToString("N2");
+        }
+
+        public void LoadChart()
+        {
+            BalanceChart.Axes.Clear();
+            BalanceChart.Series.Clear();
 
             BalanceChart.Axes.Add(new DateTimeAxis
             {
@@ -186,10 +191,12 @@ namespace Individual_project_initial
             };
 
             var dataPoints = GetDailyBalancesFromPostgres();
-            series.Points.AddRange(dataPoints);
+            if (dataPoints != null)
+                series.Points.AddRange(dataPoints);
 
             BalanceChart.Series.Add(series);
-            return BalanceChart;
+
+            BalanceChart.InvalidatePlot(true);
         }
 
         public List<DataPoint> GetDailyBalancesFromPostgres()
@@ -199,18 +206,14 @@ namespace Individual_project_initial
             using (var dbHelper = new DatabaseHelper())
             using (var connection = dbHelper.GetConnection())
             {
-                string query = @"
-                SELECT DISTINCT ON (DATE(transactiontime)) 
-                DATE(transactiontime) AS day, 
-                balanceafter 
-                FROM transactions 
-                WHERE transactiontime >= @FromDate AND transactiontime < @ToDate 
-                ORDER BY DATE(transactiontime), transactionTime DESC;";
+                string query = @"SELECT day, balanceafter FROM(SELECT CAST(transactiontime AS DATE) AS day, balanceafter, ROW_NUMBER() OVER( PARTITION BY CAST(transactiontime AS DATE)
+                    ORDER BY transactiontime DESC) AS rn FROM transactions WHERE transactiontime >= @FromDate AND transactiontime < @ToDate AND accountfk = @AccountId) AS t WHERE rn = 1 ORDER BY day;";
 
                 using (var cmd = new NpgsqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@FromDate", DateTime.Now.AddDays(-30));
                     cmd.Parameters.AddWithValue("@ToDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@AccountId", _accountPK);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -218,8 +221,6 @@ namespace Individual_project_initial
                         {
                             DateTime date = reader.GetDateTime(0);
                             decimal balance = reader.GetDecimal(1);
-
-                            // Convert to double if necessary for charting
                             dataPoints.Add(new DataPoint(DateTimeAxis.ToDouble(date), (double)balance));
                         }
                     }
@@ -228,6 +229,5 @@ namespace Individual_project_initial
 
             return dataPoints;
         }
-
     }
 }
