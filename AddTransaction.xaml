@@ -6,23 +6,62 @@
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-            Title="AddTransaction" Height="720" Width="1280">
+      Title="AddTransaction" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <DatePicker Name="DateComboBox" HorizontalAlignment="Left" Margin="120,124,0,0" VerticalAlignment="Top" Width="120"/>
-            <ComboBox Name="AccountComboBox" HorizontalAlignment="Left" Margin="120,97,0,0" VerticalAlignment="Top" Width="120"/>
-            <ComboBox Name="HourComboBox" HorizontalAlignment="Left" Margin="120,174,0,0" VerticalAlignment="Top" Width="55"/>
-            <ComboBox Name="MinuteComboBox" HorizontalAlignment="Left" Margin="180,174,0,0" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.512,0.046"/>
-            <TextBox Name="TransactionSumBox" HorizontalAlignment="Left" Margin="120,201,0,0" Text="Transaction Amount" VerticalAlignment="Top" Width="120"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="500"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBox Name="NoteBox" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Add a note" VerticalAlignment="Top" Width="120" Margin="120,224,0,0"/>
-            <Button Content="Add transaction" Click="SubmitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,247,0,0" Width="100"/>
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"><Run Language="en-gb" Text="Add a transaction"/></TextBlock>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label Content="Select account" FontSize="14" HorizontalAlignment="left" Height="25" Margin="120,67,0,0" VerticalAlignment="top" Width="108"/>
-            <Label Content="Hour" HorizontalAlignment="Left" Margin="120,148,0,0" VerticalAlignment="Top" Width="39"/>
-            <Label Content="Minute" HorizontalAlignment="Left" Margin="182,148,0,0" VerticalAlignment="Top" Width="56"/>
-            <TextBlock HorizontalAlignment="Left" Margin="255,201,0,0" TextWrapping="Wrap" Text="Use a negative number for outgoings and a positive number for incoming transactions" VerticalAlignment="Top" Height="57" Width="285"/>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                       FontSize="30" HorizontalAlignment="Left" Margin="125,14,0,1"
+                       TextWrapping="Wrap" Height="39" Width="355">
+                <Run Language="en-gb" Text="Add a transaction"/>
+            </TextBlock>
+            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Select account" FontSize="14"
+                   HorizontalAlignment="Left" Height="25" Margin="120,0,0,0" VerticalAlignment="Center" Width="108"/>
+            <ComboBox Grid.Row="3" Grid.Column="0" Name="AccountComboBox"
+                      HorizontalAlignment="Left" Margin="120,0,0,5" VerticalAlignment="Center" Width="130"/>
+            <DatePicker Grid.Row="4" Grid.Column="0" Name="DateComboBox"
+                        HorizontalAlignment="Left" Margin="120,0,0,5" VerticalAlignment="Center" Width="130"/>
+            <Grid Grid.Row="5" Grid.Column="0" Margin="120,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Hour" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <Label Content="Minute" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                <ComboBox Name="HourComboBox" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0" />
+                <ComboBox Name="MinuteComboBox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,5"/>
+            </Grid>
+            <TextBox Grid.Row="6" Grid.Column="0" Name="TransactionSumBox"
+                     HorizontalAlignment="Left" Margin="120,0,0,5" Text="Transaction Amount" VerticalAlignment="Center" Width="130" Height="25"/>
+            <TextBox Grid.Row="7" Grid.Column="0" Name="NoteBox"
+                     HorizontalAlignment="Left" TextWrapping="Wrap" Text="Add a note" VerticalAlignment="Center" Width="130" Margin="120,0,0,0" Height="25"/>
+            <Button Grid.Row="8" Grid.Column="0" Content="Add transaction" Click="SubmitButton_Click"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,10,0,5" Width="108"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="10,51,0,0"
+                       TextWrapping="Wrap" Text="Use a negative number for outgoings and a positive number for incoming transactions"
+                       VerticalAlignment="Top" Height="39" Width="285" Grid.RowSpan="3"/>
         </Grid>
     </Viewbox>
 </Page>

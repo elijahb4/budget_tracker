@@ -9,13 +9,24 @@
       Title="Markets">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock Text="Markets" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"/>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label Content="Search for Equity Data" FontSize="15" HorizontalAlignment="Left" Margin="120,65,0,0" VerticalAlignment="Top" Width="178"/>
-            <TextBox Name="SearchBox" HorizontalAlignment="Left" Margin="124,95,0,0" TextWrapping="Wrap" Text="Enter Company Name" VerticalAlignment="Top" Width="170" RenderTransformOrigin="0.503,1.246"/>
-            <Button Content="Search" Click="SearchButtonClick" HorizontalAlignment="Left" Margin="124,118,0,0" VerticalAlignment="Top"/>
-            <Separator HorizontalAlignment="Left" Margin="1022,222,0,0" VerticalAlignment="Top"/>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,143,0,0" VerticalAlignment="Top" Width="355"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Markets" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="39" Width="170"/>
+            <Separator Grid.Row="1" Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Content="Search for Equity Data" FontSize="15" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="178"/>
+            <TextBox Grid.Row="3" Name="SearchBox" HorizontalAlignment="Left" Margin="124,0,0,0" TextWrapping="Wrap" Text="Enter Company Name" VerticalAlignment="Center" Width="170" Height="28"/>
+            <Button Grid.Row="4" Content="Search" Click="SearchButtonClick" HorizontalAlignment="Left" Margin="124,5,0,0" VerticalAlignment="Top" Grid.RowSpan="3"/>
         </Grid>
     </Viewbox>
 </Page>

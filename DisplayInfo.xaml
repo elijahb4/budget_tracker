@@ -6,13 +6,22 @@
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-            Title="DisplayInfo" Height="720" Width="1280">
+      Title="DisplayInfo" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <TextBlock Text="Results" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="170"/>
-            <ScrollViewer Margin="120,70,0,10" HorizontalAlignment="Left" Width="733">
-                <StackPanel x:Name="ResultsStackPanel" Width="719" Height="auto">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Results" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="39" Width="170"/>
+            <Separator Grid.Row="1" HorizontalAlignment="Left" Height="15" Margin="120,0,0,0" VerticalAlignment="Top" Width="355"/>
+            <ScrollViewer Grid.Row="2" Margin="120,10,0,10" HorizontalAlignment="Left" Width="733">
+                <StackPanel x:Name="ResultsStackPanel" Width="719">
                 </StackPanel>
             </ScrollViewer>
         </Grid>

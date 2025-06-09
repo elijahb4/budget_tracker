@@ -7,13 +7,23 @@
       mc:Ignorable="d"
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="SearchResult">
-      <Viewbox Stretch="Uniform">
+    <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-          <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-          <TextBlock Text="Company Information" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="47" Width="355"/>
-          <ScrollViewer Margin="120,70,325,10" HorizontalAlignment="Left">
-              <StackPanel x:Name="ResultsStackPanel" Width="760" Height="auto"/>
-          </ScrollViewer>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Company Information" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="47" Width="355"/>
+            <Separator Grid.Row="1" HorizontalAlignment="Left" Height="15" Margin="120,0,0,0" VerticalAlignment="Top" Width="355"/>
+            <ScrollViewer Grid.Row="2" Margin="120,10,325,10" HorizontalAlignment="Left">
+                <StackPanel x:Name="ResultsStackPanel" Width="760">
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
-      </Viewbox>
+    </Viewbox>
 </Page>

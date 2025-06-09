@@ -7,22 +7,41 @@
         mc:Ignorable="d"
         Title="EstablishConnection" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
-        <Grid Height="720" Width="1280">
-            <TextBox Name="portTextBox" HorizontalAlignment="Left" Margin="120,135,0,0" TextWrapping="Wrap" Text="5432" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="hostTextBox" HorizontalAlignment="Left" Margin="120,91,0,0" TextWrapping="Wrap" Text="Localhost" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="databaseTextBox" HorizontalAlignment="Left" Margin="120,179,0,0" TextWrapping="Wrap" Text="budget_tracker_db" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="usernameTextBox" HorizontalAlignment="Left" Margin="120,223,0,0" TextWrapping="Wrap" Text="postgres" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Test Connection" HorizontalAlignment="Left" Margin="120,315,0,0" VerticalAlignment="Top" Click="TestButton_Click"/>
-            <Label Content="Host" HorizontalAlignment="Left" Margin="120,65,0,0" VerticalAlignment="Top" Width="120"/>
-            <TextBlock HorizontalAlignment="Left" Height="41" Margin="120,10,0,0" TextWrapping="Wrap" Text="Connect to a Database" FontSize="30" VerticalAlignment="Top" Width="314"/>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label Content="Username" HorizontalAlignment="Left" Margin="120,197,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Port" HorizontalAlignment="Left" Margin="120,109,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Database" HorizontalAlignment="Left" Margin="120,153,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Password" HorizontalAlignment="Left" Margin="120,241,0,0" VerticalAlignment="Top" Width="120"/>
-            <PasswordBox Name="passwordBox" HorizontalAlignment="Left" Margin="120,267,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Reset to Localhost Defaults" HorizontalAlignment="Left" Margin="120,290,0,0" VerticalAlignment="Top" Click="ResetButton_Click"/>
-            <Button Content="Save" HorizontalAlignment="Left" Margin="120,340,0,0" VerticalAlignment="Top" Click="SaveButton_Click"/>
+        <Grid Height="720" Width="1280" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="120,10,0,0" Text="Connect to a Database" FontSize="30" Height="41" Width="319" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Host" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Name="hostTextBox" Text="Localhost" Width="120" Margin="10,0,120,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Port" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Name="portTextBox" Text="5432" Width="120" Margin="10,0,120,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="Database" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Name="databaseTextBox" Text="budget_tracker_db" Width="120" Margin="10,0,120,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="0" Content="Username" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Name="usernameTextBox" Text="postgres" Width="120" Margin="10,0,120,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="6" Grid.Column="0" Content="Password" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <PasswordBox Grid.Row="6" Grid.Column="1" Name="passwordBox" Width="120" Margin="10,0,120,0" VerticalAlignment="Center"/>
+            <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="120,10,-114,0">
+                <Button Content="Test Connection" Click="TestButton_Click" Margin="0,0,10,0"/>
+                <Button Content="Reset to Localhost Defaults" Click="ResetButton_Click" Margin="0,0,10,0" Height="24" Width="171"/>
+                <Button Content="Save" Click="SaveButton_Click" RenderTransformOrigin="1.262,0.503"/>
+            </StackPanel>
         </Grid>
     </Viewbox>
 </Window>

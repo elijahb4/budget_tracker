@@ -7,21 +7,42 @@
         mc:Ignorable="d"
         Title="Register" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
-        <Grid Height="720" Width="1280">
-            <TextBlock HorizontalAlignment="Left" Height="41" Margin="120,10,0,0" TextWrapping="Wrap" Text="Make an Account" FontSize="30" VerticalAlignment="Top" Width="314"/>
-            <Label Content="Username" HorizontalAlignment="Left" Margin="120,65,0,0" VerticalAlignment="Top" Width="120"/>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label Content="Name" HorizontalAlignment="Left" Margin="120,109,0,0" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="usernameTextBox" HorizontalAlignment="Left" Margin="120,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="nameTextBox" HorizontalAlignment="Left" Margin="120,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="emailTextBox" HorizontalAlignment="Left" Margin="120,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="120,223,0,0" VerticalAlignment="Top" Width="120"/>
-            <PasswordBox Name="PasswordConfirmBox" HorizontalAlignment="Left" Margin="120,269,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Email" HorizontalAlignment="Left" Margin="120,152,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Password" HorizontalAlignment="Left" Margin="120,197,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Confirm Password" HorizontalAlignment="Left" Margin="120,241,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Create Account" Click="RegisterButton_Click" HorizontalAlignment="Left" Margin="120,301,0,0" VerticalAlignment="Top"/>
-            <Button Content="Go Back" Click="ToLogin_Click" HorizontalAlignment="Left" Margin="120,337,0,0" VerticalAlignment="Top"/>
+        <Grid Height="720" Width="1280" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Row="0" Text="Make an Account" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="41" Width="314"/>
+            <Separator Grid.Row="1" Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Content="Username" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="3" Name="usernameTextBox" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Width="120"/>
+            <Label Grid.Row="4" Content="Name" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="5" Name="nameTextBox" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Width="120"/>
+            <Label Grid.Row="6" Content="Email" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="7" Name="emailTextBox" HorizontalAlignment="Left" Margin="120,0,0,0" TextWrapping="Wrap" Width="120"/>
+            <Label Grid.Row="8" Content="Password" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <PasswordBox Grid.Row="9" Name="PasswordBox" HorizontalAlignment="Left" Margin="120,0,0,0" Width="120"/>
+            <Label Grid.Row="10" Content="Confirm Password" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center" Width="120"/>
+            <PasswordBox Grid.Row="11" Name="PasswordConfirmBox" HorizontalAlignment="Left" Margin="120,0,0,0" Width="120"/>
+            <Button Grid.Row="12" Content="Create Account" Click="RegisterButton_Click" HorizontalAlignment="Left" Margin="120,10,0,0"/>
+            <Button Grid.Row="13" Content="Go Back" Click="ToLogin_Click" HorizontalAlignment="Left" Margin="120,10,0,0"/>
         </Grid>
     </Viewbox>
 </Window>

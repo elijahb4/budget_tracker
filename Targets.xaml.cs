@@ -186,5 +186,10 @@ namespace Individual_project_initial
         {
             return Login.GetOwner();
         }
+
+        private void TargetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -5,25 +5,47 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-        d:DesignHeight="720" d:DesignWidth="1280"
-  Title="UpdateAccountDetails">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="UpdateAccountDetails">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBox Name="institutionNameTextBox" HorizontalAlignment="Left" Margin="120,73,0,0" TextWrapping="Wrap" Text="Institution Name" VerticalAlignment="Top" Width="120" Height="25"/>
-            <TextBox Name="accountNameTextBox" HorizontalAlignment="Left" Margin="120,103,0,0" TextWrapping="Wrap" Text="Account Nickname" VerticalAlignment="Top" Width="120" Height="25"/>
-            <TextBox Name="accountNumberTextBox" HorizontalAlignment="Left" Margin="120,133,0,0" TextWrapping="Wrap" Text="Account Number" VerticalAlignment="Top" Width="120" Height="25"/>
-            <TextBox Name="sortCodeTextBox" HorizontalAlignment="Left" Margin="120,163,0,0" TextWrapping="Wrap" Text="Sort Code" VerticalAlignment="Top" Width="120" Height="24"/>
-            <TextBox Name="referenceTextBox" HorizontalAlignment="Left" Margin="120,192,0,0" TextWrapping="Wrap" Text="Reference" VerticalAlignment="Top" Width="120" Height="25"/>
-            <ComboBox x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" HorizontalAlignment="Left" Margin="120,246,0,0" VerticalAlignment="Top" Width="120"/>
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="39" Width="355"><Run Language="en-gb" Text="Update an Account"/></TextBlock>
-            <Separator HorizontalAlignment="Left" Height="23" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label FontSize="14" Content="Account Type" HorizontalAlignment="Left" Margin="120,217,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Update" Click="UpdateInsName_Click" HorizontalAlignment="Left" Margin="245,73,0,0" VerticalAlignment="Top" Height="25"/>
-            <Button Content="Update" Click="UpdateNickname_Click" HorizontalAlignment="Left" Margin="245,103,0,0" VerticalAlignment="Top" Height="25"/>
-            <Button Content="Update" Click="UpdateAccNum_Click" HorizontalAlignment="Left" Margin="245,133,0,0" VerticalAlignment="Top" Height="25"/>
-            <Button Content="Update" Click="UpdateSortCode_Click" HorizontalAlignment="Left" Margin="245,163,0,0" VerticalAlignment="Top" Height="25"/>
-            <Button Content="Update" Click="UpdateReference_Click" HorizontalAlignment="Left" Margin="245,192,0,0" VerticalAlignment="Top" Height="25"/>
-            <Button Content="Update" Click="UpdateType_Click" HorizontalAlignment="Left" Margin="245,246,0,0" VerticalAlignment="Top" Height="25"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="136"/>
+                <ColumnDefinition Width="14"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                       FontSize="30" Margin="120,10,-25,0" TextWrapping="Wrap" Height="39" Width="355">
+                <Run Language="en-gb" Text="Update an Account"/>
+            </TextBlock>
+            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                       Margin="120,0,0,0" Height="23" Width="355" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="2" Grid.Column="0" Name="institutionNameTextBox" Margin="120,0,30,4" TextWrapping="Wrap" Text="Institution Name"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="Update" Click="UpdateInsName_Click" Margin="0,0,36,4"/>
+            <TextBox Grid.Row="3" Grid.Column="0" Name="accountNameTextBox" Margin="120,0,30,5" TextWrapping="Wrap" Text="Account Nickname" Height="25"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="Update" Click="UpdateNickname_Click" Height="25" Margin="0,1,36,6"/>
+            <TextBox Grid.Row="4" Grid.Column="0" Name="accountNumberTextBox" Margin="120,0,30,5" TextWrapping="Wrap" Text="Account Number" Height="25"/>
+            <Button Grid.Row="4" Grid.Column="1" Content="Update" Click="UpdateAccNum_Click" Height="25" Margin="0,0,36,5"/>
+            <TextBox Grid.Row="5" Grid.Column="0" Name="sortCodeTextBox" Margin="120,0,30,5" TextWrapping="Wrap" Text="Sort Code" Height="24"/>
+            <Button Grid.Row="5" Grid.Column="1" Content="Update" Click="UpdateSortCode_Click" Height="25" Margin="0,0,36,4"/>
+            <TextBox Grid.Row="6" Grid.Column="0" Name="referenceTextBox" Margin="120,0,30,0" TextWrapping="Wrap" Text="Reference" Height="25" RenderTransformOrigin="0.5,0.5"/>
+            <Button Grid.Row="6" Grid.Column="1" Content="Update" Click="UpdateReference_Click" Height="25" Margin="0,0,36,0"/>
+            <Label Grid.Row="7" Grid.Column="0" Content="Account Type" FontSize="14" Margin="120,0,60,0" Width="120" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="7" Grid.Column="0" x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" Margin="120,28,30,451" Grid.RowSpan="3"/>
+            <Button Grid.Row="7" Grid.Column="1" Content="Update" Click="UpdateType_Click" Height="25" Margin="0,28,36,452" Grid.RowSpan="3"/>
         </Grid>
     </Viewbox>
 </Page>

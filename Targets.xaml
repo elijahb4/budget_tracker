@@ -5,25 +5,51 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-        d:DesignHeight="720" d:DesignWidth="1280"
-  Title="Targets">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="Targets">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="44" Width="355"><Run Text="Set a "/><Run Language="en-gb" Text="Target"/></TextBlock>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,52,0,0" VerticalAlignment="Top" Width="355"/>
-            <Label HorizontalAlignment="Left" Content="Select Account:" Margin="120,60,0,0" VerticalAlignment="Top" Width="94"/>
-            <Button Content="Set Target" x:Name="TargetSubmit" Click="SubmitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="120,348,0,0"/>
-            <ComboBox x:Name="AccountComboBox" HorizontalAlignment="Left" Margin="120,86,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label HorizontalAlignment="Left" Content="Target Type:" Margin="120,108,0,0" VerticalAlignment="Top" Width="94"/>
-            <ComboBox x:Name="TargetComboBox" HorizontalAlignment="Left" Margin="120,134,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Start Date (Defaults to today if blank):" HorizontalAlignment="Left" Margin="120,199,0,0" VerticalAlignment="Top" Width="221"/>
-            <Label Content="Target Date:" HorizontalAlignment="Left" Margin="120,249,0,0" VerticalAlignment="Top" Width="120"/>
-            <DatePicker HorizontalAlignment="Left" Name="StartDatePicker" Margin="120,225,0,0" VerticalAlignment="Top" Width="120"/>
-            <DatePicker HorizontalAlignment="Left" Name="TargetDatePicker" Margin="120,275,0,0" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Target Amount:" HorizontalAlignment="Left" Margin="120,156,0,0" VerticalAlignment="Top" Width="138"/>
-            <TextBox HorizontalAlignment="Left" Name="AmountTextBox" Margin="120,182,0,0" TextWrapping="Wrap" Text="Enter Value" VerticalAlignment="Top" Width="120"/>
-            <Label Content="Add a note (optional):" HorizontalAlignment="Left" Margin="120,299,0,0" VerticalAlignment="Top" Width="136"/>
-            <TextBox HorizontalAlignment="Left" Name="NoteTextBox" Margin="120,325,0,0" TextWrapping="Wrap" Text="Note" VerticalAlignment="Top" Width="120"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       FontSize="30" Margin="120,5,805,5" TextWrapping="Wrap" Height="44" Width="355">
+                <Run Text="Set a "/><Run Language="en-gb" Text="Target"/>
+            </TextBlock>
+            <Separator Grid.Row="1"
+                       Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Content="Select Account:" Margin="120,0,1040,0" VerticalAlignment="Center" Width="120"/>
+            <ComboBox Grid.Row="3" x:Name="AccountComboBox" Width="120" Margin="120,0,1040,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="4" Content="Target Type:" Margin="120,0,1040,0" VerticalAlignment="Center" Width="120"/>
+            <ComboBox Grid.Row="5" x:Name="TargetComboBox" Width="120" Margin="120,0,1040,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="6" Content="Target Amount:" Margin="120,0,1040,0" VerticalAlignment="Center" Width="120"/>
+            <TextBox Grid.Row="7" Name="AmountTextBox" Margin="120,0,1014,0" TextWrapping="Wrap" Text="Enter Value" VerticalAlignment="Center"/>
+            <Label Grid.Row="8" Content="Start Date (Defaults to today if blank):" Margin="120,0,869,0" VerticalAlignment="Center"/>
+            <DatePicker Grid.Row="9" Name="StartDatePicker" Width="120" Margin="120,0,1040,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="10" Content="Target Date:" Margin="120,0,1040,0" VerticalAlignment="Center" Width="120"/>
+            <DatePicker Grid.Row="11" Name="TargetDatePicker" Width="120" Margin="120,0,1040,0" VerticalAlignment="Center"/>
+            <Label Grid.Row="12" Content="Add a note (optional):" Margin="120,0,982,0" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="13" Name="NoteTextBox" Margin="120,0,1014,0" TextWrapping="Wrap" Text="Note" VerticalAlignment="Center"/>
+            <Button Grid.Row="14" Content="Set Target" x:Name="TargetSubmit" Click="SubmitButton_Click" HorizontalAlignment="Left" Margin="120,10,0,0" Width="82"/>
         </Grid>
     </Viewbox>
 </Page>

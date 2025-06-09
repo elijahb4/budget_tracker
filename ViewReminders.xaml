@@ -4,14 +4,24 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
-               mc:Ignorable="d"
-    Title="ViewTargets" Height="720" Width="1280">
+      mc:Ignorable="d"
+      Title="ViewTargets" Height="720" Width="1280">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock HorizontalAlignment="Left" Height="41" Margin="120,10,0,0" TextWrapping="Wrap" Text="Reminders" FontSize="30" VerticalAlignment="Top" Width="314"/>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,50,0,0" VerticalAlignment="Top" Width="355"/>
-            <StackPanel x:Name="ReminderStackPanel" Height="auto" Margin="120,120,467,85"/>
-            <Button Content="Set Reminder" Click="SetReminderButton_Click" HorizontalAlignment="Left" Margin="120,70,0,0" VerticalAlignment="Top"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Reminders" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="41" Width="314"/>
+            <Separator Grid.Row="1" HorizontalAlignment="Left" Height="15" Margin="120,0,0,0" VerticalAlignment="Top" Width="355"/>
+            <Button Grid.Row="2" Content="Set Reminder" Click="SetReminderButton_Click" HorizontalAlignment="Left" Margin="120,10,0,10" VerticalAlignment="Top"/>
+            <StackPanel Grid.Row="3" x:Name="ReminderStackPanel" Margin="120,10,467,10"/>
         </Grid>
     </Viewbox>
 </Page>

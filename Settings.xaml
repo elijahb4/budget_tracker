@@ -5,25 +5,51 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
-        d:DesignHeight="720" d:DesignWidth="1280"
-  Title="Settings">
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="Settings">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="47" Width="355"><Run Language="en-gb" Text="Settings"/></TextBlock>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" VerticalAlignment="Top" Width="355"/>
-            <TextBlock HorizontalAlignment="Left" Margin="120,67,0,0" TextWrapping="Wrap" Text="Update your information" FontSize="18" VerticalAlignment="Top" Height="30" Width="300" />
-            <Label Content="Change Username" HorizontalAlignment="Left" Margin="120,97,0,0" VerticalAlignment="Top" Width="127" Height="27"/>
-            <TextBox Name="UsernameTextBox" HorizontalAlignment="Left" Margin="127,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-            <Button Click="ChangeUsername_Click" Content="Update" HorizontalAlignment="Left" Margin="255,124,0,0" VerticalAlignment="Top"/>
-            <Label Content="Change Password" HorizontalAlignment="Left" Margin="120,146,0,0" VerticalAlignment="Top" Width="127" Height="27"/>
-            <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="127,173,0,0" VerticalAlignment="Top" Width="120" Height="20"/>
-            <Button Click="ChangePassword_Click" Content="Update" HorizontalAlignment="Left" Margin="255,173,0,0" VerticalAlignment="Top"/>
-            <Label Content="Change Email" HorizontalAlignment="Left" Margin="120,195,0,0" VerticalAlignment="Top" Width="127" Height="27"/>
-            <TextBox Name="EmailTextBox" HorizontalAlignment="Left" Margin="127,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-            <Button Click="ChangeEmail_Click" Content="Update" HorizontalAlignment="Left" Margin="255,222,0,0" VerticalAlignment="Top"/>
-            <Label Content="Change Tax Free Savings Interest Limit" HorizontalAlignment="Left" Margin="120,244,0,0" VerticalAlignment="Top" Width="242" Height="27"/>
-            <TextBox Name="TaxFreeTextBox" HorizontalAlignment="Left" Margin="127,271,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="20"/>
-            <Button Click="ChangeTaxFree_Click" Content="Update" HorizontalAlignment="Left" Margin="255,271,0,0" VerticalAlignment="Top"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="390"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       FontSize="30" Margin="140,10,95,0" TextWrapping="Wrap" Height="47" Width="355">
+                <Run Language="en-gb" Text="Settings"/>
+            </TextBlock>
+            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="140,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left" Margin="140,10,0,0" TextWrapping="Wrap" Text="Update your information" FontSize="18" Height="30" Width="300" />
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Change Username" Margin="120,0,103,0" VerticalAlignment="Center" Width="127"/>
+            <TextBox Grid.Row="4" Grid.Column="0" Name="UsernameTextBox" Margin="140,0,70,0" TextWrapping="Wrap" Height="20" VerticalAlignment="Center"/>
+            <Button Grid.Row="4" Click="ChangeUsername_Click" Content="Update" Margin="325,0,145,0" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Row="5" Grid.Column="0" Content="Change Password" Margin="120,0,103,0" VerticalAlignment="Center" Width="127"/>
+            <PasswordBox Grid.Row="6" Grid.Column="0" x:Name="txtPassword" Margin="140,0,70,0" Height="20" VerticalAlignment="Center"/>
+            <Button Grid.Row="6" Click="ChangePassword_Click" Content="Update" Margin="325,0,145,0" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Row="7" Grid.Column="0" Content="Change Email" Margin="120,4,103,0" VerticalAlignment="Top" Width="127"/>
+            <TextBox Grid.Row="7" Grid.Column="0" Name="EmailTextBox" Margin="140,33,70,0" TextWrapping="Wrap" Height="20" VerticalAlignment="Top" Grid.RowSpan="2"/>
+            <Button Grid.Row="8" Click="ChangeEmail_Click" Content="Update" Margin="325,0,145,0" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Label Grid.Row="9" Grid.Column="0" Content="Change Tax Free Savings Interest Limit" Margin="140,0,0,0" VerticalAlignment="Center" Height="38"/>
+            <TextBox Grid.Row="10" Grid.Column="0" Name="TaxFreeTextBox" Margin="140,0,70,0" TextWrapping="Wrap" Height="20" VerticalAlignment="Top"/>
+            <Button Grid.Row="9" Click="ChangeTaxFree_Click" Content="Update" Margin="325,36,145,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
         </Grid>
     </Viewbox>
 </Page>

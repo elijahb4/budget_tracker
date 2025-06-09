@@ -18,20 +18,26 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="1.2*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" 
-                TextWrapping="Wrap" VerticalAlignment="Top" Height="35" Width="355" 
-                Grid.Row="0" Grid.ColumnSpan="2">
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       FontSize="30" HorizontalAlignment="Left" Margin="120,20,0,10"
+                       TextWrapping="Wrap" Height="35" Width="355">
                 <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
             </TextBlock>
-            <Separator HorizontalAlignment="Left" Height="15" Margin="120,51,0,0" 
-            VerticalAlignment="Top" Width="355" Grid.Row="1" Grid.ColumnSpan="2"/>
-            <StackPanel x:Name="AccountStackPanel" Margin="120,70,75,0" Grid.Row="2" Grid.Column="0"/>
-            <StackPanel x:Name="TransactionStackPanel" Margin="120,70,75,0" Grid.Row="2" Grid.Column="1"/>
-            <oxy:PlotView Model="{Binding BalanceChart}" Grid.Row="3" Margin="120,33,121,73" Height="300" Grid.ColumnSpan="2" />
+            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="120,0,0,10" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <StackPanel x:Name="AccountStackPanel"
+                        Grid.Row="2" Grid.Column="0"
+                        Margin="120,0,30,0" VerticalAlignment="Stretch"/>
+            <StackPanel x:Name="TransactionStackPanel"
+                        Grid.Row="2" Grid.Column="1"
+                        Margin="0,0,120,0" VerticalAlignment="Stretch"/>
+            <oxy:PlotView Model="{Binding BalanceChart}"
+                          Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                          Margin="120,30,120,30" Height="300"/>
         </Grid>
     </Viewbox>
 </Page>
