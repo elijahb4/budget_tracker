@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="Transfer" Height="720" Width="1280">
+      Title="Transfer">
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
             <Grid.RowDefinitions>

@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="AddTransaction" Height="720" Width="1280">
+      Title="AddTransaction">
     <Viewbox Stretch="Uniform">
-        <Grid Height="720" Width="1280" Background="White">
+        <Grid Background="White" Height="720" Width="1280">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

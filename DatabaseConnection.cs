@@ -51,7 +51,6 @@ namespace Individual_project_initial
                 try
                 {
                     _connection.Open();
-                    MessageBox.Show("Database connection established.");
                 }
                 catch (Exception ex)
                 {
