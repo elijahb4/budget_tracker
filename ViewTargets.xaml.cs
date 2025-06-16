@@ -71,7 +71,15 @@ namespace Individual_project_initial
                         TextWrapping = TextWrapping.Wrap
                     };
 
+                    Button deleteButton = new Button
+                    {
+                        Content = "Delete",
+                        Margin = new Thickness(5, 0, 0, 0),
+                        Tag = target.TargetId
+                    };
+
                     TargetStackPanel.Children.Add(textBlock);
+                    TargetStackPanel.Children.Add(deleteButton);
                 }
             }
             catch (Exception ex)
@@ -83,6 +91,37 @@ namespace Individual_project_initial
         private void SetTargetButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new Uri("Targets.xaml", UriKind.Relative));
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int targetId)
+            {
+                var result = MessageBox.Show("Are you sure you want to delete this target?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        using (var dbHelper = new DatabaseHelper())
+                        using (var connection = dbHelper.GetConnection())
+                        {
+                            string deleteQuery = "DELETE FROM public.targets WHERE targetpk = @targetId";
+                            using (var command = new NpgsqlCommand(deleteQuery, connection))
+                            {
+                                command.Parameters.AddWithValue("@targetId", targetId);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        // Optionally, remove the UI elements or refresh the page
+                        MessageBox.Show("Target deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                        NavigationService?.Refresh(); // Or reload the targets list
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting target: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
         }
 
         private int GetLoginOwner()
