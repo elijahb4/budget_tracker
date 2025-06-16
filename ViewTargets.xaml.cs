@@ -71,14 +71,24 @@ namespace Individual_project_initial
                         TextWrapping = TextWrapping.Wrap
                     };
 
+                    Button detailsButton = new Button
+                    {
+                        Content = "Details",
+                        Margin = new Thickness(5, 0, 0, 0),
+                        Tag = target.TargetId
+                    };
+                    detailsButton.Click += DetailsButton_Click;
+
                     Button deleteButton = new Button
                     {
                         Content = "Delete",
                         Margin = new Thickness(5, 0, 0, 0),
                         Tag = target.TargetId
                     };
+                    deleteButton.Click += DeleteButton_Click;
 
                     TargetStackPanel.Children.Add(textBlock);
+                    TargetStackPanel.Children.Add(detailsButton);
                     TargetStackPanel.Children.Add(deleteButton);
                 }
             }
@@ -91,6 +101,14 @@ namespace Individual_project_initial
         private void SetTargetButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new Uri("Targets.xaml", UriKind.Relative));
+        }
+
+        private void DetailsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int targetId)
+            {
+                NavigationService?.Navigate(new Uri($"TargetInformation.xaml?targetId={targetId}", UriKind.Relative));
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

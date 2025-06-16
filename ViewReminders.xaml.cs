@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -56,12 +57,51 @@ namespace Individual_project_initial
                         Margin = new Thickness(0, 5, 0, 5)
                     };
 
+                    Button deleteButton = new Button
+                    {
+                        Content = "Delete",
+                        Margin = new Thickness(5, 0, 0, 0),
+                        Tag = reminder.ReminderPK
+                    };
+                    deleteButton.Click += DeleteButton_Click;
+
                     ReminderStackPanel.Children.Add(textBlock);
+                    ReminderStackPanel.Children.Add(deleteButton);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading reminders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int reminderId)
+            {
+                var result = MessageBox.Show("Are you sure you want to delete this reminder?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        using (var dbHelper = new DatabaseHelper())
+                        using (var connection = dbHelper.GetConnection())
+                        {
+                            string deleteQuery = "DELETE FROM public.reminders WHERE reminderpk = @reminderId";
+                            using (var command = new NpgsqlCommand(deleteQuery, connection))
+                            {
+                                command.Parameters.AddWithValue("@reminderId", reminderId);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        MessageBox.Show("Reminder deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                        NavigationService?.Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting reminder: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
 
