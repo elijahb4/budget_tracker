@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
-    /// <summary>
-    /// Interaction logic for TargetInfo.xaml
-    /// </summary>
     public partial class TargetInfo : Page
     {
         public TargetInfo()

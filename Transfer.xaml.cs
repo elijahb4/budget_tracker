@@ -25,6 +25,8 @@ namespace Individual_project_initial
             LoadComboBox();
         }
 
+        //Load two comboboxes, one for the account to and one for the account from
+
         private void LoadComboBox()
         {
             int owner = GetLoginOwner();
@@ -73,6 +75,7 @@ namespace Individual_project_initial
             return accountOptions;
         }
 
+        // Submit event handler, if the same a account is selected twice the user is returned and no operation is performed
         private void TransferButton_Click(object sender, RoutedEventArgs e)
         {
             string selectedFromAccount = AccountFromComboBox.SelectedItem.ToString();
@@ -97,6 +100,7 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a valid decimal number for the transaction sum.");
                 return;
             }
+            // two transactions to be inserted (account to and account from)
             bool deduct = true;
             InsertTransaction(accountFromPK, transactionSum, FromBalance, DateTime.Now, deduct);
             deduct = false;

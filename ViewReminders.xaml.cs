@@ -16,7 +16,7 @@ namespace Individual_project_initial
         {
             InitializeComponent();
             int userId = GetLoginOwner();
-
+            // Load Reminders
             try
             {
                 using (var dbHelper = new DatabaseHelper())
