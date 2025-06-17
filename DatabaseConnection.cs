@@ -6,6 +6,8 @@ using System.Windows;
 
 namespace Individual_project_initial
 {
+    //DatabaseHelper class to manage database connections and schema setup, used throughout the programme.
+
     public class DatabaseHelper : IDisposable
     {
         private readonly string _connectionString;
@@ -84,8 +86,6 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Failed to execute schema setup: " + ex.Message);
             }
-
-            //SeedData();
         }
 
         private void SeedData()

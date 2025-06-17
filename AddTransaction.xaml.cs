@@ -17,6 +17,8 @@ namespace Individual_project_initial
 {
     public partial class AddTransaction : Page
     {
+        //Page for manually adding transaction
+
         public AddTransaction()
         {
             InitializeComponent();
@@ -25,6 +27,8 @@ namespace Individual_project_initial
             PopulateHourComboBox();
             PopulateMinuteComboBox();
         }
+
+        // Populate the ComboBox with account options based on the logged-in user
         private void LoadComboBox()
         {
             int owner = GetLoginOwner();
@@ -39,6 +43,8 @@ namespace Individual_project_initial
                 Console.WriteLine("ComboBox options loaded successfully.");
             }
         }
+
+        // Query the database to get account options for the ComboBox
         public List<string> GetComboBoxOptions(int owner)
         {
             List<string> accountOptions = new List<string>();
@@ -73,6 +79,8 @@ namespace Individual_project_initial
 
             return accountOptions;
         }
+
+        // Populate the hour and minute ComboBoxes with options
         private void PopulateHourComboBox()
         {
             for (int i = 0; i < 24; i++)
@@ -89,6 +97,8 @@ namespace Individual_project_initial
             }
             MinuteComboBox.SelectedIndex = 0;
         }
+
+        // Logic when transaction is submitted
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string selectedAccount = AccountComboBox.SelectedItem.ToString();
@@ -100,6 +110,9 @@ namespace Individual_project_initial
             int selectedMinute = int.Parse(MinuteComboBox.SelectedItem.ToString());
             string transactionSumInput = TransactionSumBox.Text;
             decimal transactionSum;
+
+            // Input sanitisation
+
             if (IsValidDecimal(transactionSumInput))
             {
                 transactionSum = decimal.Parse(transactionSumInput);
@@ -111,6 +124,9 @@ namespace Individual_project_initial
             }
             string note = NoteBox.Text;
             DateTime transactionTime = new DateTime(transactionDate.Year, transactionDate.Month, transactionDate.Day, selectedHour, selectedMinute, 0);
+
+            // If the transaction is before the creation date, it an equivalent amount in a negative to preserve balance history
+
             if (transactionTime < createdate)
             {
                 transactionSum = -transactionSum;

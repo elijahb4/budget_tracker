@@ -19,6 +19,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -29,7 +31,7 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                        FontSize="30" Margin="120,10,-25,0" TextWrapping="Wrap" Height="39" Width="355">
-                <Run Language="en-gb" Text="Update an Account"/>
+                <Run Language="en-gb" Text="Update the Account"/>
             </TextBlock>
             <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                        Margin="120,0,0,0" Height="23" Width="355" HorizontalAlignment="Left"/>
@@ -43,9 +45,10 @@
             <Button Grid.Row="5" Grid.Column="1" Content="Update" Click="UpdateSortCode_Click" Height="25" Margin="0,0,36,4"/>
             <TextBox Grid.Row="6" Grid.Column="0" Name="referenceTextBox" Margin="120,0,30,0" TextWrapping="Wrap" Text="Reference" Height="25" RenderTransformOrigin="0.5,0.5"/>
             <Button Grid.Row="6" Grid.Column="1" Content="Update" Click="UpdateReference_Click" Height="25" Margin="0,0,36,0"/>
-            <Label Grid.Row="7" Grid.Column="0" Content="Account Type" FontSize="14" Margin="120,0,60,0" Width="120" VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="7" Grid.Column="0" x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" Margin="120,28,30,451" Grid.RowSpan="3"/>
-            <Button Grid.Row="7" Grid.Column="1" Content="Update" Click="UpdateType_Click" Height="25" Margin="0,28,36,452" Grid.RowSpan="3"/>
+            <Label Grid.Row="6" Grid.Column="0" Content="Account Type" FontSize="14" Margin="120,24,60,0" Width="120" VerticalAlignment="Top" Grid.RowSpan="2"/>
+            <ComboBox Grid.Row="7" Grid.Column="0" x:Name="AccountTypeComboBox" ItemsSource="{Binding AccountTypes}" Margin="120,27,30,288"/>
+            <Button Grid.Row="7" Content="Update" Click="UpdateType_Click" Height="25" Margin="0,27,36,287" Grid.Column="1"/>
+            <Button Grid.Row="7" Grid.Column="0" Content="Go Back" Click="GoBack_Click" Margin="120,314,30,0" Height="25"/>
         </Grid>
     </Viewbox>
 </Page>

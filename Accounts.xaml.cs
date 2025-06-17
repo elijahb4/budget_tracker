@@ -22,6 +22,8 @@ namespace Individual_project_initial
 
         public Accounts()
         {
+            // Initialise components, query db for accounts
+
             InitializeComponent();
             int owner = GetLoginOwner();
 
@@ -53,6 +55,8 @@ namespace Individual_project_initial
                         }
                     }
                 }
+                // Load info for each account
+
                 foreach (var account in accountOptions)
                 {
                     TextBlock textBlock = new TextBlock
@@ -75,6 +79,8 @@ namespace Individual_project_initial
                 MessageBox.Show($"Error loading account types: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        // Buttons to go to other pages, including more info for a particular account
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

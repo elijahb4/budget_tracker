@@ -19,6 +19,8 @@ namespace Individual_project_initial
             PopulateComboBoxWithAccountTypes();
         }
 
+        // Load the combobox with account types
+
         private void PopulateComboBoxWithAccountTypes()
         {
             List<string> accountTypes = GetComboBoxOptions();
@@ -43,6 +45,8 @@ namespace Individual_project_initial
             };
         }
 
+        // Combobox selection changed event handler
+
         public string SelectedAccountType { get; set; }
 
         private void AccountTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -52,6 +56,8 @@ namespace Individual_project_initial
                 SelectedAccountType = AccountTypeComboBox.SelectedItem.ToString() ?? string.Empty;
             }
         }
+
+        // Submit button click event handler and logic
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {

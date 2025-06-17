@@ -25,7 +25,6 @@ namespace Individual_project_initial
         public UpdateAccountDetails()
         {
             InitializeComponent();
-            //GetLoginOwner();
             AccountTypes = new List<string>();
             PopulateComboBoxWithAccountTypes();
         }
@@ -59,8 +58,8 @@ namespace Individual_project_initial
 
         private void UpdateInsName_Click(object sender, RoutedEventArgs e)
         {
-            string newInsName = institutionNameTextBox.Text;
-            if (string.IsNullOrEmpty(newInsName))
+            string newValue = institutionNameTextBox.Text;
+            if (string.IsNullOrEmpty(newValue))
             {
                 MessageBox.Show("Please enter a value");
                 return;
@@ -75,7 +74,7 @@ namespace Individual_project_initial
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                            command.Parameters.AddWithValue("@newInsName", newValue);
                         }
                     }
                 }
@@ -87,8 +86,8 @@ namespace Individual_project_initial
         }
         private void UpdateNickname_Click(object sender, RoutedEventArgs e)
         {
-            string newInsName = accountNameTextBox.Text;
-            if (string.IsNullOrEmpty(newInsName))
+            string newValue = accountNameTextBox.Text;
+            if (string.IsNullOrEmpty(newValue))
             {
                 MessageBox.Show("Please enter a value");
                 return;
@@ -99,11 +98,11 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+                        string query = "UPDATE accounts SET accountnickname = @newNickname WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                            command.Parameters.AddWithValue("@newNickname", newValue);
                         }
                     }
                 }
@@ -116,8 +115,8 @@ namespace Individual_project_initial
 
         private void UpdateAccNum_Click(object sender, RoutedEventArgs e)
         {
-            string newInsName = accountNumberTextBox.Text;
-            if (string.IsNullOrEmpty(newInsName))
+            string newValue = accountNumberTextBox.Text;
+            if (string.IsNullOrEmpty(newValue))
             {
                 MessageBox.Show("Please enter a value");
                 return;
@@ -128,11 +127,11 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+                        string query = "UPDATE accounts SET accountnumber = @newAccNum WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                            command.Parameters.AddWithValue("@newAccNum", newValue);
                         }
                     }
                 }
@@ -145,8 +144,8 @@ namespace Individual_project_initial
 
         private void UpdateSortCode_Click(object sender, RoutedEventArgs e)
         {
-            string newInsName = sortCodeTextBox.Text;
-            if (string.IsNullOrEmpty(newInsName))
+            string newValue = sortCodeTextBox.Text;
+            if (string.IsNullOrEmpty(newValue))
             {
                 MessageBox.Show("Please enter a value");
                 return;
@@ -161,7 +160,7 @@ namespace Individual_project_initial
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                            command.Parameters.AddWithValue("@newInsName", newValue);
                         }
                     }
                 }
@@ -173,8 +172,8 @@ namespace Individual_project_initial
         }
         private void UpdateReference_Click(object sender, RoutedEventArgs e)
         {
-            string newInsName = referenceTextBox.Text;
-            if (string.IsNullOrEmpty(newInsName))
+            string newValue = referenceTextBox.Text;
+            if (string.IsNullOrEmpty(newValue))
             {
                 MessageBox.Show("Please enter a value");
                 return;
@@ -189,7 +188,7 @@ namespace Individual_project_initial
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", newInsName);
+                            command.Parameters.AddWithValue("@newInsName", newValue);
                         }
                     }
                 }
@@ -211,11 +210,11 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "UPDATE accounts SET institutionname = @newInsName WHERE accountpk = @accountpk";
+                        string query = "UPDATE accounts SET accounttype = @newType WHERE accountpk = @accountpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@newInsName", SelectedAccountType);
+                            command.Parameters.AddWithValue("@newType", SelectedAccountType);
                         }
                     }
                 }
@@ -224,10 +223,6 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-        }
-        private int GetLoginOwner()
-        {
-            return Login.GetOwner();
         }
     }
 }
