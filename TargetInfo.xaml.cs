@@ -26,6 +26,11 @@ namespace Individual_project_initial
             InitializeComponent();
         }
 
+        //Query Target
+
+        //Query Account
+
+        // Generate Chart
         public void LoadChart()
         {
             BalanceChart.Axes.Clear();
