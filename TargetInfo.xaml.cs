@@ -1,29 +1,92 @@
 ﻿using Npgsql;
+using Npgsql;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Individual_project_initial
 {
     public partial class TargetInfo : Page
     {
+        public int? TargetId { get; private set; }
+
         public TargetInfo()
         {
             InitializeComponent();
+            Loaded += TargetInfo_Loaded;
+        }
+
+        private void TargetInfo_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService?.Source != null)
+            {
+                var uri = NavigationService.Source;
+                var query = uri.OriginalString.Split('?').Skip(1).FirstOrDefault();
+                if (!string.IsNullOrEmpty(query))
+                {
+                    foreach (var part in query.Split('&'))
+                    {
+                        var kv = part.Split('=');
+                        if (kv.Length == 2 && kv[0] == "targetId" && int.TryParse(kv[1], out int id))
+                        {
+                            TargetId = id;
+                            LoadTargetInfo(id);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void LoadTargetInfo(int TargetId)
+        {
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
+                {
+                    string query = @"SELECT targetpk, ownerfk, accountfk, type, amount, startdate, targetdate, note FROM targets WHERE targetpk = @targetpk";
+                    using (var command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@targetpk", TargetId);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Target target = new Target
+                                {
+                                    TargetId = reader.GetInt32(0),
+                                    OwnerId = reader.GetInt32(1),
+                                    AccountFK = int.TryParse(reader.GetString(2), out int accFk) ? accFk : 0,
+                                    TargetType = reader.GetString(3),
+                                    TargetAmount = reader.GetDecimal(4),
+                                    StartDate = reader.GetDateTime(5),
+                                    EndDate = reader.GetDateTime(6),
+                                    Note = reader.IsDBNull(7) ? null : reader.GetString(7)
+                                };
+
+                                TextBlock textBlock = new TextBlock
+                                {
+                                    Text = $"Target Type: {target.TargetType}\n" +
+                                        $"Amount: {target.TargetAmount:C}\n" +
+                                        $"Start Date: {target.StartDate:d}\n" +
+                                        $"End Date: {target.EndDate:d}\n" +
+                                        $"Note: {target.Note}",
+                                    TextWrapping = TextWrapping.Wrap
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading account details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         //Query Target
