@@ -130,9 +130,8 @@ namespace Individual_project_initial
                                 command.ExecuteNonQuery();
                             }
                         }
-                        // Optionally, remove the UI elements or refresh the page
                         MessageBox.Show("Target deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
-                        NavigationService?.Refresh(); // Or reload the targets list
+                        NavigationService?.Refresh();
                     }
                     catch (Exception ex)
                     {

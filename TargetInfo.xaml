@@ -1,8 +1,9 @@
 ﻿<Page x:Class="Individual_project_initial.TargetInfo"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:oxy="http://oxyplot.org/wpf"
       xmlns:local="clr-namespace:Individual_project_initial"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
@@ -13,6 +14,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -21,6 +26,13 @@
 
             <TextBlock Grid.Row="0" Text="Target Details" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="41" Width="314"/>
             <Separator Grid.Row="1" Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
+            <StackPanel x:Name="AccountStackPanel"
+            Grid.Row="2" Grid.Column="0"
+            Margin="120,0,30,0" VerticalAlignment="Stretch"/>
+            <oxy:PlotView Model="{Binding BalanceChart}"
+              Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+              Margin="120,30,120,30" Height="300"/>
+            <Button Name="BackButton" Content="Go Back" Grid.Row="4" Margin="120,10,0,0" Width="100" Height="30" HorizontalAlignment="Left" Click="BackButton_Click"/>
         </Grid>
     </Viewbox>
 </Page>
