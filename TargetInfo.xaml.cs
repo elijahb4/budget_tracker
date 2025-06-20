@@ -1,14 +1,10 @@
-﻿using Npgsql;
+﻿using Individual_project_initial;
 using Npgsql;
-using Org.BouncyCastle.Asn1.X509;
-using OxyPlot;
 using OxyPlot.Axes;
-using OxyPlot.Series;
-using System;
-using System.Linq;
-using System.Windows;
+using OxyPlot;
 using System.Windows.Controls;
-using System.Windows.Navigation;
+using System.Windows;
+using OxyPlot.Series;
 
 namespace Individual_project_initial
 {
@@ -16,50 +12,34 @@ namespace Individual_project_initial
     {
         public int? TargetId { get; private set; }
         public PlotModel BalanceChart { get; set; }
+        private Target currentTarget;
+        private List<Transactionchange> transactionDetails = new List<Transactionchange>();
 
         public TargetInfo()
         {
             InitializeComponent();
+            BalanceChart = new PlotModel { Title = "Target Progress" };
+            DataContext = this;
             Loaded += TargetInfo_Loaded;
         }
 
-        private void TargetInfo_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (NavigationService?.Source != null)
-            {
-                var uri = NavigationService.Source;
-                var query = uri.OriginalString.Split('?').Skip(1).FirstOrDefault();
-                if (!string.IsNullOrEmpty(query))
-                {
-                    foreach (var part in query.Split('&'))
-                    {
-                        var kv = part.Split('=');
-                        if (kv.Length == 2 && kv[0] == "targetId" && int.TryParse(kv[1], out int id))
-                        {
-                            TargetId = id;
-                            LoadTargetInfo(id);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void LoadTargetInfo(int TargetId)
+        private void LoadTargetInfo(int targetId)
         {
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 using (var connection = dbHelper.GetConnection())
                 {
-                    string query = @"SELECT targetpk, ownerfk, accountfk, type, amount, startdate, targetdate, note FROM targets WHERE targetpk = @targetpk";
+                    string query = @"SELECT targetpk, ownerfk, accountfk, type, amount, startdate, targetdate, note 
+                               FROM targets WHERE targetpk = @targetpk";
                     using (var command = new NpgsqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@targetpk", TargetId);
+                        command.Parameters.AddWithValue("@targetpk", targetId);
                         using (var reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                Target target = new Target
+                                currentTarget = new Target
                                 {
                                     TargetId = reader.GetInt32(0),
                                     OwnerId = reader.GetInt32(1),
@@ -73,15 +53,18 @@ namespace Individual_project_initial
 
                                 TextBlock textBlock = new TextBlock
                                 {
-                                    Text = $"Target Type: {target.TargetType}\n" +
-                                        $"Amount: {target.TargetAmount:C}\n" +
-                                        $"Start Date: {target.StartDate:d}\n" +
-                                        $"End Date: {target.EndDate:d}\n" +
-                                        $"Note: {target.Note}",
+                                    Text = $"Target Type: {currentTarget.TargetType}\n" +
+                                        $"Amount: {currentTarget.TargetAmount:C}\n" +
+                                        $"Start Date: {currentTarget.StartDate:d}\n" +
+                                        $"End Date: {currentTarget.EndDate:d}\n" +
+                                        $"Note: {currentTarget.Note}",
                                     TextWrapping = TextWrapping.Wrap
                                 };
+                                TargetStackPanel.Children.Add(textBlock);
 
-                                QueryTransactions(target);
+                                // Query transactions and load chart after target is loaded
+                                QueryTransactions(currentTarget);
+                                LoadChart();
                             }
                         }
                     }
@@ -89,26 +72,34 @@ namespace Individual_project_initial
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading account details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading target details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void QueryTransactions()
-	    {
-		    try
-		    {
-			    using (var dbHelper = new DatabaseHelper())
-			    using (var connection = dbHelper.GetConnection())
-			    {
-				    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accountfk = @accountfk";
-				    using (var command = new NpgsqlCommand(query, connection))
-				    {
-					    command.Parameters.AddWithValue("@accountfk", target.AccountFK);
-					    using (var reader = command.ExecuteReader())
-					    {
-						    while (reader.Read())
-						    {
-							    Transactionchange transaction = new Transactionchange
+        private void QueryTransactions(Target target)
+        {
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
+                {
+                    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter 
+                               FROM transactions 
+                               WHERE accountfk = @accountfk 
+                               AND transactiontime BETWEEN @startDate AND @endDate
+                               ORDER BY transactiontime";
+
+                    using (var command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@accountfk", target.AccountFK);
+                        command.Parameters.AddWithValue("@startDate", target.StartDate);
+                        command.Parameters.AddWithValue("@endDate", target.EndDate);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Transactionchange transaction = new Transactionchange
                                 {
                                     TransactionId = reader.GetInt32(0),
                                     AccountFK = reader.GetInt32(1),
@@ -118,18 +109,74 @@ namespace Individual_project_initial
                                     BalanceAfter = reader.GetDecimal(5),
                                 };
                                 transactionDetails.Add(transaction);
-						    }
-					    }
-				    }
-			    }
-		    }
+                            }
+                        }
+                    }
+                }
+
+                // Add transactions to UI
+                foreach (var transaction in transactionDetails)
+                {
+                    TextBlock transactionBlock = new TextBlock
+                    {
+                        Text = $"Transaction Date: {transaction.Timestamp:d}\n" +
+                              $"Amount: {transaction.TransactionSum:C}\n" +
+                              $"Balance After: {transaction.BalanceAfter:C}",
+                        TextWrapping = TextWrapping.Wrap,
+                        Margin = new Thickness(0, 5, 0, 5)
+                    };
+                    TransactionStackPanel.Children.Add(transactionBlock);
+                }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading transactions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        // Generate Chart
+        public List<DataPoint> GetDailyBalancesFromPostgres()
+        {
+            var dataPoints = new List<DataPoint>();
+            if (currentTarget == null) return dataPoints;
+
+            using (var dbHelper = new DatabaseHelper())
+            using (var connection = dbHelper.GetConnection())
+            {
+                string query = @"SELECT day, balanceafter 
+                           FROM (
+                               SELECT CAST(transactiontime AS DATE) AS day, 
+                                      balanceafter, 
+                                      ROW_NUMBER() OVER(PARTITION BY CAST(transactiontime AS DATE)
+                                          ORDER BY transactiontime DESC) AS rn 
+                               FROM transactions 
+                               WHERE transactiontime >= @FromDate 
+                               AND transactiontime <= @ToDate 
+                               AND accountfk = @AccountId
+                           ) AS t 
+                           WHERE rn = 1 
+                           ORDER BY day;";
+
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@FromDate", currentTarget.StartDate);
+                    cmd.Parameters.AddWithValue("@ToDate", currentTarget.EndDate);
+                    cmd.Parameters.AddWithValue("@AccountId", currentTarget.AccountFK);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime date = reader.GetDateTime(0);
+                            decimal balance = reader.GetDecimal(1);
+                            dataPoints.Add(new DataPoint(DateTimeAxis.ToDouble(date), (double)balance));
+                        }
+                    }
+                }
+            }
+
+            return dataPoints;
+        }
+
         public void LoadChart()
         {
             BalanceChart.Axes.Clear();
@@ -165,42 +212,6 @@ namespace Individual_project_initial
             BalanceChart.Series.Add(series);
 
             BalanceChart.InvalidatePlot(true);
-        }
-
-        public List<DataPoint> GetDailyBalancesFromPostgres()
-        {
-            var dataPoints = new List<DataPoint>();
-
-            using (var dbHelper = new DatabaseHelper())
-            using (var connection = dbHelper.GetConnection())
-            {
-                string query = @"SELECT day, balanceafter FROM(SELECT CAST(transactiontime AS DATE) AS day, balanceafter, ROW_NUMBER() OVER( PARTITION BY CAST(transactiontime AS DATE)
-                    ORDER BY transactiontime DESC) AS rn FROM transactions WHERE transactiontime >= @FromDate AND transactiontime < @ToDate AND accountfk = @AccountId) AS t WHERE rn = 1 ORDER BY day;";
-
-                using (var cmd = new NpgsqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@FromDate", DateTime.Now.AddDays(-30));
-                    cmd.Parameters.AddWithValue("@ToDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@AccountId", _accountPK);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            DateTime date = reader.GetDateTime(0);
-                            decimal balance = reader.GetDecimal(1);
-                            dataPoints.Add(new DataPoint(DateTimeAxis.ToDouble(date), (double)balance));
-                        }
-                    }
-                }
-            }
-
-            return dataPoints;
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService?.Navigate(new Uri("ViewTargets.xaml", UriKind.Relative));
         }
     }
 }
