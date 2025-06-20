@@ -1,8 +1,9 @@
 ﻿using Npgsql;
 using Npgsql;
+using Org.BouncyCastle.Asn1.X509;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot;
 using System;
 using System.Linq;
 using System.Windows;
@@ -14,6 +15,7 @@ namespace Individual_project_initial
     public partial class TargetInfo : Page
     {
         public int? TargetId { get; private set; }
+        public PlotModel BalanceChart { get; set; }
 
         public TargetInfo()
         {
@@ -78,6 +80,8 @@ namespace Individual_project_initial
                                         $"Note: {target.Note}",
                                     TextWrapping = TextWrapping.Wrap
                                 };
+
+                                QueryTransactions(target);
                             }
                         }
                     }
@@ -89,9 +93,41 @@ namespace Individual_project_initial
             }
         }
 
-        //Query Target
-
-        //Query Account
+        private void QueryTransactions()
+	    {
+		    try
+		    {
+			    using (var dbHelper = new DatabaseHelper())
+			    using (var connection = dbHelper.GetConnection())
+			    {
+				    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accountfk = @accountfk";
+				    using (var command = new NpgsqlCommand(query, connection))
+				    {
+					    command.Parameters.AddWithValue("@accountfk", target.AccountFK);
+					    using (var reader = command.ExecuteReader())
+					    {
+						    while (reader.Read())
+						    {
+							    Transactionchange transaction = new Transactionchange
+                                {
+                                    TransactionId = reader.GetInt32(0),
+                                    AccountFK = reader.GetInt32(1),
+                                    TransactionSum = reader.GetDecimal(2),
+                                    Timestamp = reader.GetDateTime(3),
+                                    BalanceBefore = reader.GetDecimal(4),
+                                    BalanceAfter = reader.GetDecimal(5),
+                                };
+                                transactionDetails.Add(transaction);
+						    }
+					    }
+				    }
+			    }
+		    }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading transactions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         // Generate Chart
         public void LoadChart()
