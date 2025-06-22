@@ -6,7 +6,7 @@ This is a local budget tracker application for Windows. It allows you to add par
 You can set your own personal tax limits and fiscal year start/end.
 The application also allows you to search for data on US stocks.
 
-The application is written in C# and is a .NET Windows Presentation Foundation application which uses PostgreSQL for persistent database storage.
+The application is written in C# and is a .NET Windows Presentation Foundation (WPF) application which uses PostgreSQL for persistent database storage.
 You can store data on your local machine or connect to remote data base, if you don't have a local database initialised on your local machine the software will initialise one for you if you choose to connect to localhost.
 
 - Target .NET Version: 9.0
@@ -61,9 +61,7 @@ You can store data on your local machine or connect to remote data base, if you 
   - When you're finished, click this to sign out
 
 ## Notices and declarations
-### Licences
-This software uses languages and dependencies which are subject to their own respective licences, please see *licences.txt* for full details of those licences as well as attribution.
-### Privacy
-
-
-### Accessibility
+### Precautions
+Financial data is sensitive. Please read all relevant documentation for this software and its dependencies before using. Please additional take precautions and seek advice if using this software to manage finances other than your own personal finances. No part of this software, nor its documentation, provide, or claim to provide, financial advice.
+### Licences and Attribution
+This software uses languages and dependencies which are subject to their own respective licences, please see *licences.txt* for full details of those licences and attribution.

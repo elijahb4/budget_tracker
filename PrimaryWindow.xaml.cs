@@ -55,7 +55,12 @@ namespace Individual_project_initial
         }
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            Frame.NavigationService.Navigate(new Uri("Settings.xaml", UriKind.Relative));
+            if (MessageBox.Show("Would you like to log out?", "Log out", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.Hide();
+                Login loginWindow = new Login();
+                loginWindow.Show();
+            }
         }
     }
 }

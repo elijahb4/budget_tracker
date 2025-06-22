@@ -126,7 +126,7 @@ namespace Individual_project_initial
             int owner = GetLoginOwner();
             decimal totalInterestEarned = 0;
             List<Transactionchange> transactions = new List<Transactionchange>();
-            decimal interestRate = 0; // Declare interestRate variable here  
+            decimal interestRate = 0;
 
             try
             {
@@ -197,6 +197,8 @@ namespace Individual_project_initial
             decimal dailyInterest = 0;
             decimal balanceprior = 0;
 
+            balance = GetBalanceBeforeDate(AccountFK, startDate);
+
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
                 while (txIndex < transactions.Count && transactions[txIndex].Timestamp.Date == date.Date)
@@ -204,11 +206,11 @@ namespace Individual_project_initial
                     balance += transactions[txIndex].TransactionSum;
                     txIndex++;
                 }
-
                 dailyInterest = balance * (interestRate / 100 / 365);
                 totalInterestEarned += dailyInterest;
-                decimal balanceafter = balanceprior + dailyInterest;
-                InsertInterest(AccountFK, dailyInterest, date, balanceafter, balanceprior);
+                decimal balanceafter = balance + dailyInterest;
+                InsertInterest(AccountFK, dailyInterest, date, balanceafter, balance);
+                balance = balanceafter;
             }
 
             return totalInterestEarned;
@@ -259,6 +261,54 @@ namespace Individual_project_initial
                     }
                 }
             }
+        }
+        private decimal GetBalanceBeforeDate(int AccountFK, DateTime startDate)
+        {
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
+                {
+                    string query = @"SELECT balanceafter 
+                        FROM transactions 
+                        WHERE accountfk = @AccountFK 
+                        AND transactiontime < @StartDate 
+                        ORDER BY transactiontime DESC LIMIT 1";
+
+                    using (var command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@AccountFK", AccountFK);
+                        command.Parameters.AddWithValue("@StartDate", startDate);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetDecimal(0);
+                            }
+                        }
+                    }
+
+                    query = "SELECT balance FROM accounts WHERE accountpk = @AccountFK";
+                    using (var command = new NpgsqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@AccountFK", AccountFK);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetDecimal(0);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving balance: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return 0;
         }
 
         private void GoToAccounts_Click(object sender, RoutedEventArgs e)

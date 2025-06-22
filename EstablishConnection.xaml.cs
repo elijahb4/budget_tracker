@@ -34,7 +34,11 @@ namespace Individual_project_initial
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-
+            hostTextBox.Text = "localhost";
+            portTextBox.Text = "5432";
+            databaseTextBox.Text = "budget_tracker_db";
+            usernameTextBox.Text = "postgres";
+            SetDefaultPwd();
         }
 
         private void TestButton_Click(object sender, RoutedEventArgs e)
