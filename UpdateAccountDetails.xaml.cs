@@ -224,5 +224,10 @@ namespace Individual_project_initial
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
+        private void GoBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri($"Accounts.xaml?", UriKind.Relative));
+        }
     }
 }

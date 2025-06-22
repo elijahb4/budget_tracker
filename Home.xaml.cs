@@ -57,7 +57,11 @@ namespace Individual_project_initial
             BalanceTextBlock.Text = "Total Balance: £" + totalBalance.ToString("F2");
             foreach (Int32 AccountPK in accounts)
             {
-                totalInterestEarned =+ GetTotalInterest(AccountPK);
+                // Example: calculate for the last year
+                DateTime start = new DateTime(DateTime.Now.Year, 1, 1);
+                DateTime end = DateTime.Now;
+                InterestEarned(AccountPK, start, end);
+                totalInterestEarned += GetTotalInterest(AccountPK);
             }
             decimal tax_allowance = 0;
             try
@@ -120,10 +124,37 @@ namespace Individual_project_initial
         public decimal InterestEarned(int AccountFK, DateTime startDate, DateTime endDate)
         {
             int owner = GetLoginOwner();
-            //update to work monthly, do months where transactions exist and only up to the start if the prior fiscal year and calculations haven't already been made and interest != 0
             decimal totalInterestEarned = 0;
             List<Transactionchange> transactions = new List<Transactionchange>();
-            //query the database for account information
+            decimal interestRate = 0; // Declare interestRate variable here  
+
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = "SELECT interestrate FROM accounts WHERE accountpk = @AccountFK";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@AccountFK", AccountFK);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    interestRate = reader.GetDecimal(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving interest rate: " + ex.Message);
+            }
+
             try
             {
                 using (var dbHelper = new DatabaseHelper())
@@ -143,12 +174,10 @@ namespace Individual_project_initial
                                     {
                                         AccountFK = reader.GetInt32(1),
                                         TransactionSum = reader.GetDecimal(2),
-                                        Timestamp = new DateTime(3),
+                                        Timestamp = reader.GetDateTime(3),
                                         BalanceAfter = reader.GetDecimal(4),
                                         BalanceBefore = reader.GetDecimal(5),
                                         LogType = reader.GetString(6),
-                                        NewRate = reader.GetDecimal(7),
-                                        RatePrior = reader.GetDecimal(8),
                                     };
                                     transactions.Add(transaction);
                                 }
@@ -161,41 +190,39 @@ namespace Individual_project_initial
             {
                 MessageBox.Show("Error retrieving transactions: " + ex.Message);
             }
+
             DateTime workingDate = new DateTime();
             int txIndex = 0;
             decimal balance = 0;
             decimal dailyInterest = 0;
             decimal balanceprior = 0;
-            decimal interestRate = 0;
+
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
-                // Apply any transactions that happened on this day
                 while (txIndex < transactions.Count && transactions[txIndex].Timestamp.Date == date.Date)
                 {
                     balance += transactions[txIndex].TransactionSum;
-                    interestRate = transactions[txIndex].NewRate;
                     txIndex++;
                 }
 
-                // Calculate daily interest
                 dailyInterest = balance * (interestRate / 100 / 365);
-
+                totalInterestEarned += dailyInterest;
                 decimal balanceafter = balanceprior + dailyInterest;
-                // Insert the interest for this day
                 InsertInterest(AccountFK, dailyInterest, date, balanceafter, balanceprior);
             }
+
             return totalInterestEarned;
         }
         private void InsertInterest(int AccountFK, decimal transactionSum, DateTime timestamp, decimal balanceafter, decimal balanceprior)
         {
-            string logType = "InterestPayment";
+            string logType = "Interest";
             try
             {
                 using (var dbHelper = new DatabaseHelper())
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "INSERT INTO transactions (accountfk, amount, transactionsum, balanceafter, balanceprior, logtype) " +
+                        string query = "INSERT INTO transactions (accountfk, transactionsum, transactiontime, balanceafter, balanceprior, logtype) " +
                             "VALUES (@AccountFK, @TransactionSum, @TransactionTime, @balanceafter, @balanceprior, @logtype)";
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -222,10 +249,10 @@ namespace Individual_project_initial
             {
                 using (var connection = dbHelper.GetConnection())
                 {
-                    using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(transactionsum), 0) FROM public.transactions WHERE accountfk = @AccountFK AND logtype = @LogType;", connection);
+                    using var cmd = new NpgsqlCommand(@"SELECT COALESCE(SUM(transactionsum), 0) FROM public.transactions WHERE accountfk = @AccountFK AND logtype = @logtype;", connection);
                     {
                         cmd.Parameters.AddWithValue("@accountfk", accountId);
-                        cmd.Parameters.AddWithValue("@logtype", "interest");
+                        cmd.Parameters.AddWithValue("@logtype", "Interest");
 
                         var result = cmd.ExecuteScalar();
                         return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
@@ -285,8 +312,6 @@ namespace Individual_project_initial
         public decimal BalanceBefore { get; set; }
         public string LogType { get; set; }
         public string Refernece { get; set; }
-        public decimal NewRate { get; set; }
-        public decimal RatePrior { get; set; }
         public string Reference { get; internal set; }
     }
 }

@@ -107,7 +107,7 @@ namespace Individual_project_initial
         {
             if (sender is Button button && button.Tag is int targetId)
             {
-                NavigationService?.Navigate(new Uri($"TargetInformation.xaml?targetId={targetId}", UriKind.Relative));
+                NavigationService?.Navigate(new Uri($"TargetInfo.xaml?targetId={targetId}", UriKind.Relative));
             }
         }
 

@@ -23,6 +23,29 @@ namespace Individual_project_initial
             Loaded += TargetInfo_Loaded;
         }
 
+        private void TargetInfo_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService?.Source != null)
+            {
+                var uri = NavigationService.Source;
+                var query = uri.OriginalString.Split('?').Skip(1).FirstOrDefault();
+                if (!string.IsNullOrEmpty(query))
+                {
+                    foreach (var part in query.Split('&'))
+                    {
+                        var kv = part.Split('=');
+                        if (kv.Length == 2 && kv[0] == "targetId" && int.TryParse(kv[1], out int id))
+                        {
+                            TargetId = id;
+                            LoadTargetInfo(id);
+                            return;
+                        }
+                    }
+                }
+                MessageBox.Show("Navigation Error: No valid targetId was passed in the navigation.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void LoadTargetInfo(int targetId)
         {
             try
@@ -60,7 +83,7 @@ namespace Individual_project_initial
                                         $"Note: {currentTarget.Note}",
                                     TextWrapping = TextWrapping.Wrap
                                 };
-                                TargetStackPanel.Children.Add(textBlock);
+                                AccountStackPanel.Children.Add(textBlock);
 
                                 // Query transactions and load chart after target is loaded
                                 QueryTransactions(currentTarget);
@@ -125,7 +148,7 @@ namespace Individual_project_initial
                         TextWrapping = TextWrapping.Wrap,
                         Margin = new Thickness(0, 5, 0, 5)
                     };
-                    TransactionStackPanel.Children.Add(transactionBlock);
+                    AccountStackPanel.Children.Add(transactionBlock);
                 }
             }
             catch (Exception ex)
@@ -199,6 +222,7 @@ namespace Individual_project_initial
                 MajorGridlineStyle = LineStyle.Solid
             });
 
+            // Balance series
             var series = new LineSeries
             {
                 Title = "Balance",
@@ -211,7 +235,33 @@ namespace Individual_project_initial
 
             BalanceChart.Series.Add(series);
 
+            // Target line series
+            if (currentTarget != null)
+            {
+                var targetLine = new LineSeries
+                {
+                    Title = "Target",
+                    Color = OxyColors.Red,
+                    StrokeThickness = 2,
+                    LineStyle = LineStyle.Dash
+                };
+
+                double x0 = DateTimeAxis.ToDouble(currentTarget.StartDate);
+                double x1 = DateTimeAxis.ToDouble(currentTarget.EndDate);
+                double y = (double)currentTarget.TargetAmount;
+
+                targetLine.Points.Add(new DataPoint(x0, y));
+                targetLine.Points.Add(new DataPoint(x1, y));
+
+                BalanceChart.Series.Add(targetLine);
+            }
+
             BalanceChart.InvalidatePlot(true);
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri($"ViewTargets.xaml", UriKind.Relative));
         }
     }
 }
