@@ -93,7 +93,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Account: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{ToString(account.Balance)}\nAccount Number: {account.AccountNumber}\nSort Code: {account.SortCode}\nReference: {account.Reference}\nInterest Rate: {account.InterestRate}\nType: {account.AccountType}",
+                        Text = $"\nAccount: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{ToString(account.Balance)}\nAccount Number: {account.AccountNumber}\nSort Code: {account.SortCode}\nReference: {account.Reference}\nInterest Rate: {account.InterestRate}\nType: {account.AccountType}\n=====",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
@@ -110,7 +110,7 @@ namespace Individual_project_initial
                 using (var dbHelper = new DatabaseHelper())
                 using (var connection = dbHelper.GetConnection())
                 {
-                    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter FROM transactions WHERE accountfk = @accountfk";
+                    string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter, logtype FROM transactions WHERE accountfk = @accountfk";
                     using (var command = new NpgsqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@accountfk", accountPK);
@@ -126,6 +126,7 @@ namespace Individual_project_initial
                                     Timestamp = reader.GetDateTime(3),
                                     BalanceBefore = reader.GetDecimal(4),
                                     BalanceAfter = reader.GetDecimal(5),
+                                    LogType = reader.GetString(6)
                                 };
                                 transactionDetails.Add(transaction);
                             }
@@ -228,6 +229,11 @@ namespace Individual_project_initial
             }
 
             return dataPoints;
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new Uri($"Accounts.xaml", UriKind.Relative));
         }
     }
 }

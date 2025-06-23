@@ -186,8 +186,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"INSERT INTO transactions (transactionsum, transactiontime, accountfk, balanceafter, balanceprior)
-                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior)";
+                        string query = @"INSERT INTO transactions (transactionsum, transactiontime, accountfk, balanceafter, balanceprior, logtype)
+                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior, @logtype)";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -196,6 +196,7 @@ namespace Individual_project_initial
                             command.Parameters.AddWithValue("@accountFK", accountpk);
                             command.Parameters.AddWithValue("@balanceafter", balanceAfter);
                             command.Parameters.AddWithValue("@balanceprior", balance);
+                            command.Parameters.AddWithValue("@logtype", "Transfer");
                             command.ExecuteNonQuery();
                         }
                     }

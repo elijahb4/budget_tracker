@@ -13,26 +13,25 @@
         <Grid Height="720" Width="1280" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" MinHeight="120.903"/>
+                <RowDefinition Height="Auto" MinHeight="217"/>
+                <RowDefinition Height="Auto" MinHeight="300"/>
+                <RowDefinition Height="Auto" MinHeight="68"/>
+                <RowDefinition Height="0*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Target Details" FontSize="30" HorizontalAlignment="Left" Margin="120,10,0,0" TextWrapping="Wrap" Height="41" Width="314"/>
-            <Separator Grid.Row="1" Margin="120,0,0,0" Height="15" Width="355" HorizontalAlignment="Left"/>
-            <StackPanel Name="AccountStackPanel"
-            Grid.Row="2" Grid.Column="0"
-            Margin="120,0,30,0" VerticalAlignment="Stretch"/>
+            <TextBlock Grid.Row="0" Text="Target Details" FontSize="30" HorizontalAlignment="Left" TextWrapping="Wrap" Width="314" Margin="120,2,0,119" Grid.RowSpan="2"/>
+            <Separator Width="355" HorizontalAlignment="Left" Margin="120,14,0,10" Grid.RowSpan="2"/>
+            <ScrollViewer Name="TargetDetailsScrollViewer" Grid.Row="2" Grid.Column="0" Margin="120,10,120,10">
+                <StackPanel Name="AccountStackPanel" />
+            </ScrollViewer>
             <oxy:PlotView Model="{Binding BalanceChart}"
-              Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-              Margin="120,30,120,30" Height="300"/>
-            <Button Name="BackButton" Content="Go Back" Grid.Row="4" Margin="120,10,0,0" Width="100" Height="30" HorizontalAlignment="Left" Click="BackButton_Click"/>
+              Grid.Row="3" Grid.Column="0"
+              Margin="120,10,120,10"/>
+            <Button Name="BackButton" Content="Go Back" Grid.Row="4" Margin="120,10,0,6" Width="100" HorizontalAlignment="Left" Click="BackButton_Click"/>
         </Grid>
     </Viewbox>
 </Page>

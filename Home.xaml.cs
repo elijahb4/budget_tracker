@@ -57,7 +57,6 @@ namespace Individual_project_initial
             BalanceTextBlock.Text = "Total Balance: £" + totalBalance.ToString("F2");
             foreach (Int32 AccountPK in accounts)
             {
-                // Example: calculate for the last year
                 DateTime start = new DateTime(DateTime.Now.Year, 1, 1);
                 DateTime end = DateTime.Now;
                 InterestEarned(AccountPK, start, end);

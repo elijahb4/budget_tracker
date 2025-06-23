@@ -14,30 +14,35 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="Auto" MinHeight="36.923"/>
+                <RowDefinition Height="Auto" MinHeight="252"/>
+                <RowDefinition Height="Auto" MinHeight="314"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.2*"/>
                 <ColumnDefinition Width="1.2*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+            <TextBlock Grid.Row="0" Grid.Column="0"
                        FontSize="30" HorizontalAlignment="Left" Margin="120,20,0,10"
-                       TextWrapping="Wrap" Height="35" Width="355">
+                       TextWrapping="Wrap" Width="355">
                 <Run Language="en-gb" Text="Account"/><Run Text=" Information"/>
             </TextBlock>
-            <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                       Margin="120,0,0,10" Height="15" Width="355" HorizontalAlignment="Left"/>
-            <StackPanel x:Name="AccountStackPanel"
-                        Grid.Row="2" Grid.Column="0"
-                        Margin="120,0,30,0" VerticalAlignment="Stretch"/>
-            <StackPanel x:Name="TransactionStackPanel"
-                        Grid.Row="2" Grid.Column="1"
-                        Margin="0,0,120,0" VerticalAlignment="Stretch"/>
+            <Separator Grid.Row="1" Grid.Column="0"
+                       Margin="120,0,0,10" Width="355" HorizontalAlignment="Left"/>
+            <TextBlock Text="Account Details" FontSize="24" Grid.Row="2" Grid.Column="0" Margin="120,0,30,5"/>
+            <TextBlock Text="Transactions" FontSize="24" Grid.Row="2" Grid.Column="1" Margin="10,0,0,5"/>
+            <ScrollViewer Grid.Row="3" Grid.Column="0" Margin="120,0,30,5">
+                <StackPanel x:Name="AccountStackPanel"/>
+            </ScrollViewer>
+            <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="10,0,110,5">
+                <StackPanel x:Name="TransactionStackPanel"/>
+            </ScrollViewer>
             <oxy:PlotView Model="{Binding BalanceChart}"
-                          Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                          Margin="120,30,120,30" Height="300"/>
+                          Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                          Margin="120,10,120,5"/>
+            <Button Content=" Go Back" Click="BackButton_Click" Grid.Row="5" Grid.Column="0" Margin="120,5,420,10" />
         </Grid>
     </Viewbox>
 </Page>

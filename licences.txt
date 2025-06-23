@@ -2,7 +2,7 @@ Relevant Software Licences and Attribution for Budget Tracker Application
 
 ====================
 
-.NET and components, including the C# language:
+.NET and components (this includes the C# language):
 
 
 The MIT License (MIT)
