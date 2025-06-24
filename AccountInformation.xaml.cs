@@ -93,7 +93,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"\nAccount: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{ToString(account.Balance)}\nAccount Number: {account.AccountNumber}\nSort Code: {account.SortCode}\nReference: {account.Reference}\nInterest Rate: {account.InterestRate}\nType: {account.AccountType}\n=====",
+                        Text = $"\nAccount: {account.AccountNickname}\nInstitution: {account.InstitutionName}\nBalance: £{ToString(account.Balance)}\nAccount Number: {account.AccountNumber}\nSort Code: {account.SortCode}\nReference: {account.Reference}\nInterest Rate: {account.InterestRate}\nType: {account.AccountType}\n",
                         TextWrapping = TextWrapping.Wrap
                     };
                     AccountStackPanel.Children.Add(textBlock);
@@ -145,7 +145,7 @@ namespace Individual_project_initial
                 {
                     TextBlock textBlock = new TextBlock
                     {
-                        Text = $"Transaction Sum: {transaction.TransactionSum}\nTransaction Timestamp: {transaction.Timestamp}\nBalance After: £{ToString(transaction.BalanceAfter)}\nBalance Before: £{ToString(transaction.BalanceBefore)}",
+                        Text = $"\nTransaction Sum: {transaction.TransactionSum}\nTransaction Timestamp: {transaction.Timestamp}\nBalance After: £{ToString(transaction.BalanceAfter)}\nBalance Before: £{ToString(transaction.BalanceBefore)}\n=====",
                         TextWrapping = TextWrapping.Wrap
                     };
                     TransactionStackPanel.Children.Add(textBlock);

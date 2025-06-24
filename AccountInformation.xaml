@@ -15,9 +15,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" MinHeight="36.923"/>
-                <RowDefinition Height="Auto" MinHeight="252"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto" MinHeight="314"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.2*"/>
@@ -33,10 +33,10 @@
                        Margin="120,0,0,10" Width="355" HorizontalAlignment="Left"/>
             <TextBlock Text="Account Details" FontSize="24" Grid.Row="2" Grid.Column="0" Margin="120,0,30,5"/>
             <TextBlock Text="Transactions" FontSize="24" Grid.Row="2" Grid.Column="1" Margin="10,0,0,5"/>
-            <ScrollViewer Grid.Row="3" Grid.Column="0" Margin="120,0,30,5">
+            <ScrollViewer Grid.Row="3" Grid.Column="0"  VerticalScrollBarVisibility="Auto" Margin="120,0,30,5">
                 <StackPanel x:Name="AccountStackPanel"/>
             </ScrollViewer>
-            <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="10,0,110,5">
+            <ScrollViewer Grid.Row="3" Grid.Column="1"  VerticalScrollBarVisibility="Auto" Margin="10,0,110,5">
                 <StackPanel x:Name="TransactionStackPanel"/>
             </ScrollViewer>
             <oxy:PlotView Model="{Binding BalanceChart}"
