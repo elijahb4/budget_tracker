@@ -12,20 +12,29 @@
     <Viewbox Stretch="Uniform">
         <Grid Height="720" Width="1280" Background="White">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" MinHeight="120.903"/>
-                <RowDefinition Height="Auto" MinHeight="217"/>
-                <RowDefinition Height="Auto" MinHeight="300"/>
-                <RowDefinition Height="Auto" MinHeight="68"/>
+                <RowDefinition Height="Auto" MinHeight="61.903"/>
+                <RowDefinition Height="Auto" MaxHeight="5"/>
+                <RowDefinition Height="Auto" MinHeight="223"/>
+                <RowDefinition Height="Auto" MinHeight="391"/>
+                <RowDefinition Height="Auto" MinHeight="39.097"/>
                 <RowDefinition Height="0*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Target Details" FontSize="30" HorizontalAlignment="Left" TextWrapping="Wrap" Width="314" Margin="120,2,0,119" Grid.RowSpan="2"/>
-            <Separator Width="355" HorizontalAlignment="Left" Margin="120,14,0,10" Grid.RowSpan="2"/>
-            <ScrollViewer Name="TargetDetailsScrollViewer" Grid.Row="2" Grid.Column="0" Margin="120,10,120,10">
+            <TextBlock Grid.Row="0" Text="Target Details" FontSize="30" HorizontalAlignment="Left" TextWrapping="Wrap" Width="314" Margin="120,10,0,12"/>
+            <Separator Width="355" HorizontalAlignment="Left" Margin="120,1,0,3" RenderTransformOrigin="0.5,0.5" Grid.Row="1" >
+                <Separator.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Separator.RenderTransform>
+            </Separator>
+            <ScrollViewer Name="TargetDetailsScrollViewer" Margin="120,11,120,10" Grid.Row="2">
                 <StackPanel Name="AccountStackPanel" />
             </ScrollViewer>
             <oxy:PlotView Model="{Binding BalanceChart}"
