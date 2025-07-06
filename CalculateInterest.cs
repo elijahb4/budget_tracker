@@ -10,9 +10,9 @@ namespace Individual_project_initial
 {
     internal class CalculateInterest
     {
-        private Dictionary<int, decimal> Earnings(int userpk)
+        private List<Account> Earnings(int userpk)
         {
-            var accountInterestDict = new Dictionary<int, decimal>();
+            var accounts = new List<Account>();
 
             try
             {
@@ -20,7 +20,8 @@ namespace Individual_project_initial
                 {
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = "SELECT accountpk, interestrate FROM accounts WHERE user_pk = @userpk";
+                        string query = @"SELECT accountpk, accountnickname, institutionname, accountnumber, sortcode, reference, interestrate, balance, accounttype 
+                                       FROM accounts WHERE user_pk = @userpk";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
@@ -29,9 +30,20 @@ namespace Individual_project_initial
                             {
                                 while (reader.Read())
                                 {
-                                    int accountPK = reader.GetInt32(0);
-                                    decimal interestRate = reader.GetDecimal(1);
-                                    accountInterestDict[accountPK] = interestRate;
+                                    Account account = new Account
+                                    {
+                                        AccountPK = reader.GetInt32(0),
+                                        AccountNickname = reader.GetString(1),
+                                        InstitutionName = reader.GetString(2),
+                                        AccountNumber = reader.GetString(3),
+                                        SortCode = reader.GetString(4),
+                                        Reference = reader.GetString(5),
+                                        InterestRate = reader.GetDecimal(6),
+                                        Balance = reader.GetDecimal(7),
+                                        CreatedAt = reader.GetDateTime(8),
+                                        AccountType = reader.GetString(9)
+                                    };
+                                    accounts.Add(account);
                                 }
                             }
                         }
@@ -40,43 +52,47 @@ namespace Individual_project_initial
             }
             catch (Exception ex)
             {
-                return new Dictionary<int, decimal>();
+                return new List<Account>();
             }
-
-            QueryTransactions(accountInterestDict.Keys.ToList());
-            return accountInterestDict;
+            QueryTransactions(accounts);
+            return accounts;
         }
 
-        private List<Transactionchange> QueryTransactions(List<int> accountPKs)
+        private (List<Transactionchange> Transactions, Dictionary<int, List<int>> DaysBetween) QueryTransactionsWithDays(List<Account> accounts)
         {
             List<Transactionchange> allTransactions = new List<Transactionchange>();
 
-            foreach (int accountPK in accountPKs)
+            foreach (var account in accounts)
             {
                 try
                 {
                     using (var dbHelper = new DatabaseHelper())
                     using (var connection = dbHelper.GetConnection())
                     {
-                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, 
-                                       balanceprior, balanceafter, logtype, newrate, rateprior
-                                       FROM transactions 
-                                       WHERE accountfk = @accountfk 
-                                       ORDER BY transactiontime ASC";
+                        string query = @"SELECT transactionpk, accountfk, transactionsum, transactiontime, balanceprior, balanceafter, logtype
+                                       FROM transactions WHERE accountfk = @accountfk ORDER BY transactiontime ASC";
 
                         using (var command = new NpgsqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@accountfk", accountPK);
+                            command.Parameters.AddWithValue("@accountfk", account.AccountPK);
                             using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {
+                                    DateTime transactionTime = reader.GetDateTime(3);
+
+                                    if (transactionTime < account.CreatedAt)
+                                        continue;
+
+                                    if (transactionTime > DateTime.Now)
+                                        continue;
+
                                     Transactionchange transaction = new Transactionchange
                                     {
                                         TransactionId = reader.GetInt32(0),
                                         AccountFK = reader.GetInt32(1),
                                         TransactionSum = reader.GetDecimal(2),
-                                        Timestamp = reader.GetDateTime(3),
+                                        Timestamp = transactionTime,
                                         BalanceBefore = reader.GetDecimal(4),
                                         BalanceAfter = reader.GetDecimal(5),
                                         LogType = reader.GetString(6)
@@ -93,7 +109,39 @@ namespace Individual_project_initial
                 }
             }
 
-            return allTransactions;
+            var daysBetweenDict = GetDaysBetweenTransactions(accounts);
+
+            return (allTransactions, daysBetweenDict);
         }
+
+        private Dictionary<int, List<int>> GetDaysBetweenTransactions(List<Account> accounts)
+        {
+            var result = new Dictionary<int, List<int>>();
+
+            foreach (var account in accounts)
+            {
+                var transactions = QueryTransactions(new List<Account> { account })
+                    .OrderBy(t => t.Timestamp)
+                    .ToList();
+
+                if (transactions.Count < 2)
+                    continue; // No pairs to compare
+
+                var daysBetweenList = new List<int>();
+                for (int i = 1; i < transactions.Count; i++)
+                {
+                    var prev = transactions[i - 1];
+                    var curr = transactions[i];
+                    int daysBetween = (curr.Timestamp.Date - prev.Timestamp.Date).Days;
+                    daysBetweenList.Add(daysBetween);
+                }
+
+                result[account.AccountPK] = daysBetweenList;
+            }
+
+            return result;
+        }
+
+        
     }
 }

@@ -1,7 +1,9 @@
-﻿using Npgsql;
+﻿using Google.Protobuf.WellKnownTypes;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -118,6 +120,7 @@ namespace Individual_project_initial
         public string BIC { get; set; }
         public decimal InterestRate { get; set; }
         public decimal Balance { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string AccountType { get; set; }
     }
 }
