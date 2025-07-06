@@ -25,6 +25,8 @@ namespace Individual_project_initial
             LoadComboBox();
             LoadTypeComboBox();
         }
+
+        //Load combo box to select and account relevant to the transaction
         private void LoadComboBox()
         {
             int owner = GetLoginOwner();
@@ -81,6 +83,8 @@ namespace Individual_project_initial
 
             return accountOptions;
         }
+
+        //To set the target when button clicked
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             if (AccountComboBox.SelectedItem == null || TargetComboBox.SelectedItem == null ||
@@ -143,6 +147,8 @@ namespace Individual_project_initial
                 }
             }
         }
+
+        //Get infomration for relevant account
         private string GetAccountFK(string account_name, int owner)
         {
             int account_int = 0;
@@ -185,11 +191,6 @@ namespace Individual_project_initial
         private int GetLoginOwner()
         {
             return Login.GetOwner();
-        }
-
-        private void TargetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

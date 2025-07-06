@@ -24,7 +24,7 @@ You can store data on your local machine or connect to remote data base, if you 
 	
 2. Ensure NPGSQL is installed
 	
-3. 
+3. If the database prerequisites are configured correctly, the application will generate a new database for itself on the initial run
 	
 
 ## Features and using the application
