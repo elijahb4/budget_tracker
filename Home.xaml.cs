@@ -1,6 +1,8 @@
-﻿using Mysqlx.Crud;
+﻿using IndividualProjectInitial;
+using Mysqlx.Crud;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Windows;
@@ -13,16 +15,94 @@ namespace Individual_project_initial
         public Home()
         {
             InitializeComponent();
+            UpdateBalance();
+            CalculateInterest();
+        }
+
+        private void UpdateBalance()
+        {
+            decimal totalBalance = 0;
+            int owner = GetLoginOwner();
+
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
+                {
+                    string getAccountsQuery = "SELECT accountpk FROM accounts WHERE owner = @Owner";
+                    List<int> accountPKs = new List<int>();
+
+                    using (var getAccountsCmd = new NpgsqlCommand(getAccountsQuery, connection))
+                    {
+                        getAccountsCmd.Parameters.AddWithValue("@Owner", owner);
+                        using (var reader = getAccountsCmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                accountPKs.Add(reader.GetInt32(0));
+                            }
+                        }
+                    }
+
+                    foreach (var accountPK in accountPKs)
+                    {
+                        decimal latestBalance = 0;
+                        string getLatestBalanceQuery = @"
+                            SELECT balanceafter 
+                            FROM transactions 
+                            WHERE accountfk = @AccountPK 
+                            ORDER BY transactiontime DESC 
+                            LIMIT 1";
+
+                        using (var getLatestBalanceCmd = new NpgsqlCommand(getLatestBalanceQuery, connection))
+                        {
+                            getLatestBalanceCmd.Parameters.AddWithValue("@AccountPK", accountPK);
+                            var result = getLatestBalanceCmd.ExecuteScalar();
+                            if (result != null && result != DBNull.Value)
+                            {
+                                latestBalance = Convert.ToDecimal(result);
+                            }
+                        }
+
+                        string updateAccountBalanceQuery = "UPDATE accounts SET balance = @Balance WHERE accountpk = @AccountPK";
+                        using (var updateAccountCmd = new NpgsqlCommand(updateAccountBalanceQuery, connection))
+                        {
+                            updateAccountCmd.Parameters.AddWithValue("@Balance", latestBalance);
+                            updateAccountCmd.Parameters.AddWithValue("@AccountPK", accountPK);
+                            updateAccountCmd.ExecuteNonQuery();
+                        }
+
+                        totalBalance += latestBalance;
+                    }
+                }
+
+                BalanceTextBlock.Text = $"Total Balance: £{totalBalance:N2}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving or updating account balances: " + ex.Message);
+            }
         }
 
         private void CalculateInterest()
         {
             int owner = GetLoginOwner();
-
+            decimal totalInterest = 0;
+            try
+            {
+                var interestCalculator = new CalculateInterest();
+                totalInterest = interestCalculator.CalculateInterestForUser(owner);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error calculating interest: " + ex.Message);
+            }
+            UpdateTotalInterestNotice(totalInterest, owner);
         }
         
-        private void UpdateTotalInterestNotice()
+        private void UpdateTotalInterestNotice(decimal totalInterestEarned, int owner)
         {
+            decimal tax_allowance = 0;
             try
             {
                 using (var dbHelper = new DatabaseHelper())
@@ -53,26 +133,29 @@ namespace Individual_project_initial
             decimal moderate_concern = tax_allowance * Convert.ToDecimal(0.8);
             decimal most_concern = tax_allowance * Convert.ToDecimal(1.25);
             TextBlock InterestStatus = new TextBlock();
+
             if (totalInterestEarned < least_concern)
             {
-                InterestStatus.Text = $"You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
+                InterestStatus.Text = $"You have earned £{totalInterestEarned} in interest this year. \nThat's less than 50% of your tax-free limit.";
             }
-            else if (totalInterestEarned > least_concern)
+            else if (totalInterestEarned >= least_concern && totalInterestEarned < moderate_concern)
             {
-                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's more than 50% of your tax-free limit.";
+                InterestStatus.Text = $"You have earned £{totalInterestEarned} in interest this year. \nThat's more than 50% but less than 80% of your tax-free limit.";
             }
-            else if (totalInterestEarned > moderate_concern && totalInterestEarned <= least_concern)
+            else if (totalInterestEarned >= moderate_concern && totalInterestEarned < tax_allowance)
             {
-                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
+                InterestStatus.Text = $"You have earned £{totalInterestEarned} in interest this year. \nThat's more than 80% of your tax-free limit.";
             }
-            else if (totalInterestEarned > moderate_concern && totalInterestEarned < most_concern)
+            else if (totalInterestEarned >= tax_allowance && totalInterestEarned < most_concern)
             {
-                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 80% of your tax-free limit. ";
+                InterestStatus.Text = $"You have earned £{totalInterestEarned} in interest this year. \nYou are above your tax-free limit!";
             }
-            else
+            else // totalInterestEarned >= most_concern
             {
-                InterestStatus.Text = "You have earned £" + Convert.ToString(totalInterestEarned) + "in interest this year. \nThat's less than 50% of your tax-free limit.";
+                InterestStatus.Text = $"You have earned £{totalInterestEarned} in interest this year. \nThat's well above your tax-free limit!";
             }
+
+            InterestStackPanel.Children.Clear();
             InterestStackPanel.Children.Add(InterestStatus);
         }
 

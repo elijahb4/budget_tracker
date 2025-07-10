@@ -32,6 +32,13 @@ namespace Individual_project_initial
             this.DataContext = equity;
             string search_query = equity.symbol;
             string response = await CallApi(search_query);
+
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                MessageBox.Show("No data was returned from the API, unavailable stock.");
+                return;
+            }
+
             companyProfiles = ParseResponse(response);
             OutputResult();
         }
@@ -54,6 +61,7 @@ namespace Individual_project_initial
             catch (HttpRequestException e)
             {
                 MessageBox.Show($"Request error: {e.Message}");
+                NavigationService?.Navigate(new Uri("Markets.xaml", UriKind.Relative));
                 return null;
             }
         }

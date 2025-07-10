@@ -33,7 +33,17 @@ namespace Individual_project_initial
             }
             int owner = GetLoginOwner();
             string note = Note(ReminderNote);
+            if (string.IsNullOrWhiteSpace(note))
+            {
+                MessageBox.Show("Note cannot be empty.");
+                return;
+            }
             DateTime reminder_date_input = ReminderDate.SelectedDate.Value;
+            if (reminder_date_input < DateTime.Now)
+            {
+                MessageBox.Show("Reminder date cannot be in the past.");
+                return;
+            }
             DateOnly reminder_date = DateOnly.FromDateTime(reminder_date_input);
             using (var dbHelper = new DatabaseHelper())
             try

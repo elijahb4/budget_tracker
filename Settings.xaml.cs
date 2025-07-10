@@ -34,29 +34,30 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a new username before trying to update");
                 return;
             }
+            int userId = GetLoginOwner();
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = "UPDATE user_information SET username = @newUsername WHERE user_pk = @userId";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = "UPDATE user_information SET username = @newUsername WHERE user_pk = @userId";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@newUsername", newUsername);
-                        }
+                        command.Parameters.AddWithValue("@newUsername", newUsername);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
                     }
                 }
+                MessageBox.Show("Username updated successfully.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
         private void ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-            //add hashing later
             string password_input = txtPassword.Password;
             if (string.IsNullOrEmpty(password_input))
             {
@@ -68,20 +69,22 @@ namespace Individual_project_initial
                 MessageBox.Show("Password must be at least 8 characters long.");
                 return;
             }
+            string hash = PasswordHasher.Hash(password_input);
+            int userId = GetLoginOwner();
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = "UPDATE user_information SET password = @newPassword WHERE user_pk = @userId";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = "UPDATE user_information SET password = @newPassword WHERE user_pk = @userId";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@newPassword", password_input);
-                        }
+                        command.Parameters.AddWithValue("@newPassword", hash);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
                     }
                 }
+                MessageBox.Show("Password updated successfully.");
             }
             catch (Exception ex)
             {
@@ -97,20 +100,21 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a new email before trying to update");
                 return;
             }
+            int userId = GetLoginOwner();
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = "UPDATE user_information SET email = @newEmail WHERE user_pk = @userId";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = "UPDATE user_information SET email = @newEmail WHERE user_pk = @userId";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@newEmail", email_input);
-                        }
+                        command.Parameters.AddWithValue("@newEmail", email_input);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
                     }
                 }
+                MessageBox.Show("Email updated successfully.");
             }
             catch (Exception ex)
             {
@@ -131,31 +135,34 @@ namespace Individual_project_initial
                 MessageBox.Show("Please enter a valid decimal number for the tax allowance.");
                 return;
             }
-            decimal.Parse(tax_allowance_input);
+            decimal taxAllowance = decimal.Parse(tax_allowance_input);
+            int userId = GetLoginOwner();
             try
             {
                 using (var dbHelper = new DatabaseHelper())
+                using (var connection = dbHelper.GetConnection())
                 {
-                    using (var connection = dbHelper.GetConnection())
+                    string query = "UPDATE user_information SET tax_allowance = @newTaxAllowance WHERE user_pk = @userId";
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        string query = "UPDATE user_information SET tax_allowance = @newTaxAllowance WHERE user_pk = @userId";
-
-                        using (var command = new NpgsqlCommand(query, connection))
-                        {
-
-                        }
+                        command.Parameters.AddWithValue("@newTaxAllowance", taxAllowance);
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
                     }
                 }
+                MessageBox.Show("Tax allowance updated successfully.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error updating tax allowance: " + ex.Message);
             }
         }
+
         static bool IsValidDecimal(string input)
         {
             return decimal.TryParse(input, out _);
         }
+
         private int GetLoginOwner()
         {
             return Login.GetOwner();

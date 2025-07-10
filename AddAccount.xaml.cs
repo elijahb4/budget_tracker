@@ -1,9 +1,11 @@
 ﻿using IndividualProjectInitial;
+using MySqlX.XDevAPI.Common;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using static System.TimeZoneInfo;
 
 namespace Individual_project_initial
 {
@@ -77,8 +79,9 @@ namespace Individual_project_initial
             string reference = referenceTextBox.Text;
             string startingBalanceText = balanceTextBox.Text;
             string interestRateText = interestRateTextBox.Text;
-            decimal startingBalance;
-            decimal interestRate;
+            int accountPK = 0;
+            decimal startingBalance = 0;
+            decimal interestRate = 0;
 
             if (!decimal.TryParse(startingBalanceText, out startingBalance))
             {
@@ -128,11 +131,36 @@ namespace Individual_project_initial
                         }
                     }
                 }
+            }
+            catch (NpgsqlException ex)
+            {
+                MessageBox.Show("Error adding account: " + ex.Message);
+            }
+            try
+            {
+                using (var dbHelper = new DatabaseHelper())
+                {
+                    using (var connection = dbHelper.GetConnection())
+                    {
+                        string query = @"INSERT INTO transactions (transactionsum, transactiontime, balanceafter, balanceprior, logtype)
+                        VALUES (@sum, @time, @accountFK, @balanceafter, @balanceprior, @logtype)";
+
+                        using (var command = new NpgsqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@sum", startingBalance);
+                            command.Parameters.AddWithValue("@time", date);
+                            command.Parameters.AddWithValue("@balanceafter", startingBalance);
+                            command.Parameters.AddWithValue("@balanceprior", startingBalance);
+                            command.Parameters.AddWithValue("@logtype", "Creation");
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
                 MessageBox.Show("Account added successfully!");
             }
             catch (NpgsqlException ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error inserting creation transaction: " + ex.Message);
             }
         }
 
