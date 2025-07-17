@@ -8,7 +8,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>62880poundbanknote_109256.png</PackageIcon>
+    <PackageLicenseFile>licences.txt</PackageLicenseFile>
+    <ApplicationIcon>Assets\62880poundbanknote_109256.ico</ApplicationIcon>
+    <NuGetAuditMode>direct</NuGetAuditMode>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\62880poundbanknote_109256.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <!-- NuGet Package References -->
@@ -32,9 +50,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\62880poundbanknote_109256.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="licences.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
     <None Update="sql\init_schema.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
